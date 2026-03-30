@@ -20,8 +20,9 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable()) // Disable CSRF for testing
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/**").permitAll() // Allow auth endpoints
-                .anyRequest().authenticated() // Secure all other endpoints
+                .requestMatchers("/auth/**").permitAll()
+                .requestMatchers("/admin/**").hasAuthority("ADMIN")
+                .anyRequest().authenticated()
             )
             .cors(cors -> cors.configurationSource(corsConfigurationSource())); // Enable CORS
 
