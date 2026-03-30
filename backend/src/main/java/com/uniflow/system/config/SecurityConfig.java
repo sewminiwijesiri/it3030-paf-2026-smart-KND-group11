@@ -5,9 +5,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 
 import java.util.List;
 
@@ -15,16 +15,23 @@ import java.util.List;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    private final JwtFilter jwtFilter;
+
+    public SecurityConfig(JwtFilter jwtFilter) {
+        this.jwtFilter = jwtFilter;
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable()) // Disable CSRF for testing
+            .csrf(csrf -> csrf.disable()) // Disable CSRF for role-based testing
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/**").permitAll()
-                .requestMatchers("/admin/**").hasAuthority("ADMIN")
-                .anyRequest().authenticated()
+                .requestMatchers("/auth/**").permitAll() // Allow auth endpoints
+                .requestMatchers("/admin/**").hasAuthority("ADMIN") // ADMIN only access
+                .anyRequest().authenticated() // All other requests must be authenticated
             )
-            .cors(cors -> cors.configurationSource(corsConfigurationSource())); // Enable CORS
+            .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Enable CORS
+            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class); // Add custom JWT Filter
 
         return http.build();
     }
@@ -42,3 +49,4 @@ public class SecurityConfig {
         return source;
     }
 }
+
