@@ -23,13 +23,17 @@ const Login = () => {
             const response = await axios.post('http://localhost:8081/auth/login', credentials);
             
             // Assuming response looks like { token: '...', role: '...' }
-            const { token, role } = response.data;
+            const { token, role, message } = response.data;
 
             if (token) {
                 localStorage.setItem('token', token);
                 localStorage.setItem('role', role);
                 alert('Login Successful!');
                 navigate('/');
+            } else if (message) {
+                setError(message);
+            } else {
+                setError('Login failed. Please check your credentials.');
             }
         } catch (err) {
             console.error('Login error:', err);
