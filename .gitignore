@@ -1,0 +1,11 @@
+# Root gitignore
+backend/target/
+backend/build.log
+backend/.mvn/wrapper/maven-wrapper.jar
+frontend/node_modules/
+frontend/build/
+.env
+.vscode/
+build_out.txt
+build_err.txt
+build_output.txt
