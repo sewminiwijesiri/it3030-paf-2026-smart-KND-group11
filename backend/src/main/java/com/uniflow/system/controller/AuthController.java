@@ -2,6 +2,7 @@ package com.uniflow.system.controller;
 
 import com.uniflow.system.model.User;
 import com.uniflow.system.service.AuthService;
+import com.uniflow.system.config.JwtUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,9 +14,11 @@ import java.util.Optional;
 public class AuthController {
 
     private final AuthService authService;
+    private final JwtUtil jwtUtil;
 
-    public AuthController(AuthService authService) {
+    public AuthController(AuthService authService, JwtUtil jwtUtil) {
         this.authService = authService;
+        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/register")
@@ -31,13 +34,14 @@ public class AuthController {
         if (found.isPresent()) {
             User u = found.get();
 
+            String token = jwtUtil.generateToken(u.getEmail(), u.getRole().name());
+
             return Map.of(
-                    "message", "Login successful",
-                    "email", u.getEmail(),
-                    "role", u.getRole());
+                    "token", token,
+                    "role", u.getRole()
+            );
         }
 
-        return Map.of(
-                "message", "Invalid credentials");
+        return Map.of("message", "Invalid credentials");
     }
 }
