@@ -29,7 +29,15 @@ const Login = () => {
                 localStorage.setItem('token', token);
                 localStorage.setItem('role', role);
                 alert('Login Successful!');
-                navigate('/');
+                
+                // Role-based dashboard redirection
+                if (role === 'ADMIN') {
+                    navigate('/admin-dashboard');
+                } else if (role === 'TECHNICIAN') {
+                    navigate('/technician-dashboard');
+                } else {
+                    navigate('/user-dashboard');
+                }
             } else if (message) {
                 setError(message);
             } else {
