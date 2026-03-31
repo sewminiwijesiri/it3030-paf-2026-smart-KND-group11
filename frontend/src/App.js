@@ -2,9 +2,11 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Login from './pages/Login';
-import AdminTest from './pages/AdminTest';
-
 import Register from './pages/Register';
+import AdminDashboard from './pages/AdminDashboard';
+import UserDashboard from './pages/UserDashboard';
+import TechnicianDashboard from './pages/TechnicianDashboard';
+import AdminTest from './pages/AdminTest';
 
 function App() {
   return (
@@ -14,6 +16,9 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/admin-dashboard" element={<AdminDashboard />} />
+          <Route path="/user-dashboard" element={<UserDashboard />} />
+          <Route path="/technician-dashboard" element={<TechnicianDashboard />} />
           <Route path="/admin" element={<AdminTest />} />
         </Routes>
       </div>

@@ -35,7 +35,14 @@ const Navbar = () => {
         </Link>
         <div style={{ display: 'flex', gap: '1.5rem' }}>
           <Link to="/" className="nav-link">Home</Link>
-          {token && <Link to="/admin" className="nav-link">Admin Panel</Link>}
+          {token && (
+            <Link 
+              to={role === 'ADMIN' ? "/admin-dashboard" : role === 'TECHNICIAN' ? "/technician-dashboard" : "/user-dashboard"} 
+              className="nav-link"
+            >
+              Dashboard
+            </Link>
+          )}
         </div>
       </div>
       
