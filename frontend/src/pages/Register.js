@@ -9,6 +9,7 @@ const Register = () => {
         name: '', 
         email: '', 
         password: '', 
+        confirmPassword: '',
         role: 'USER' 
     });
     const [loading, setLoading] = useState(false);
@@ -24,8 +25,16 @@ const Register = () => {
         setLoading(true);
         setError('');
 
+        if (user.password !== user.confirmPassword) {
+            setError('Passwords do not match');
+            setLoading(false);
+            return;
+        }
+
         try {
-            await axios.post('http://localhost:8081/auth/register', user);
+            // Remove confirmPassword before sending to backend
+            const { confirmPassword, ...registrationData } = user;
+            await axios.post('http://localhost:8081/auth/register', registrationData);
             alert('Registration Successful! Please login.');
             navigate('/login');
         } catch (err) {
@@ -88,6 +97,19 @@ const Register = () => {
                                 required
                             />
                         </div>
+                        <div className="input-group">
+                            <label htmlFor="confirmPassword">Confirm Password</label>
+                            <input
+                                type="password"
+                                id="confirmPassword"
+                                name="confirmPassword"
+                                className="input-field"
+                                placeholder="••••••••"
+                                value={user.confirmPassword}
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
 
                         <div className="input-group">
                             <label htmlFor="role">Account Role</label>
@@ -100,7 +122,7 @@ const Register = () => {
                                 style={{ background: 'var(--surface)' }}
                             >
                                 <option value="USER">Standard User</option>
-                                <option value="ADMIN">Administrator</option>
+                                <option value="TECHNICIAN">Technician</option>
                             </select>
                         </div>
 
