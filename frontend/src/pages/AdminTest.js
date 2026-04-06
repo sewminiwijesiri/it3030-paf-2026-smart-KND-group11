@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '../utils/api';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
@@ -14,11 +14,7 @@ const AdminTest = () => {
         setResult('');
 
         try {
-            const response = await axios.get('http://localhost:8081/admin/test', {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
+            const response = await api.get('/admin/test');
 
             console.log('Admin test response:', response.data);
             setResult(typeof response.data === 'string' ? response.data : JSON.stringify(response.data));

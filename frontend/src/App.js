@@ -8,6 +8,8 @@ import UserDashboard from './pages/UserDashboard';
 import TechnicianDashboard from './pages/TechnicianDashboard';
 import AdminTest from './pages/AdminTest';
 import OAuth2RedirectHandler from './pages/OAuth2RedirectHandler';
+import AccessDenied from './pages/AccessDenied';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   return (
@@ -17,11 +19,27 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/admin-dashboard" element={<AdminDashboard />} />
-          <Route path="/user-dashboard" element={<UserDashboard />} />
-          <Route path="/technician-dashboard" element={<TechnicianDashboard />} />
-          <Route path="/admin" element={<AdminTest />} />
+          
+          {/* Protected Routes */}
+          <Route 
+            path="/admin-dashboard" 
+            element={<ProtectedRoute allowedRoles={['ADMIN']}><AdminDashboard /></ProtectedRoute>} 
+          />
+          <Route 
+            path="/user-dashboard" 
+            element={<ProtectedRoute allowedRoles={['USER', 'ADMIN', 'TECHNICIAN']}><UserDashboard /></ProtectedRoute>} 
+          />
+          <Route 
+            path="/technician-dashboard" 
+            element={<ProtectedRoute allowedRoles={['TECHNICIAN', 'ADMIN']}><TechnicianDashboard /></ProtectedRoute>} 
+          />
+          <Route 
+            path="/admin" 
+            element={<ProtectedRoute allowedRoles={['ADMIN']}><AdminTest /></ProtectedRoute>} 
+          />
+          
           <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
+          <Route path="/access-denied" element={<AccessDenied />} />
         </Routes>
       </div>
     </Router>
