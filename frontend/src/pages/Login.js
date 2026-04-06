@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '../utils/api';
 import { useNavigate, Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -20,7 +20,7 @@ const Login = () => {
         setError('');
 
         try {
-            const response = await axios.post('http://localhost:8081/auth/login', credentials);
+            const response = await api.post('/auth/login', credentials);
             
             // Assuming response looks like { token: '...', role: '...' }
             const { token, role, message } = response.data;
