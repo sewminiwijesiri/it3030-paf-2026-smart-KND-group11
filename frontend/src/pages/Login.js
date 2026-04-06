@@ -114,6 +114,38 @@ const Login = () => {
                         </button>
                     </form>
 
+                    <div style={{ display: 'flex', alignItems: 'center', margin: '1.5rem 0' }}>
+                        <div style={{ flex: 1, height: '1px', background: 'var(--border-color)' }}></div>
+                        <span style={{ padding: '0 1rem', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>OR</span>
+                        <div style={{ flex: 1, height: '1px', background: 'var(--border-color)' }}></div>
+                    </div>
+
+                    <a 
+                        href="http://localhost:8081/oauth2/authorization/google" 
+                        className="btn" 
+                        style={{ 
+                            width: '100%', 
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            justifyContent: 'center',
+                            padding: '0.75rem',
+                            background: 'white',
+                            color: '#333',
+                            border: '1px solid #ddd',
+                            borderRadius: '8px',
+                            textDecoration: 'none',
+                            fontWeight: '600',
+                            gap: '10px'
+                        }}
+                    >
+                        <img 
+                            src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" 
+                            alt="Google" 
+                            style={{ width: '18px' }} 
+                        />
+                        Continue with Google
+                    </a>
+
                     <div style={{ textAlign: 'center', marginTop: '2rem', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
                         Don't have an account? <Link to="/register" style={{ color: 'var(--primary)', fontWeight: '600', textDecoration: 'none' }}>Register here</Link>
                     </div>

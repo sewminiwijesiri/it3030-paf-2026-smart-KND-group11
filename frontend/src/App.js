@@ -7,6 +7,7 @@ import AdminDashboard from './pages/AdminDashboard';
 import UserDashboard from './pages/UserDashboard';
 import TechnicianDashboard from './pages/TechnicianDashboard';
 import AdminTest from './pages/AdminTest';
+import OAuth2RedirectHandler from './pages/OAuth2RedirectHandler';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/user-dashboard" element={<UserDashboard />} />
           <Route path="/technician-dashboard" element={<TechnicianDashboard />} />
           <Route path="/admin" element={<AdminTest />} />
+          <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
         </Routes>
       </div>
     </Router>
