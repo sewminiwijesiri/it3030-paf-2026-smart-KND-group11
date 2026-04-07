@@ -13,74 +13,96 @@ const Navbar = () => {
   };
 
   return (
-    <div style={{ position: 'sticky', top: 0, zIndex: 1000, background: 'white', borderBottom: '1px solid var(--border)' }}>
-      {/* Top Bar */}
-      <div style={{ background: '#f8fafc', padding: '0.6rem 2rem', borderBottom: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-        <div style={{ display: 'flex', gap: '2rem' }}>
-          <span>📧 info@uniflow.com</span>
-          <span>📍 123 Main St, Tech City</span>
+    <div className="navbar glass" style={{ borderBottom: '1px solid var(--border)' }}>
+      {/* Top Bar - Simplified */}
+      <div style={{ 
+        background: 'rgba(59, 130, 246, 0.03)', 
+        padding: '0.5rem 2rem', 
+        borderBottom: '1px solid var(--border)', 
+        display: 'flex', 
+        justifyContent: 'space-between', 
+        alignItems: 'center', 
+        fontSize: '0.8rem', 
+        color: 'var(--text-muted)',
+        fontWeight: '500'
+      }}>
+        <div style={{ display: 'flex', gap: '1.5rem' }}>
+          <span>📧 support@uniflow.edu</span>
+          <span>📍 Global Tech Campus</span>
         </div>
-        <div style={{ display: 'flex', gap: '1.5rem', fontWeight: '500' }}>
-          {!token && <Link to="/login" style={{ color: 'var(--text-main)', textDecoration: 'none' }}>👤 Login</Link>}
-          <Link to="/" style={{ color: 'var(--text-main)', textDecoration: 'none' }}>Contact Us</Link>
+        <div style={{ display: 'flex', gap: '1.5rem' }}>
+          {!token && <Link to="/login" style={{ color: 'var(--text-main)', textDecoration: 'none' }}>Student Portal</Link>}
+          <Link to="/" style={{ color: 'var(--text-main)', textDecoration: 'none' }}>Quick Help</Link>
         </div>
       </div>
 
       {/* Main Nav */}
       <nav className="container" style={{
-        padding: '1.2rem 0',
+        padding: '1rem 0',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '3.5rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '3rem' }}>
           <Link to="/" style={{ 
-            fontSize: '1.8rem', 
-            fontWeight: '900', 
-            color: 'var(--primary)', 
+            fontSize: '1.5rem', 
+            fontWeight: '800', 
+            color: 'var(--text-main)', 
             textDecoration: 'none',
-            letterSpacing: '-1.5px',
             display: 'flex',
             alignItems: 'center',
-            gap: '8px'
+            gap: '10px'
           }}>
-            <span style={{ background: 'var(--primary)', color: 'white', padding: '4px 10px', borderRadius: '4px' }}>U</span>
-            UniFlow
+            <div style={{ 
+              background: 'var(--primary)', 
+              width: '32px', 
+              height: '32px', 
+              borderRadius: '8px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'white',
+              fontSize: '1.1rem'
+            }}>U</div>
+            <span className="grad-text">UniFlow</span>
           </Link>
-          <div style={{ display: 'flex', gap: '2.5rem' }}>
-            <Link to="/" className="nav-link" style={{ fontWeight: '600' }}>Home</Link>
-            <Link to="/" className="nav-link" style={{ fontWeight: '600' }}>About</Link>
-            <Link to="/" className="nav-link" style={{ fontWeight: '600' }}>Courses</Link>
+          <div style={{ display: 'flex', gap: '2rem' }}>
+            <Link to="/" className="nav-link" style={{ textDecoration: 'none', color: 'var(--text-main)', fontWeight: '600', fontSize: '0.9rem' }}>Programs</Link>
+            <Link to="/" className="nav-link" style={{ textDecoration: 'none', color: 'var(--text-main)', fontWeight: '600', fontSize: '0.9rem' }}>Research</Link>
+            <Link to="/" className="nav-link" style={{ textDecoration: 'none', color: 'var(--text-main)', fontWeight: '600', fontSize: '0.9rem' }}>Innovation</Link>
             {token && (
               <Link 
                 to={role === 'ADMIN' ? "/admin-dashboard" : role === 'TECHNICIAN' ? "/technician-dashboard" : "/user-dashboard"} 
                 className="nav-link"
-                style={{ fontWeight: '600', color: 'var(--primary)' }}
+                style={{ textDecoration: 'none', fontWeight: '700', color: 'var(--primary)', fontSize: '0.9rem' }}
               >
-                Dashboard
+                My Dashboard
               </Link>
             )}
           </div>
         </div>
         
         <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
-          <div style={{ position: 'relative' }}>
+          <div style={{ position: 'relative', display: 'none' }}> {/* Hidden for clean UI unless needed */}
             <input 
               type="text" 
-              placeholder="Search..." 
-              style={{ padding: '0.6rem 1rem', paddingRight: '2.5rem', border: '1px solid var(--border)', borderRadius: '4px', fontSize: '0.9rem', width: '220px' }} 
+              placeholder="Search courses..." 
+              className="input-field"
+              style={{ padding: '0.5rem 1rem', width: '180px', fontSize: '0.85rem' }} 
             />
-            <span style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', opacity: 0.5 }}>🔍</span>
           </div>
 
           {!token ? (
-            <Link to="/register" className="btn btn-primary" style={{ padding: '0.6rem 1.8rem', borderRadius: '4px' }}>Register</Link>
+            <div style={{ display: 'flex', gap: '0.75rem' }}>
+              <Link to="/login" className="btn btn-outline" style={{ padding: '0.5rem 1.25rem', fontSize: '0.85rem' }}>Login</Link>
+              <Link to="/register" className="btn btn-primary" style={{ padding: '0.5rem 1.25rem', fontSize: '0.85rem' }}>Join Now</Link>
+            </div>
           ) : (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1.2rem' }}>
-              <span style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
-                <strong style={{ color: 'var(--primary)' }}>{role}</strong>
-              </span>
-              <button onClick={handleLogout} className="btn btn-outline" style={{ padding: '0.5rem 1.25rem', borderRadius: '4px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+              <div className="glass" style={{ padding: '0.4rem 1rem', borderRadius: '20px', border: '1px solid var(--primary-light)' }}>
+                <span style={{ fontSize: '0.8rem', fontWeight: '700', color: 'var(--primary)' }}>{role}</span>
+              </div>
+              <button onClick={handleLogout} className="btn btn-outline" style={{ padding: '0.4rem 1rem', borderRadius: '10px', fontSize: '0.85rem' }}>
                 Logout
               </button>
             </div>
