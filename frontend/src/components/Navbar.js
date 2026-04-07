@@ -14,10 +14,19 @@ const Navbar = () => {
   };
 
   return (
-    <div className="navbar glass" style={{ borderBottom: '1px solid var(--border)' }}>
+    <div className="navbar" style={{ 
+      background: 'rgba(240, 247, 255, 0.95)', 
+      backdropFilter: 'blur(12px)',
+      WebkitBackdropFilter: 'blur(12px)',
+      borderBottom: '1px solid rgba(59, 130, 246, 0.1)',
+      boxShadow: '0 4px 20px rgba(0, 0, 0, 0.05)',
+      position: 'sticky',
+      top: 0,
+      zIndex: 1000
+    }}>
       {/* Main Nav */}
       <nav className="container" style={{
-        padding: '1rem 0',
+        padding: '0.75rem 0',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center'
@@ -26,19 +35,18 @@ const Navbar = () => {
           <Link to="/" style={{ 
             fontSize: '1.6rem', 
             fontWeight: '800', 
-            color: 'var(--text-main)', 
+            color: '#1e3a8a', 
             textDecoration: 'none',
             display: 'flex',
             alignItems: 'center',
             gap: '12px'
           }}>
-            <img src={logoIcon} alt="UniFlow Logo" style={{ width: '45px', height: 'auto' }} />
+            <img src={logoIcon} alt="UniFlow Logo" style={{ width: '55px', height: 'auto' }} />
             <span className="grad-text" style={{ letterSpacing: '-0.5px' }}>UniFlow</span>
           </Link>
           <div style={{ display: 'flex', gap: '2rem' }}>
-            <Link to="/" className="nav-link" style={{ textDecoration: 'none', color: 'var(--text-main)', fontWeight: '600', fontSize: '0.9rem' }}>Programs</Link>
-            <Link to="/" className="nav-link" style={{ textDecoration: 'none', color: 'var(--text-main)', fontWeight: '600', fontSize: '0.9rem' }}>Research</Link>
-            <Link to="/" className="nav-link" style={{ textDecoration: 'none', color: 'var(--text-main)', fontWeight: '600', fontSize: '0.9rem' }}>Innovation</Link>
+            <Link to="/" className="nav-link" style={{ textDecoration: 'none', color: '#475569', fontWeight: '600', fontSize: '0.9rem' }}>Home</Link>
+            <a href="#features" className="nav-link" style={{ textDecoration: 'none', color: '#475569', fontWeight: '600', fontSize: '0.9rem' }}>Features</a>
             {token && (
               <Link 
                 to={role === 'ADMIN' ? "/admin-dashboard" : role === 'TECHNICIAN' ? "/technician-dashboard" : "/user-dashboard"} 
@@ -52,26 +60,17 @@ const Navbar = () => {
         </div>
         
         <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
-          <div style={{ position: 'relative', display: 'none' }}> {/* Hidden for clean UI unless needed */}
-            <input 
-              type="text" 
-              placeholder="Search courses..." 
-              className="input-field"
-              style={{ padding: '0.5rem 1rem', width: '180px', fontSize: '0.85rem' }} 
-            />
-          </div>
-
           {!token ? (
             <div style={{ display: 'flex', gap: '0.75rem' }}>
-              <Link to="/login" className="btn btn-outline" style={{ padding: '0.5rem 1.25rem', fontSize: '0.85rem' }}>Login</Link>
-              <Link to="/register" className="btn btn-primary" style={{ padding: '0.5rem 1.25rem', fontSize: '0.85rem' }}>Join Now</Link>
+              <Link to="/login" className="btn btn-outline" style={{ padding: '0.5rem 1.25rem', fontSize: '0.85rem', color: '#1e3a8a', borderColor: 'rgba(30, 58, 138, 0.2)' }}>Login</Link>
+              <Link to="/register" className="btn btn-primary" style={{ padding: '0.5rem 1.25rem', fontSize: '0.85rem' }}>Register</Link>
             </div>
           ) : (
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-              <div className="glass" style={{ padding: '0.4rem 1rem', borderRadius: '20px', border: '1px solid var(--primary-light)' }}>
+              <div style={{ padding: '0.4rem 1rem', borderRadius: '20px', border: '1px solid var(--primary)', background: 'rgba(59, 130, 246, 0.1)' }}>
                 <span style={{ fontSize: '0.8rem', fontWeight: '700', color: 'var(--primary)' }}>{role}</span>
               </div>
-              <button onClick={handleLogout} className="btn btn-outline" style={{ padding: '0.4rem 1rem', borderRadius: '10px', fontSize: '0.85rem' }}>
+              <button onClick={handleLogout} className="btn btn-outline" style={{ padding: '0.4rem 1rem', borderRadius: '10px', fontSize: '0.85rem', color: '#1e3a8a', borderColor: 'rgba(30, 58, 138, 0.2)' }}>
                 Logout
               </button>
             </div>
