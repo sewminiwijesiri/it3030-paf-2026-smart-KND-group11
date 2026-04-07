@@ -5,118 +5,169 @@ import { Link } from 'react-router-dom';
 
 const Home = () => {
     return (
-        <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+        <div className="home-wrapper" style={{ minHeight: '100vh', background: 'var(--bg-soft)' }}>
             <Navbar />
             <main>
-                {/* Hero Section */}
-                <section style={{
-                    position: 'relative',
-                    height: '80vh',
-                    background: 'url("https://images.unsplash.com/photo-1541339907198-e08756ebafe3?q=80&w=2000&auto=format&fit=crop") center/cover no-repeat',
-                    display: 'flex',
-                    alignItems: 'center',
-                    color: 'white'
+                {/* Modern Hero Section */}
+                <section className="hero-gradient" style={{ 
+                    position: 'relative', 
+                    padding: '100px 0 160px', 
+                    overflow: 'hidden' 
                 }}>
-                    <div className="overlay" style={{ background: 'linear-gradient(to right, rgba(6, 78, 59, 0.8), rgba(0, 0, 0, 0.2))' }}></div>
-                    <div className="container" style={{ position: 'relative', zIndex: 1 }}>
-                        <div className="animate-up" style={{ maxWidth: '650px' }}>
-                            <h4 style={{ textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '1.5rem', fontSize: '1rem', fontWeight: '500' }}>UniFlow University</h4>
-                            <h1 style={{ fontSize: '4.5rem', marginBottom: '2rem', lineHeight: '1.1' }}>Together We'll <br />Explore New Things</h1>
-                            <p style={{ fontSize: '1.25rem', marginBottom: '2.5rem', opacity: 0.9 }}>
-                                We believe everyone should have the opportunity to create progress through technology and join the global flow of innovation.
+                    <div className="container" style={{ position: 'relative', zIndex: 2 }}>
+                        <div className="animate-up" style={{ textAlign: 'center', maxWidth: '900px', margin: '0 auto' }}>
+                            <span className="badge badge-primary" style={{ marginBottom: '1.5rem' }}>Next-Gen Learning Platform</span>
+                            <h1 style={{ 
+                                fontSize: 'clamp(2.5rem, 8vw, 4.5rem)', 
+                                marginBottom: '1.5rem', 
+                                background: 'linear-gradient(135deg, var(--text-main) 0%, #475569 100%)',
+                                WebkitBackgroundClip: 'text',
+                                WebkitTextFillColor: 'transparent',
+                                fontWeight: '800'
+                            }}>
+                                Master Your Future <br />With UniFlow
+                            </h1>
+                            <p style={{ 
+                                fontSize: '1.25rem', 
+                                marginBottom: '2.5rem', 
+                                maxWidth: '600px', 
+                                margin: '0 auto 2.5rem',
+                                color: 'var(--text-muted)'
+                            }}>
+                                Experience a transformative education platform that combines creative thinking with industrial-grade technical knowledge.
                             </p>
-                            <Link to="/register" className="btn btn-primary" style={{ padding: '1.2rem 2.8rem', fontSize: '1.1rem', borderRadius: '4px' }}>
-                                Find Courses
-                            </Link>
+                            <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+                                <Link to="/register" className="btn btn-primary" style={{ padding: '1rem 2.5rem' }}>
+                                    Start Learning <span>→</span>
+                                </Link>
+                                <Link to="/login" className="btn btn-outline" style={{ padding: '1rem 2.5rem' }}>
+                                    View Courses
+                                </Link>
+                            </div>
                         </div>
                     </div>
+                    
+                    {/* Abstract Decorative Elements */}
+                    <div className="float" style={{ 
+                        position: 'absolute', top: '10%', left: '5%', width: '150px', height: '150px', 
+                        background: 'radial-gradient(circle, var(--primary) 0%, transparent 70%)', 
+                        opacity: '0.1', borderRadius: '50%' 
+                    }}></div>
+                    <div className="float" style={{ 
+                        position: 'absolute', bottom: '15%', right: '8%', width: '250px', height: '250px', 
+                        background: 'radial-gradient(circle, var(--accent) 0%, transparent 70%)', 
+                        opacity: '0.1', borderRadius: '50%', animationDelay: '1s' 
+                    }}></div>
                 </section>
 
-                {/* Floating Cards Section */}
-                <section style={{ marginTop: '-80px', position: 'relative', zIndex: 10 }}>
+                {/* Feature Cards Section */}
+                <section style={{ marginTop: '-80px' }}>
                     <div className="container">
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem' }}>
+                        <div style={{ 
+                            display: 'grid', 
+                            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', 
+                            gap: '2rem' 
+                        }}>
                             {[
-                                { title: 'Graduation', desc: 'Join thousands of students who have successfully transformed their careers.', icon: '🎓' },
-                                { title: 'University Life', desc: 'Experience a vibrant campus culture with endless opportunities to grow.', icon: '🏫' },
-                                { title: 'Global Services', desc: 'Our dedicated support team is available 24/7 to help you along the way.', icon: '🌐' }
+                                { title: 'Advanced Labs', desc: 'State-of-the-art virtual laboratories for hands-on technical training.', icon: '⚡', color: '#3b82f6' },
+                                { title: 'Expert Mentors', desc: 'Learn directly from industry leaders and academic pioneers.', icon: '🛡️', color: '#10b981' },
+                                { title: 'Global Network', desc: 'Connect with a diverse community of students from across the globe.', icon: '🌍', color: '#8b5cf6' }
                             ].map((card, index) => (
-                                <div key={index} className="card animate-up" style={{ textAlign: 'center', animationDelay: `${index * 0.15}s` }}>
-                                    <div style={{ fontSize: '3rem', marginBottom: '1.5rem', color: 'var(--primary)' }}>{card.icon}</div>
-                                    <h3 style={{ marginBottom: '1rem', fontSize: '1.5rem' }}>{card.title}</h3>
-                                    <p style={{ color: 'var(--text-muted)', marginBottom: '1.5rem' }}>{card.desc}</p>
-                                    <Link to="/" style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: '700', fontSize: '0.9rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px' }}>
-                                        Learn More <span>→</span>
-                                    </Link>
+                                <div key={index} className="card animate-scale" style={{ 
+                                    padding: '2.5rem', 
+                                    animationDelay: `${index * 0.1}s`,
+                                    position: 'relative',
+                                    overflow: 'hidden'
+                                }}>
+                                    <div style={{ 
+                                        width: '60px', height: '60px', background: `${card.color}15`, 
+                                        borderRadius: '16px', display: 'flex', alignItems: 'center', 
+                                        justifyContent: 'center', fontSize: '1.8rem', marginBottom: '1.5rem',
+                                        color: card.color
+                                    }}>
+                                        {card.icon}
+                                    </div>
+                                    <h3 style={{ marginBottom: '0.75rem', fontSize: '1.4rem' }}>{card.title}</h3>
+                                    <p style={{ fontSize: '0.95rem', lineHeight: '1.6' }}>{card.desc}</p>
                                 </div>
                             ))}
                         </div>
                     </div>
                 </section>
 
-                {/* About Section */}
+                {/* Showcase Section */}
                 <section className="section-padding">
                     <div className="container">
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '5rem', alignItems: 'center' }}>
+                        <div style={{ 
+                            display: 'grid', 
+                            gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', 
+                            gap: '5rem', 
+                            alignItems: 'center' 
+                        }}>
                             <div className="animate-up">
                                 <div style={{ position: 'relative' }}>
-                                    <img 
-                                        src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=800&auto=format&fit=crop" 
-                                        alt="Students" 
-                                        style={{ width: '100%', borderRadius: '12px', boxShadow: 'var(--shadow-lg)' }}
-                                    />
                                     <div style={{ 
-                                        position: 'absolute', 
-                                        bottom: '-40px', 
-                                        right: '-40px', 
-                                        width: '250px', 
-                                        height: '250px', 
-                                        border: '10px solid white',
-                                        borderRadius: '12px',
-                                        overflow: 'hidden',
-                                        boxShadow: 'var(--shadow-lg)'
+                                        position: 'absolute', inset: '-10px', 
+                                        background: 'linear-gradient(135deg, var(--primary), var(--accent))', 
+                                        borderRadius: '30px', transform: 'rotate(-2deg)', opacity: 0.1 
+                                    }}></div>
+                                    <img 
+                                        src="https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=1200&auto=format&fit=crop" 
+                                        alt="Modern Workspace" 
+                                        style={{ 
+                                            width: '100%', borderRadius: '24px', 
+                                            boxShadow: 'var(--shadow-lg)', position: 'relative', zIndex: 1 
+                                        }}
+                                    />
+                                    <div className="glass float" style={{ 
+                                        position: 'absolute', bottom: '15%', left: '-30px', 
+                                        padding: '1.5rem', borderRadius: '16px', boxShadow: 'var(--shadow-md)',
+                                        zIndex: 2, display: 'flex', alignItems: 'center', gap: '15px'
                                     }}>
-                                        <img 
-                                            src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=600&auto=format&fit=crop" 
-                                            alt="Study" 
-                                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                        />
+                                        <div style={{ background: '#22c55e', width: '12px', height: '12px', borderRadius: '50%' }}></div>
+                                        <span style={{ fontWeight: '600', color: 'var(--text-main)', fontSize: '0.9rem' }}>1.2k+ Students Online</span>
                                     </div>
                                 </div>
                             </div>
                             <div className="animate-up" style={{ animationDelay: '0.2s' }}>
-                                <h4 style={{ color: 'var(--primary)', marginBottom: '1rem', textTransform: 'uppercase', fontSize: '0.9rem', letterSpacing: '1px' }}>About UniFlow</h4>
-                                <h2 style={{ fontSize: '3rem', marginBottom: '2rem' }}>Degrees in Various Academic Disciplines</h2>
-                                <p style={{ color: 'var(--text-muted)', marginBottom: '2rem', fontSize: '1.1rem' }}>
-                                    Not only can university offer an environment rich in our social and cultural experiences, but it also develops critical thinking and professional skills.
+                                <span style={{ color: 'var(--primary)', fontWeight: '700', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '2px' }}>Why Choose UniFlow?</span>
+                                <h2 style={{ fontSize: '3rem', margin: '1rem 0 2rem', lineHeight: '1.1' }}>Bridging Academics with Innovation</h2>
+                                <p style={{ fontSize: '1.1rem', marginBottom: '2rem' }}>
+                                    We provide an environment where curiosity meets capability. Our curriculum is designed to evolve as fast as the technology landscape does.
                                 </p>
-                                <ul style={{ listStyle: 'none', marginBottom: '2.5rem' }}>
-                                    {['Access to all our courses', 'Learn the latest skills', 'Upskill your organization'].map((item, i) => (
-                                        <li key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '1rem', fontWeight: '500' }}>
-                                            <span style={{ color: '#22c55e', fontSize: '1.2rem' }}>✓</span> {item}
-                                        </li>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '2.5rem' }}>
+                                    {[
+                                        { label: 'Industry Projects', icon: '📁' },
+                                        { label: 'Global Mentors', icon: '💡' },
+                                        { label: 'Cloud Access', icon: '☁️' },
+                                        { label: 'Job Placement', icon: '🎯' }
+                                    ].map((item, i) => (
+                                        <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                            <span style={{ fontSize: '1.2rem' }}>{item.icon}</span>
+                                            <span style={{ fontWeight: '500', color: 'var(--text-main)' }}>{item.label}</span>
+                                        </div>
                                     ))}
-                                </ul>
-                                <button className="btn btn-primary" style={{ padding: '1rem 3rem' }}>Read More</button>
+                                </div>
+                                <Link to="/register" className="btn btn-primary">Join the Community</Link>
                             </div>
                         </div>
                     </div>
                 </section>
 
-                {/* Stats Section */}
-                <section style={{ background: '#f8fafc', padding: '80px 0' }}>
-                    <div className="container">
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '3rem', textAlign: 'center' }}>
+                {/* Stats Section with Glassmorphism */}
+                <section style={{ padding: '80px 0', background: 'var(--primary)', position: 'relative', overflow: 'hidden' }}>
+                    <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0.1, background: 'url("https://www.transparenttextures.com/patterns/cubes.png")' }}></div>
+                    <div className="container" style={{ position: 'relative', zIndex: 1 }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '4rem', textAlign: 'center' }}>
                             {[
-                                { count: '3+', label: 'Years of Experience', icon: '🌍' },
-                                { count: '99+', label: 'Innovative Courses', icon: '💻' },
-                                { count: '10+', label: 'Qualified Teachers', icon: '👨‍🏫' },
-                                { count: '11+', label: 'Learners Enrolled', icon: '📚' }
-                            ].map((stat, index) => (
-                                <div key={index} className="animate-up" style={{ animationDelay: `${index * 0.1}s` }}>
-                                    <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>{stat.icon}</div>
-                                    <h3 style={{ fontSize: '2.5rem', color: 'var(--primary)', marginBottom: '0.5rem' }}>{stat.count}</h3>
-                                    <p style={{ color: 'var(--text-muted)', fontWeight: '500' }}>{stat.label}</p>
+                                { val: '4.9/5', label: 'Student Rating' },
+                                { val: '99%', label: 'Course Success' },
+                                { val: '24/7', label: 'Technical Help' },
+                                { val: '500+', label: 'Global Partners' }
+                            ].map((stat, i) => (
+                                <div key={i} className="animate-up" style={{ animationDelay: `${i * 0.1}s` }}>
+                                    <div style={{ fontSize: '2.8rem', fontWeight: '800', color: 'white', marginBottom: '0.5rem' }}>{stat.val}</div>
+                                    <div style={{ color: 'rgba(255,255,255,0.75)', fontWeight: '500', fontSize: '1rem', textTransform: 'uppercase', letterSpacing: '1px' }}>{stat.label}</div>
                                 </div>
                             ))}
                         </div>
@@ -129,3 +180,4 @@ const Home = () => {
 };
 
 export default Home;
+

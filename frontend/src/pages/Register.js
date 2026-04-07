@@ -32,7 +32,6 @@ const Register = () => {
         }
 
         try {
-            // Remove confirmPassword before sending to backend
             const { confirmPassword, ...registrationData } = user;
             await axios.post('http://localhost:8081/auth/register', registrationData);
             alert('Registration Successful! Please login.');
@@ -46,95 +45,110 @@ const Register = () => {
     };
 
     return (
-        <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+        <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: 'var(--bg-soft)' }}>
             <Navbar />
-            <main style={{ flex: '1', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
-                <div className="card glass animate-fade" style={{ width: '100%', maxWidth: '500px' }}>
-                    <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
-                        <h2 style={{ fontSize: '2rem', fontWeight: '800', marginBottom: '0.5rem', color: 'var(--primary)' }}>Create Account</h2>
-                        <p style={{ color: 'var(--text-secondary)' }}>Welcome to the UniFlow community</p>
+            <main style={{ flex: '1', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '60px 20px', position: 'relative', overflow: 'hidden' }}>
+                <div className="hero-gradient" style={{ position: 'absolute', inset: 0, opacity: 0.6, zIndex: 0 }}></div>
+                
+                <div className="card animate-up glass" style={{ 
+                    width: '100%', 
+                    maxWidth: '440px', 
+                    padding: '2rem', 
+                    zIndex: 1,
+                    boxShadow: 'var(--shadow-lg)'
+                }}>
+                    <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
+                         <div style={{ 
+                            width: '40px', height: '40px', background: 'var(--primary)', 
+                            borderRadius: '10px', margin: '0 auto 1rem', display: 'flex', 
+                            alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '1.25rem' 
+                        }}>U</div>
+                        <h2 style={{ fontSize: '1.75rem', fontWeight: '800', marginBottom: '0.25rem', letterSpacing: '-0.02em' }}>Join UniFlow</h2>
+                        <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Global learning community</p>
                     </div>
 
                     <form onSubmit={handleRegister}>
-                        <div className="input-group">
-                            <label htmlFor="name">Full Name</label>
+                        <div style={{ marginBottom: '0.75rem' }}>
+                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: 'var(--text-main)', marginBottom: '0.3rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Full Name</label>
                             <input
                                 type="text"
-                                id="name"
                                 name="name"
                                 className="input-field"
-                                placeholder="John Doe"
+                                placeholder="Your Name"
+                                style={{ padding: '0.6rem 0.8rem', fontSize: '0.85rem' }}
                                 value={user.name}
                                 onChange={handleChange}
                                 required
                             />
                         </div>
 
-                        <div className="input-group">
-                            <label htmlFor="email">Email Address</label>
+                        <div style={{ marginBottom: '0.75rem' }}>
+                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: 'var(--text-main)', marginBottom: '0.3rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Email Address</label>
                             <input
                                 type="email"
-                                id="email"
                                 name="email"
                                 className="input-field"
-                                placeholder="name@example.com"
+                                placeholder="name@university.edu"
+                                style={{ padding: '0.6rem 0.8rem', fontSize: '0.85rem' }}
                                 value={user.email}
                                 onChange={handleChange}
                                 required
                             />
                         </div>
 
-                        <div className="input-group">
-                            <label htmlFor="password">Password</label>
-                            <input
-                                type="password"
-                                id="password"
-                                name="password"
-                                className="input-field"
-                                placeholder="••••••••"
-                                value={user.password}
-                                onChange={handleChange}
-                                required
-                            />
-                        </div>
-                        <div className="input-group">
-                            <label htmlFor="confirmPassword">Confirm Password</label>
-                            <input
-                                type="password"
-                                id="confirmPassword"
-                                name="confirmPassword"
-                                className="input-field"
-                                placeholder="••••••••"
-                                value={user.confirmPassword}
-                                onChange={handleChange}
-                                required
-                            />
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '0.75rem' }}>
+                            <div>
+                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: 'var(--text-main)', marginBottom: '0.3rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Password</label>
+                                <input
+                                    type="password"
+                                    name="password"
+                                    className="input-field"
+                                    placeholder="••••••••"
+                                    style={{ padding: '0.6rem 0.8rem', fontSize: '0.85rem' }}
+                                    value={user.password}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
+                            <div>
+                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: 'var(--text-main)', marginBottom: '0.3rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Confirm</label>
+                                <input
+                                    type="password"
+                                    name="confirmPassword"
+                                    className="input-field"
+                                    placeholder="••••••••"
+                                    style={{ padding: '0.6rem 0.8rem', fontSize: '0.85rem' }}
+                                    value={user.confirmPassword}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
                         </div>
 
-                        <div className="input-group">
-                            <label htmlFor="role">Account Role</label>
+                        <div style={{ marginBottom: '1.25rem' }}>
+                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: 'var(--text-main)', marginBottom: '0.3rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Account Role</label>
                             <select 
-                                id="role" 
                                 name="role" 
                                 className="input-field" 
                                 value={user.role} 
                                 onChange={handleChange}
-                                style={{ background: 'var(--surface)' }}
+                                style={{ cursor: 'pointer', padding: '0.6rem 0.8rem', fontSize: '0.85rem' }}
                             >
-                                <option value="USER">Standard User</option>
-                                <option value="TECHNICIAN">Technician</option>
+                                <option value="USER">Student / Standard User</option>
+                                <option value="TECHNICIAN">Technician / Researcher</option>
                             </select>
                         </div>
 
                         {error && (
                             <div style={{ 
                                 color: 'var(--error)', 
-                                fontSize: '0.9rem', 
-                                marginBottom: '1.5rem',
-                                padding: '0.75rem',
-                                background: 'rgba(239, 68, 68, 0.1)',
-                                borderRadius: '6px',
-                                borderLeft: '3px solid var(--error)'
+                                fontSize: '0.8rem', 
+                                marginBottom: '1rem',
+                                padding: '0.6rem 0.8rem',
+                                background: 'rgba(239, 68, 68, 0.08)',
+                                borderRadius: 'var(--radius-sm)',
+                                border: '1px solid rgba(239, 68, 68, 0.12)',
+                                fontWeight: '500'
                             }}>
                                 {error}
                             </div>
@@ -143,15 +157,34 @@ const Register = () => {
                         <button 
                             type="submit" 
                             className="btn btn-primary" 
-                            style={{ width: '100%', padding: '1rem', marginTop: '1rem' }}
+                            style={{ width: '100%', padding: '0.75rem', fontSize: '0.95rem' }}
                             disabled={loading}
                         >
-                            {loading ? 'Creating account...' : 'Complete Registration'}
+                            {loading ? 'Processing...' : 'Register'}
                         </button>
                     </form>
 
-                    <div style={{ textAlign: 'center', marginTop: '2rem', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
-                        Already have an account? <Link to="/login" style={{ color: 'var(--primary)', fontWeight: '600', textDecoration: 'none' }}>Log in</Link>
+                    <div style={{ display: 'flex', alignItems: 'center', margin: '1rem 0' }}>
+                        <div style={{ flex: 1, height: '1px', background: 'var(--border)' }}></div>
+                        <span style={{ padding: '0 0.75rem', fontSize: '0.65rem', color: 'var(--text-muted)', fontWeight: '700' }}>OR JOIN WITH</span>
+                        <div style={{ flex: 1, height: '1px', background: 'var(--border)' }}></div>
+                    </div>
+
+                    <a 
+                        href="http://localhost:8081/oauth2/authorization/google" 
+                        className="btn btn-outline" 
+                        style={{ width: '100%', padding: '0.6rem', backgroundColor: 'white', fontSize: '0.9rem' }}
+                    >
+                        <img 
+                            src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" 
+                            alt="Google" 
+                            style={{ width: '16px' }} 
+                        />
+                        Google Sign Up
+                    </a>
+
+                    <div style={{ textAlign: 'center', marginTop: '1.25rem', color: 'var(--text-muted)', fontSize: '0.85rem' }}>
+                        Member already? <Link to="/login" style={{ color: 'var(--primary)', fontWeight: '700', textDecoration: 'none' }}>Log in</Link>
                     </div>
                 </div>
             </main>
