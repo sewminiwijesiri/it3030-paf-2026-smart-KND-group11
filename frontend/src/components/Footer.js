@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import logoIcon from '../assets/uniflow-icon.svg';
 
 const Footer = () => {
     return (
@@ -27,7 +28,7 @@ const Footer = () => {
                             gap: '12px', 
                             marginBottom: '1.5rem' 
                         }}>
-                            <div style={{ background: 'var(--primary)', width: '32px', height: '32px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '1rem' }}>U</div>
+                            <img src={logoIcon} alt="UniFlow" style={{ width: '45px', height: 'auto', filter: 'brightness(0) invert(1)' }} />
                             UniFlow
                         </Link>
                         <p style={{ lineHeight: '1.8', fontSize: '0.95rem' }}>

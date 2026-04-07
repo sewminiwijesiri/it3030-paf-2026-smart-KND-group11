@@ -3,6 +3,7 @@ import api from '../utils/api';
 import { useNavigate, Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import logoIcon from '../assets/uniflow-icon.svg';
 
 const Login = () => {
     const [credentials, setCredentials] = useState({ email: '', password: '' });
@@ -62,11 +63,7 @@ const Login = () => {
                     boxShadow: 'var(--shadow-lg)'
                 }}>
                     <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
-                        <div style={{ 
-                            width: '40px', height: '40px', background: 'var(--primary)', 
-                            borderRadius: '10px', margin: '0 auto 1rem', display: 'flex', 
-                            alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '1.25rem' 
-                        }}>U</div>
+                        <img src={logoIcon} alt="UniFlow Logo" style={{ width: '48px', height: 'auto', margin: '0 auto 1.5rem' }} />
                         <h2 style={{ fontSize: '1.75rem', fontWeight: '800', marginBottom: '0.25rem', letterSpacing: '-0.02em' }}>Welcome Back</h2>
                         <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Secure portal access</p>
                     </div>

@@ -1,0 +1,15 @@
+<svg width="400" height="300" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <!-- Graduation Cap -->
+  <path d="M200 40 L300 85 L200 130 L100 85 Z" fill="#1a5bb8"/>
+  <path d="M150 105 V120 C150 120 175 140 200 140 C225 140 250 120 250 120 V105 L200 125 Z" fill="#3a8dfc"/>
+  <path d="M110 95 V125" stroke="#1a5bb8" stroke-width="4" stroke-linecap="round"/>
+  <rect x="106" y="122" width="8" height="18" rx="2" fill="#1a5bb8"/>
+
+  <!-- Left Side (Green) -->
+  <path d="M195 165 Q175 155 130 155 C145 175 175 195 195 198 Z" fill="#4caf50"/>
+  <path d="M195 205 Q155 185 85 195 C110 225 165 250 195 252 Z" fill="#4caf50" opacity="0.8"/>
+  
+  <!-- Right Side (Blue) -->
+  <path d="M205 165 Q225 155 270 155 C255 175 225 195 205 198 Z" fill="#1a5bb8"/>
+  <path d="M205 205 Q245 185 315 195 C290 225 235 250 205 252 Z" fill="#1a5bb8" opacity="0.8"/>
+</svg>
