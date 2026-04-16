@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import AdminDashboard from './pages/AdminDashboard';
+import AdminResourceManagement from './pages/AdminResourceManagement';
 import UserDashboard from './pages/UserDashboard';
 import TechnicianDashboard from './pages/TechnicianDashboard';
 import AdminTest from './pages/AdminTest';
@@ -24,6 +25,10 @@ function App() {
           <Route 
             path="/admin-dashboard" 
             element={<ProtectedRoute allowedRoles={['ADMIN']}><AdminDashboard /></ProtectedRoute>} 
+          />
+          <Route 
+            path="/admin/resources" 
+            element={<ProtectedRoute allowedRoles={['ADMIN']}><AdminResourceManagement /></ProtectedRoute>} 
           />
           <Route 
             path="/user-dashboard" 
