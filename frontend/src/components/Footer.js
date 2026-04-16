@@ -12,38 +12,25 @@ const Footer = () => {
     };
 
     return (
-        <footer style={{ 
-            background: '#0f172a', 
-            color: 'rgba(255, 255, 255, 0.5)', 
-            padding: '80px 0 40px',
-            borderTop: '1px solid rgba(255, 255, 255, 0.05)'
-        }}>
-            <div className="container" style={{ textAlign: 'center' }}>
-                <div style={{ marginBottom: '2.5rem' }}>
-                    <div style={{ display: 'inline-flex', alignItems: 'center', gap: '12px', marginBottom: '1.25rem' }}>
-                        <img src={logoIcon} alt="UniFlow" style={{ width: '40px', height: 'auto' }} />
-                        <span style={{ color: 'white', fontSize: '1.5rem', fontWeight: '800', letterSpacing: '-0.02em' }}>UniFlow</span>
+        <footer className="bg-slate-950 text-slate-500 py-20 pb-10 border-t border-white/5">
+            <div className="container mx-auto px-4 md:px-8 text-center">
+                <div className="mb-10">
+                    <div className="inline-flex items-center gap-3 mb-5">
+                        <img src={logoIcon} alt="UniFlow" className="w-[40px] h-auto" />
+                        <span className="text-white text-2xl font-extrabold tracking-tight">UniFlow</span>
                     </div>
-                    <p style={{ maxWidth: '500px', margin: '0 auto', fontSize: '0.95rem', lineHeight: '1.7' }}>
+                    <p className="max-w-[500px] mx-auto text-[0.95rem] leading-relaxed">
                         Providing smart solutions for project tracking and team collaboration. Streamlining workflows with precision and ease.
                     </p>
                 </div>
 
-                <div style={{ 
-                    display: 'flex', 
-                    justifyContent: 'center', 
-                    gap: '1.5rem', 
-                    marginBottom: '2.5rem' 
-                }}>
+                <div className="flex justify-center gap-6 mb-10">
                     {Object.entries(icons).map(([key, path]) => (
-                        <Link key={key} to="/" style={{ 
-                            width: '40px', height: '40px', 
-                            borderRadius: '50%', background: 'rgba(255,255,255,0.06)', 
-                            display: 'flex', alignItems: 'center', justifyContent: 'center', 
-                            color: 'white', textDecoration: 'none',
-                            transition: 'var(--transition)',
-                            border: '1px solid rgba(255,255,255,0.05)'
-                        }}>
+                        <Link 
+                            key={key} 
+                            to="/" 
+                            className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white no-underline transition-all duration-300 border border-white/5 hover:bg-primary hover:border-primary hover:-translate-y-1"
+                        >
                            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
                                <path d={path} />
                            </svg>
@@ -51,11 +38,7 @@ const Footer = () => {
                     ))}
                 </div>
 
-                <div style={{ 
-                    borderTop: '1px solid rgba(255, 255, 255, 0.05)', 
-                    paddingTop: '2.5rem',
-                    fontSize: '0.85rem'
-                }}>
+                <div className="border-t border-white/5 pt-10 text-[0.85rem]">
                     <p>© 2026 UniFlow. All rights reserved.</p>
                 </div>
             </div>

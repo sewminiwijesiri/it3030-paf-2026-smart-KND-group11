@@ -7,30 +7,28 @@ const AccessDenied = () => {
     const navigate = useNavigate();
 
     return (
-        <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+        <div className="min-h-screen flex flex-col bg-bg-soft">
             <Navbar />
-            <main style={{ flex: '1', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
-                <div className="card glass animate-fade" style={{ width: '100%', maxWidth: '600px', padding: '3rem', textAlign: 'center' }}>
-                    <div style={{ fontSize: '5rem', marginBottom: '1rem' }}>🚫</div>
-                    <h1 style={{ fontSize: '2.5rem', fontWeight: '800', marginBottom: '1rem', color: 'var(--error)' }}>
+            <main className="flex-1 flex items-center justify-center p-8">
+                <div className="card glass animate-up w-full max-w-2xl p-12 text-center shadow-2xl">
+                    <div className="text-8xl mb-6">🚫</div>
+                    <h1 className="text-4xl md:text-5xl font-extrabold mb-4 text-error tracking-tight">
                         Access Denied
                     </h1>
-                    <p style={{ fontSize: '1.1rem', color: 'var(--text-secondary)', marginBottom: '2rem' }}>
+                    <p className="text-lg text-slate-500 mb-10 max-w-md mx-auto leading-relaxed">
                         You do not have the required permissions to view this page. 
                         If you believe this is an error, please contact your administrator.
                     </p>
-                    <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+                    <div className="flex flex-wrap gap-4 justify-center">
                         <button 
                             onClick={() => navigate(-1)} 
-                            className="btn btn-secondary"
-                            style={{ padding: '0.75rem 1.5rem' }}
+                            className="btn btn-outline !px-8 !py-3"
                         >
                             Go Back
                         </button>
                         <button 
                             onClick={() => navigate('/')} 
-                            className="btn btn-primary"
-                            style={{ padding: '0.75rem 1.5rem' }}
+                            className="btn btn-primary !px-8 !py-3"
                         >
                             Return Home
                         </button>
