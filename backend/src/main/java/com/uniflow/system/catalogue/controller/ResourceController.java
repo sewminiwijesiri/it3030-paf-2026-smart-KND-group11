@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/resources")
-@CrossOrigin(origins = "*") // Allow requests from frontend
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class ResourceController {
 
     private final ResourceService resourceService;
