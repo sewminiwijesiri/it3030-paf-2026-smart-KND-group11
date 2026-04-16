@@ -7,6 +7,7 @@ import com.uniflow.system.catalogue.service.ResourceService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,6 +26,7 @@ public class ResourceController {
 
     // CREATE a new resource
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Resource> createResource(@Valid @RequestBody Resource resource) {
         Resource savedResource = resourceService.createResource(resource);
         return new ResponseEntity<>(savedResource, HttpStatus.CREATED);
@@ -32,6 +34,7 @@ public class ResourceController {
 
     // GET all resources OR Filtered resources
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'TECHNICIAN', 'USER')")
     public ResponseEntity<List<Resource>> getAllResources(
             @RequestParam(required = false) ResourceType type,
             @RequestParam(required = false) Integer minCapacity,
@@ -52,6 +55,7 @@ public class ResourceController {
 
     // GET resource by ID
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'TECHNICIAN', 'USER')")
     public ResponseEntity<Resource> getResourceById(@PathVariable String id) {
         Resource resource = resourceService.getResourceById(id);
         return ResponseEntity.ok(resource);
@@ -59,6 +63,7 @@ public class ResourceController {
 
     // UPDATE a resource
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Resource> updateResource(
             @PathVariable String id,
             @Valid @RequestBody Resource resourceDetails) {
@@ -68,6 +73,7 @@ public class ResourceController {
 
     // DELETE a resource
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteResource(@PathVariable String id) {
         resourceService.deleteResource(id);
         return ResponseEntity.noContent().build();
