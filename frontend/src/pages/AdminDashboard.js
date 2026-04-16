@@ -4,58 +4,58 @@ import Footer from '../components/Footer';
 
 const AdminDashboard = () => {
     return (
-        <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: 'var(--bg-soft)' }}>
+        <div className="min-h-screen flex flex-col bg-bg-soft">
             <Navbar />
-            <main style={{ flex: '1', padding: '80px 0' }}>
-                <div className="container">
+            <main className="flex-1 py-20 px-4 md:px-8">
+                <div className="container mx-auto">
                     <div className="animate-up">
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '4rem' }}>
+                        <div className="flex flex-col md:flex-row md:justify-between md:items-end mb-16 gap-6">
                             <div>
-                                <span className="badge badge-primary" style={{ marginBottom: '1rem' }}>System Administrator</span>
-                                <h1 style={{ fontSize: '3.5rem', fontWeight: '800', letterSpacing: '-0.04em' }}>Admin Core</h1>
+                                <span className="badge badge-primary mb-4">System Administrator</span>
+                                <h1 className="text-5xl md:text-6xl font-extrabold tracking-tighter text-slate-900 leading-tight">Admin Core</h1>
                             </div>
-                            <div style={{ padding: '0.75rem 1.5rem', background: 'white', borderRadius: '12px', border: '1px solid var(--border)', fontSize: '0.9rem', fontWeight: '600' }}>
-                                <span style={{ color: 'var(--success)', marginRight: '8px' }}>●</span> All Engines Active
+                            <div className="px-6 py-3 bg-white rounded-xl border border-slate-200 text-sm font-semibold shadow-sm flex items-center">
+                                <span className="text-success mr-2 animate-pulse text-lg">●</span> All Engines Active
                             </div>
                         </div>
                         
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '2rem', marginBottom: '4rem' }}>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
                             {[
                                 { label: 'Total Members', val: '1,284', inc: '+12%' },
                                 { label: 'Revenue Flow', val: '$42.5k', inc: '+5.2%' },
                                 { label: 'Active Labs', val: '18', inc: 'Stable' },
                                 { label: 'System Load', val: '24%', inc: 'Optimal' }
                             ].map((stat, i) => (
-                                <div key={i} className="card" style={{ padding: '2rem' }}>
-                                    <p style={{ fontSize: '0.8rem', fontWeight: '700', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '1rem', letterSpacing: '1px' }}>{stat.label}</p>
-                                    <div style={{ fontSize: '1.8rem', fontWeight: '800', color: 'var(--text-main)', marginBottom: '0.5rem' }}>{stat.val}</div>
-                                    <p style={{ color: 'var(--primary)', fontSize: '0.8rem', fontWeight: '700' }}>{stat.inc}</p>
+                                <div key={i} className="card p-8 group hover:border-primary transition-colors">
+                                    <p className="text-[10px] font-bold text-slate-400 uppercase mb-4 tracking-widest">{stat.label}</p>
+                                    <div className="text-3xl font-extrabold text-slate-900 mb-2">{stat.val}</div>
+                                    <p className="text-primary text-xs font-bold">{stat.inc}</p>
                                 </div>
                             ))}
                         </div>
 
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '2rem' }}>
-                            <div className="card" style={{ padding: '0', overflow: 'hidden' }}>
-                                <div style={{ padding: '2rem', borderBottom: '1px solid var(--border)' }}>
-                                    <h3 style={{ fontSize: '1.1rem' }}>Platform Entities</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div className="card p-0 overflow-hidden border-slate-200">
+                                <div className="p-8 border-b border-slate-200 bg-slate-50/50">
+                                    <h3 className="text-lg font-bold text-slate-900">Platform Entities</h3>
                                 </div>
-                                <div style={{ padding: '2rem', color: 'var(--text-muted)', textAlign: 'center', minHeight: '200px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                                    <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📁</div>
-                                    <p>Detailed system logs and entity management will appear here as the platform expands.</p>
+                                <div className="p-12 text-slate-400 text-center min-h-[250px] flex flex-col justify-center items-center">
+                                    <div className="text-5xl mb-6 opacity-40">📁</div>
+                                    <p className="max-w-[300px] leading-relaxed">Detailed system logs and entity management will appear here as the platform expands.</p>
                                 </div>
                             </div>
                             
-                            <div className="card glass-dark" style={{ background: 'var(--text-main)', border: 'none', padding: '2.5rem' }}>
-                                <h3 style={{ color: 'white', marginBottom: '2rem', fontSize: '1.2rem' }}>System Integrity</h3>
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                            <div className="card glass-dark bg-slate-950 border-none p-10 flex flex-col shadow-2xl">
+                                <h3 className="text-white text-xl font-bold mb-8 tracking-tight">System Integrity</h3>
+                                <div className="flex flex-col gap-6 flex-1">
                                     {['Database Backup', 'Auth Service', 'Storage Core', 'Email SMTP'].map((service, i) => (
-                                        <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                            <span style={{ fontSize: '0.9rem', opacity: 0.8 }}>{service}</span>
-                                            <span style={{ fontSize: '0.8rem', fontWeight: '700', color: 'var(--secondary)' }}>OPERATIONAL</span>
+                                        <div key={i} className="flex justify-between items-center group">
+                                            <span className="text-sm text-white/70 group-hover:text-white transition-colors">{service}</span>
+                                            <span className="text-[10px] font-bold text-secondary tracking-widest bg-secondary/10 px-2 py-1 rounded">OPERATIONAL</span>
                                         </div>
                                     ))}
                                 </div>
-                                <button className="btn btn-primary" style={{ width: '100%', marginTop: '3rem' }}>Re-scan Core</button>
+                                <button className="btn btn-primary w-full mt-12 py-3.5 !rounded-lg text-sm shadow-xl shadow-primary/20">Re-scan Core</button>
                             </div>
                         </div>
                     </div>

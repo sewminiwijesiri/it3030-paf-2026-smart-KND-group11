@@ -46,75 +46,65 @@ const Register = () => {
     };
 
     return (
-        <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: 'var(--bg-soft)' }}>
+        <div className="min-h-screen flex flex-col bg-bg-soft">
             <Navbar />
-            <main style={{ flex: '1', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '60px 20px', position: 'relative', overflow: 'hidden' }}>
-                <div className="hero-gradient" style={{ position: 'absolute', inset: 0, opacity: 0.6, zIndex: 0 }}></div>
+            <main className="flex-1 flex items-center justify-center py-12 px-5 relative overflow-hidden">
+                <div className="absolute inset-0 opacity-60 z-0 bg-sky-50"></div>
                 
-                <div className="card animate-up glass" style={{ 
-                    width: '100%', 
-                    maxWidth: '440px', 
-                    padding: '2rem', 
-                    zIndex: 1,
-                    boxShadow: 'var(--shadow-lg)'
-                }}>
-                    <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
-                        <img src={logoIcon} alt="UniFlow Logo" style={{ width: '64px', height: 'auto', margin: '0 auto 1.5rem' }} />
-                        <h2 style={{ fontSize: '1.75rem', fontWeight: '800', marginBottom: '0.25rem', letterSpacing: '-0.02em' }}>Join UniFlow</h2>
-                        <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Global learning community</p>
+                <div className="card animate-up glass w-full max-w-[440px] p-8 z-[1] shadow-2xl">
+                    <div className="text-center mb-8">
+                        <img src={logoIcon} alt="UniFlow Logo" className="w-[64px] h-auto mx-auto mb-6" />
+                        <h2 className="text-2xl font-extrabold mb-1 tracking-tight text-slate-900">Join UniFlow</h2>
+                        <p className="text-text-muted text-sm">Global learning community</p>
                     </div>
 
                     <form onSubmit={handleRegister}>
-                        <div style={{ marginBottom: '0.75rem' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: 'var(--text-main)', marginBottom: '0.3rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Full Name</label>
+                        <div className="mb-4">
+                            <label className="block text-[10px] font-bold text-slate-700 mb-1.5 uppercase tracking-wider">Full Name</label>
                             <input
                                 type="text"
                                 name="name"
-                                className="input-field"
+                                className="input-field !py-2.5 !px-3.5 !text-sm"
                                 placeholder="Your Name"
-                                style={{ padding: '0.6rem 0.8rem', fontSize: '0.85rem' }}
                                 value={user.name}
                                 onChange={handleChange}
                                 required
                             />
                         </div>
 
-                        <div style={{ marginBottom: '0.75rem' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: 'var(--text-main)', marginBottom: '0.3rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Email Address</label>
+                        <div className="mb-4">
+                            <label className="block text-[10px] font-bold text-slate-700 mb-1.5 uppercase tracking-wider">Email Address</label>
                             <input
                                 type="email"
                                 name="email"
-                                className="input-field"
+                                className="input-field !py-2.5 !px-3.5 !text-sm"
                                 placeholder="name@university.edu"
-                                style={{ padding: '0.6rem 0.8rem', fontSize: '0.85rem' }}
                                 value={user.email}
                                 onChange={handleChange}
                                 required
                             />
                         </div>
 
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '0.75rem' }}>
+                        <div className="grid grid-cols-2 gap-4 mb-4">
                             <div>
-                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: 'var(--text-main)', marginBottom: '0.3rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Password</label>
+                                <label className="block text-[10px] font-bold text-slate-700 mb-1.5 uppercase tracking-wider">Password</label>
                                 <input
                                     type="password"
                                     name="password"
-                                    className="input-field"
+                                    className="input-field !py-2.5 !px-3.5 !text-sm"
                                     placeholder="••••••••"
-                                    style={{ padding: '0.6rem 0.8rem', fontSize: '0.85rem' }}
                                     value={user.password}
                                     onChange={handleChange}
                                     required
                                 />
                             </div>
                             <div>
-                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: 'var(--text-main)', marginBottom: '0.3rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Confirm</label>
+                                <label className="block text-[10px] font-bold text-slate-700 mb-1.5 uppercase tracking-wider">Confirm</label>
                                 <input
                                     type="password"
                                     name="confirmPassword"
-                                    className="input-field"
+                                    className="input-field !py-2.5 !px-3.5 !text-sm"
                                     placeholder="••••••••"
-                                    style={{ padding: '0.6rem 0.8rem', fontSize: '0.85rem' }}
                                     value={user.confirmPassword}
                                     onChange={handleChange}
                                     required
@@ -122,14 +112,13 @@ const Register = () => {
                             </div>
                         </div>
 
-                        <div style={{ marginBottom: '1.25rem' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: 'var(--text-main)', marginBottom: '0.3rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Account Role</label>
+                        <div className="mb-6">
+                            <label className="block text-[10px] font-bold text-slate-700 mb-1.5 uppercase tracking-wider">Account Role</label>
                             <select 
                                 name="role" 
-                                className="input-field" 
+                                className="input-field !py-2.5 !px-3.5 !text-sm cursor-pointer" 
                                 value={user.role} 
                                 onChange={handleChange}
-                                style={{ cursor: 'pointer', padding: '0.6rem 0.8rem', fontSize: '0.85rem' }}
                             >
                                 <option value="USER">Student / Standard User</option>
                                 <option value="TECHNICIAN">Technician / Researcher</option>
@@ -137,51 +126,40 @@ const Register = () => {
                         </div>
 
                         {error && (
-                            <div style={{ 
-                                color: 'var(--error)', 
-                                fontSize: '0.8rem', 
-                                marginBottom: '1rem',
-                                padding: '0.6rem 0.8rem',
-                                background: 'rgba(239, 68, 68, 0.08)',
-                                borderRadius: 'var(--radius-sm)',
-                                border: '1px solid rgba(239, 68, 68, 0.12)',
-                                fontWeight: '500'
-                            }}>
+                            <div className="text-xs text-error font-medium mb-4 p-3 bg-error/5 border border-error/10 rounded-lg">
                                 {error}
                             </div>
                         )}
 
                         <button 
                             type="submit" 
-                            className="btn btn-primary" 
-                            style={{ width: '100%', padding: '0.75rem', fontSize: '0.95rem' }}
+                            className="btn btn-primary w-full !py-3 !text-sm mt-1" 
                             disabled={loading}
                         >
                             {loading ? 'Processing...' : 'Register'}
                         </button>
                     </form>
 
-                    <div style={{ display: 'flex', alignItems: 'center', margin: '1rem 0' }}>
-                        <div style={{ flex: 1, height: '1px', background: 'var(--border)' }}></div>
-                        <span style={{ padding: '0 0.75rem', fontSize: '0.65rem', color: 'var(--text-muted)', fontWeight: '700' }}>OR JOIN WITH</span>
-                        <div style={{ flex: 1, height: '1px', background: 'var(--border)' }}></div>
+                    <div className="flex items-center my-6">
+                        <div className="flex-1 h-px bg-slate-200"></div>
+                        <span className="px-3 text-[10px] text-slate-400 font-bold uppercase">OR JOIN WITH</span>
+                        <div className="flex-1 h-px bg-slate-200"></div>
                     </div>
 
                     <a 
                         href="http://localhost:8081/oauth2/authorization/google" 
-                        className="btn btn-outline" 
-                        style={{ width: '100%', padding: '0.6rem', backgroundColor: 'white', fontSize: '0.9rem' }}
+                        className="btn btn-outline w-full !py-2.5 !text-sm bg-white hover:bg-slate-50 transition-colors"
                     >
                         <img 
                             src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" 
                             alt="Google" 
-                            style={{ width: '16px' }} 
+                            className="w-4 h-4 mr-2"
                         />
                         Google Sign Up
                     </a>
 
-                    <div style={{ textAlign: 'center', marginTop: '1.25rem', color: 'var(--text-muted)', fontSize: '0.85rem' }}>
-                        Member already? <Link to="/login" style={{ color: 'var(--primary)', fontWeight: '700', textDecoration: 'none' }}>Log in</Link>
+                    <div className="text-center mt-8 text-slate-500 text-sm">
+                        Member already? <Link to="/login" className="text-primary font-bold no-underline ml-1">Log in</Link>
                     </div>
                 </div>
             </main>

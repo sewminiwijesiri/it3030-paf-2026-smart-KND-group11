@@ -30,31 +30,24 @@ const AdminTest = () => {
     };
 
     return (
-        <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+        <div className="min-h-screen flex flex-col bg-bg-soft">
             <Navbar />
-            <main style={{ flex: '1', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
-                <div className="card glass animate-fade" style={{ width: '100%', maxWidth: '600px', textAlign: 'center' }}>
-                    <div style={{ marginBottom: '2rem' }}>
-                        <h2 style={{ fontSize: '2.5rem', fontWeight: '800', marginBottom: '1rem', color: 'var(--primary)' }}>Admin Dashboard</h2>
-                        <p style={{ color: 'var(--text-secondary)' }}>Welcome to the protected admin area. Your role is: <strong>{role}</strong></p>
+            <main className="flex-1 flex items-center justify-center p-8">
+                <div className="card glass animate-up w-full max-w-2xl p-10 text-center shadow-2xl">
+                    <div className="mb-10">
+                        <h2 className="text-4xl md:text-5xl font-extrabold mb-4 text-primary tracking-tight">Admin Dashboard</h2>
+                        <p className="text-slate-500">Welcome to the protected admin area. Your role is: <strong className="text-slate-900">{role}</strong></p>
                     </div>
 
-                    <div style={{ 
-                        padding: '2.5rem', 
-                        background: 'rgba(0,0,0,0.2)', 
-                        borderRadius: '12px', 
-                        border: '1px solid var(--glass-border)',
-                        marginBottom: '2rem'
-                    }}>
-                        <h4 style={{ marginBottom: '1.5rem', fontSize: '1.2rem' }}>Protected API Test</h4>
-                        <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: '1.5rem' }}>
-                            Click the button below to test the protected <code>GET /admin/test</code> endpoint using your JWT token.
+                    <div className="p-10 bg-slate-900/5 rounded-2xl border border-slate-200 mb-8">
+                        <h4 className="mb-6 text-xl font-bold text-slate-800 tracking-tight">Protected API Test</h4>
+                        <p className="text-sm text-slate-500 mb-8">
+                            Click the button below to test the protected <code className="bg-slate-200 px-1.5 py-0.5 rounded">GET /admin/test</code> endpoint using your JWT token.
                         </p>
                         
                         <button 
                             onClick={callAdmin} 
-                            className="btn btn-primary" 
-                            style={{ padding: '1rem 3rem' }}
+                            className="btn btn-primary !px-12 !py-4 shadow-xl shadow-primary/20" 
                             disabled={loading || !token}
                         >
                             {loading ? 'Calling API...' : 'Call Admin API'}
@@ -62,22 +55,13 @@ const AdminTest = () => {
                     </div>
 
                     {result && (
-                        <div style={{ 
-                            padding: '1.5rem', 
-                            background: result.startsWith('Error') ? 'rgba(239, 68, 68, 0.1)' : 'rgba(34, 197, 94, 0.1)', 
-                            color: result.startsWith('Error') ? 'var(--error)' : 'var(--success)', 
-                            borderRadius: '8px',
-                            fontWeight: '600',
-                            fontFamily: 'monospace',
-                            textAlign: 'left',
-                            wordBreak: 'break-all'
-                        }}>
+                        <div className={`p-6 rounded-xl font-semibold font-mono text-left break-all ${result.startsWith('Error') ? 'bg-error/10 text-error' : 'bg-success/10 text-success'}`}>
                              {result}
                         </div>
                     )}
 
                     {!token && (
-                        <div style={{ color: 'var(--error)', marginTop: '1rem' }}>
+                        <div className="text-error mt-4 font-bold animate-pulse">
                             No JWT token found. Please login first.
                         </div>
                     )}

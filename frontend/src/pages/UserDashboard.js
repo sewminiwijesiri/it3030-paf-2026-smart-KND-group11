@@ -7,51 +7,43 @@ const UserDashboard = () => {
     const name = localStorage.getItem('name') || 'Student';
 
     return (
-        <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: 'var(--bg-soft)' }}>
+        <div className="min-h-screen flex flex-col bg-bg-soft">
             <Navbar />
-            <main style={{ flex: '1', padding: '60px 0' }}>
-                <div className="container">
+            <main className="flex-1 py-[60px]">
+                <div className="container mx-auto px-4 md:px-8">
                     <div className="animate-up">
-                        <div style={{ marginBottom: '3rem' }}>
-                            <span className="badge badge-primary" style={{ marginBottom: '1rem' }}>Connected as {role}</span>
-                            <h1 style={{ fontSize: '3rem', fontWeight: '800', marginBottom: '1rem', letterSpacing: '-0.03em' }}>User Dashboard</h1>
-                            <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', maxWidth: '600px' }}>
-                                Manage your technical inquiries, access course materials, and track your global progress in the UniFlow ecosystem.
+                        <div className="mb-12">
+                            <span className="badge badge-primary mb-4">Connected as {role}</span>
+                            <h1 className="text-5xl md:text-6xl font-extrabold mb-4 tracking-tight leading-tight">Welcome, {name}</h1>
+                            <p className="text-text-muted text-lg md:text-xl max-w-[600px]">
+                                This is your personalized dashboard. Manage your technical inquiries, access course materials, and track your global progress in the UniFlow ecosystem.
                             </p>
                         </div>
                         
-                        <div style={{ 
-                            display: 'grid', 
-                            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
-                            gap: '2.5rem' 
-                        }}>
-                            <div className="card glass-dark" style={{ 
-                                padding: '2.5rem', 
-                                border: 'none',
-                                background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
-                            }}>
-                                <h3 style={{ marginBottom: '1.5rem', color: 'white', opacity: 0.9, fontSize: '1.1rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Current Status</h3>
-                                <div style={{ fontSize: '2.5rem', fontWeight: '800', marginBottom: '1rem' }}>Active Flow</div>
-                                <p style={{ color: 'rgba(255,255,255,0.6)' }}>Your account is in good standing. All services are operational.</p>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                            <div className="card glass-dark p-10 border-none bg-gradient-to-br from-[#0f172a] to-[#1e293b]">
+                                <h3 className="mb-6 text-white/90 text-sm md:text-base font-medium uppercase tracking-widest">Current Status</h3>
+                                <div className="text-4xl md:text-5xl font-extrabold mb-4">Active Flow</div>
+                                <p className="text-white/60">Your account is in good standing. All services are operational.</p>
                             </div>
 
-                            <div className="card" style={{ padding: '2.5rem' }}>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-                                    <h3 style={{ fontSize: '1.1rem', color: 'var(--text-main)', letterSpacing: '0.02em' }}>Notifications</h3>
-                                    <div style={{ width: '10px', height: '10px', background: 'var(--error)', borderRadius: '50%' }}></div>
+                            <div className="card p-10">
+                                <div className="flex justify-between items-center mb-6">
+                                    <h3 className="text-lg md:text-xl text-text-main font-semibold tracking-tight">Notifications</h3>
+                                    <div className="w-2.5 h-2.5 bg-error rounded-full animate-pulse"></div>
                                 </div>
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                                    <p style={{ fontSize: '0.95rem', color: 'var(--text-main)', fontWeight: '500' }}>• Global Seminar starts tomorrow</p>
-                                    <p style={{ fontSize: '0.95rem', color: 'var(--text-muted)' }}>• Your profile update is complete</p>
-                                    <p style={{ fontSize: '0.95rem', color: 'var(--text-muted)' }}>• 2 New resources added to Labs</p>
+                                <div className="flex flex-col gap-5">
+                                    <p className="text-[0.95rem] text-text-main font-medium"> <span className="text-primary mr-2">•</span> Global Seminar starts tomorrow</p>
+                                    <p className="text-[0.95rem] text-text-muted"> <span className="text-primary mr-2">•</span> Your profile update is complete</p>
+                                    <p className="text-[0.95rem] text-text-muted"> <span className="text-primary mr-2">•</span> 2 New resources added to Labs</p>
                                 </div>
                             </div>
 
-                            <div className="card" style={{ padding: '2.5rem' }}>
-                                <h3 style={{ marginBottom: '1.5rem', fontSize: '1.1rem' }}>Quick Actions</h3>
-                                <div style={{ display: 'grid', gap: '1rem' }}>
-                                    <button className="btn btn-outline" style={{ justifyContent: 'flex-start' }}>Browse Innovation Portal</button>
-                                    <button className="btn btn-outline" style={{ justifyContent: 'flex-start' }}>Contact Faculty Lab</button>
+                            <div className="card p-10">
+                                <h3 className="mb-6 text-lg md:text-xl font-semibold">Quick Actions</h3>
+                                <div className="grid gap-4">
+                                    <button className="btn btn-outline !justify-start text-left">Browse Innovation Portal</button>
+                                    <button className="btn btn-outline !justify-start text-left">Contact Faculty Lab</button>
                                 </div>
                             </div>
                         </div>

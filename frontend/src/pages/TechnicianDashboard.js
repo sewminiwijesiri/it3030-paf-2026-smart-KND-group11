@@ -4,23 +4,23 @@ import Footer from '../components/Footer';
 
 const TechnicianDashboard = () => {
     return (
-        <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+        <div className="min-h-screen flex flex-col bg-bg-soft">
             <Navbar />
-            <main style={{ flex: '1', padding: '3rem', maxWidth: '1200px', margin: '0 auto', width: '100%' }}>
-                <div className="card glass animate-fade" style={{ padding: '3rem' }}>
-                    <h1 style={{ fontSize: '2.5rem', fontWeight: '800', marginBottom: '1.5rem', color: 'var(--primary)' }}>Technician Dashboard</h1>
-                    <p style={{ color: 'var(--text-secondary)', fontSize: '1.2rem', lineHeight: '1.6' }}>
+            <main className="flex-1 px-4 py-12 md:px-8 max-w-7xl mx-auto w-full">
+                <div className="card glass animate-up p-8 md:p-12">
+                    <h1 className="text-4xl md:text-5xl font-extrabold mb-6 text-primary tracking-tight">Technician Dashboard</h1>
+                    <p className="text-text-muted text-lg md:text-xl leading-relaxed max-w-3xl">
                         Welcome, Technician. Keep track of your assigned tasks and update the status of service requests.
                     </p>
                     
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem', marginTop: '3rem' }}>
-                        <div className="card" style={{ background: 'rgba(255, 255, 255, 0.05)', padding: '2rem' }}>
-                            <h3 style={{ marginBottom: '1rem' }}>Pending Tasks</h3>
-                            <p style={{ fontSize: '2rem', fontWeight: '700' }}>0</p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
+                        <div className="card bg-white/50 backdrop-blur-sm p-8 border-none shadow-sm hover:shadow-md transition-shadow">
+                            <h3 className="text-lg font-semibold mb-4 text-text-main">Pending Tasks</h3>
+                            <p className="text-4xl md:text-5xl font-bold text-primary">0</p>
                         </div>
-                        <div className="card" style={{ background: 'rgba(255, 255, 255, 0.05)', padding: '2rem' }}>
-                            <h3 style={{ marginBottom: '1rem' }}>Completed Jobs</h3>
-                            <p style={{ fontSize: '2rem', fontWeight: '700' }}>0</p>
+                        <div className="card bg-white/50 backdrop-blur-sm p-8 border-none shadow-sm hover:shadow-md transition-shadow">
+                            <h3 className="text-lg font-semibold mb-4 text-text-main">Completed Jobs</h3>
+                            <p className="text-4xl md:text-5xl font-bold text-secondary">0</p>
                         </div>
                     </div>
                 </div>
