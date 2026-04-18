@@ -29,7 +29,11 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             Optional<User> userOptional = userRepository.findByEmail(email);
             if (userOptional.isEmpty()) {
                 // Create new user if first login
-                User newUser = new User(email, "OAUTH_LOGIN", Role.USER);
+                String name = oAuth2User.getAttribute("name");
+                if (name == null) {
+                    name = email.split("@")[0];
+                }
+                User newUser = new User(name, email, "OAUTH_LOGIN", Role.USER);
                 userRepository.save(newUser);
             }
         }
