@@ -35,8 +35,11 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             User user = userOptional.get();
             String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
             
-            // Redirect to frontend with token and role
-            String targetUrl = "http://localhost:3000/oauth2/redirect?token=" + token + "&role=" + user.getRole().name();
+            // Redirect to frontend with token, role, name and email
+            String targetUrl = "http://localhost:3000/oauth2/redirect?token=" + token + 
+                               "&role=" + user.getRole().name() + 
+                               "&name=" + (user.getName() != null ? user.getName() : "") +
+                               "&email=" + user.getEmail();
             getRedirectStrategy().sendRedirect(request, response, targetUrl);
         } else {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "User creation failed");

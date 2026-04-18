@@ -14,9 +14,12 @@ import java.util.List;
 public class ResourceDataSeeder implements CommandLineRunner {
 
     private final ResourceRepository resourceRepository;
+    private final com.uniflow.system.repository.MaintenanceRepository maintenanceRepository;
 
-    public ResourceDataSeeder(ResourceRepository resourceRepository) {
+    public ResourceDataSeeder(ResourceRepository resourceRepository, 
+                             com.uniflow.system.repository.MaintenanceRepository maintenanceRepository) {
         this.resourceRepository = resourceRepository;
+        this.maintenanceRepository = maintenanceRepository;
     }
 
     @Override
@@ -25,6 +28,32 @@ public class ResourceDataSeeder implements CommandLineRunner {
         if (resourceRepository.count() == 0) {
             seedResources();
         }
+        if (maintenanceRepository.count() == 0) {
+            seedMaintenanceRequests();
+        }
+    }
+
+    private void seedMaintenanceRequests() {
+        String technicianEmail = "sewminiwijesiri5@gmail.com";
+        
+        com.uniflow.system.model.MaintenanceRequest req1 = new com.uniflow.system.model.MaintenanceRequest();
+        req1.setResourceName("Computer Lab B2");
+        req1.setDescription("Network switches in rack 4 are unresponsive. High latency reported by students.");
+        req1.setTechnicianEmail(technicianEmail);
+        req1.setPriority(com.uniflow.system.model.MaintenanceRequest.MaintenancePriority.HIGH);
+        req1.setStatus(com.uniflow.system.model.MaintenanceRequest.MaintenanceStatus.PENDING);
+        req1.setCreatedAt(java.time.LocalDateTime.now());
+        
+        com.uniflow.system.model.MaintenanceRequest req2 = new com.uniflow.system.model.MaintenanceRequest();
+        req2.setResourceName("Lecture Hall A");
+        req2.setDescription("Main projector bulb replacement needed. Brightness has dropped significantly.");
+        req2.setTechnicianEmail(technicianEmail);
+        req2.setPriority(com.uniflow.system.model.MaintenanceRequest.MaintenancePriority.MEDIUM);
+        req2.setStatus(com.uniflow.system.model.MaintenanceRequest.MaintenanceStatus.IN_PROGRESS);
+        req2.setCreatedAt(java.time.LocalDateTime.now());
+
+        maintenanceRepository.saveAll(java.util.Arrays.asList(req1, req2));
+        System.out.println(">>> Maintenance Requests seeded successfully.");
     }
 
     private void seedResources() {

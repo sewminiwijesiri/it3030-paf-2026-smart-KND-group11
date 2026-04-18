@@ -1,11 +1,34 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
+import AdminSidebar from '../components/AdminSidebar';
+import TechnicianSidebar from '../components/TechnicianSidebar';
 import Footer from '../components/Footer';
+import api from '../utils/api';
 
 const UserDashboard = () => {
-    const name = localStorage.getItem('name') || 'Student';
-    const email = localStorage.getItem('email') || 'student@uniflow.com';
+    const [userData, setUserData] = useState({
+        name: localStorage.getItem('name') || 'Student',
+        email: localStorage.getItem('email') || 'student@uniflow.com'
+    });
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const response = await api.get('/auth/me');
+                setUserData({
+                    name: response.data.name,
+                    email: response.data.email
+                });
+                localStorage.setItem('name', response.data.name);
+                localStorage.setItem('email', response.data.email);
+            } catch (err) {
+                console.error('Failed to fetch user data', err);
+            }
+        };
+
+        fetchUserData();
+    }, []);
 
     // Sample Data
     const stats = [
@@ -20,6 +43,16 @@ const UserDashboard = () => {
         { id: '#REQ-799', title: 'Maintenance: VR Station 01', type: 'Technical', status: 'Pending', date: 'Oct 14, 2026' },
     ];
 
+    const role = localStorage.getItem('role') || 'USER';
+
+    const renderSidebar = () => {
+        switch (role) {
+            case 'ADMIN': return <AdminSidebar />;
+            case 'TECHNICIAN': return <TechnicianSidebar />;
+            default: return <Sidebar />;
+        }
+    };
+
     return (
         <div className="min-h-screen bg-[#f8fafc] flex flex-col font-sans selection:bg-indigo-100 relative overflow-hidden">
             {/* Background Aesthetic Blobs */}
@@ -29,9 +62,9 @@ const UserDashboard = () => {
             <Navbar />
             
             <div className="flex flex-1 relative z-10">
-                <Sidebar />
+                {renderSidebar()}
 
-                <main className="flex-1 lg:ml-64 p-6 md:p-8">
+                <main className={`flex-1 ${role === 'USER' ? 'lg:ml-64' : 'lg:ml-72'} p-6 md:p-8 transition-all duration-300`}>
                     <div className="max-w-6xl mx-auto">
                         
                         {/* 1. Header with Simplified Status */}
@@ -41,7 +74,7 @@ const UserDashboard = () => {
                                     Student Workspace
                                 </span>
                                 <h1 className="text-3xl font-black text-slate-900 tracking-tight leading-none">
-                                    Hello, {name}<span className="text-indigo-600">.</span>
+                                    Hello, {userData.name}<span className="text-indigo-600">.</span>
                                 </h1>
                             </div>
                             <div className="flex items-center gap-3 bg-white px-4 py-2 border border-slate-200/60 rounded-2xl shadow-sm">
@@ -130,10 +163,10 @@ const UserDashboard = () => {
                                 <section className="bg-white p-6 rounded-[2.5rem] shadow-sm border border-slate-100 text-center relative overflow-hidden group">
                                     <div className="absolute top-0 left-0 w-full h-1 bg-indigo-600"></div>
                                     <div className="w-20 h-20 bg-indigo-50 text-indigo-600 rounded-[2rem] mx-auto mb-4 flex items-center justify-center text-3xl font-black italic shadow-inner group-hover:scale-95 transition-transform duration-500">
-                                        {name.charAt(0)}
+                                        {userData.name.charAt(0)}
                                     </div>
-                                    <h3 className="text-base font-black text-slate-800 leading-none mb-1">{name}</h3>
-                                    <p className="text-[10px] font-bold text-slate-300 uppercase tracking-widest mb-4 italic">{email}</p>
+                                    <h3 className="text-base font-black text-slate-800 leading-none mb-1">{userData.name}</h3>
+                                    <p className="text-[10px] font-bold text-slate-300 uppercase tracking-widest mb-4 italic">{userData.email}</p>
                                     <button className="w-full py-2.5 bg-slate-50 border border-slate-100 text-slate-400 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-indigo-600 hover:text-white transition-all shadow-sm">View Profile</button>
                                 </section>
 

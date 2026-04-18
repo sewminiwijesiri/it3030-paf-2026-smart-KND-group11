@@ -2,6 +2,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import api from '../utils/api';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
+import AdminSidebar from '../components/AdminSidebar';
+import TechnicianSidebar from '../components/TechnicianSidebar';
 import ResourceFilters from '../components/catalogue/ResourceFilters';
 
 const UserResourceCatalogue = () => {
@@ -43,14 +45,24 @@ const UserResourceCatalogue = () => {
         }
     };
 
+    const role = localStorage.getItem('role') || 'USER';
+
+    const renderSidebar = () => {
+        switch (role) {
+            case 'ADMIN': return <AdminSidebar />;
+            case 'TECHNICIAN': return <TechnicianSidebar />;
+            default: return <Sidebar />;
+        }
+    };
+
     return (
         <div className="min-h-screen bg-[#f8fafc] flex flex-col font-sans relative overflow-hidden">
             <Navbar />
             
             <div className="flex flex-1">
-                <Sidebar />
+                {renderSidebar()}
 
-                <main className="flex-1 lg:ml-64 p-6 md:p-8">
+                <main className={`flex-1 ${role === 'USER' ? 'lg:ml-64' : 'lg:ml-72'} p-6 md:p-8 transition-all duration-300`}>
                     <div className="max-w-6xl mx-auto">
                         
                         {/* Header Section */}

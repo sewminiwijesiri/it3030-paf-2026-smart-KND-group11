@@ -48,7 +48,7 @@ const Navbar = () => {
               </div>
               <button 
                 onClick={handleLogout} 
-                className="btn btn-outline !px-4 !py-1.5 !text-xs !rounded-lg border-blue-900/20 text-blue-900"
+                className="btn btn-outline !px-4 !py-1.5 !text-xs !rounded-lg border-red-600/20 text-red-600 hover:!bg-red-600 hover:!text-white hover:!border-red-600 transition-colors"
               >
                 Logout
               </button>
