@@ -10,6 +10,7 @@ import UserDashboard from './pages/UserDashboard';
 import UserResourceCatalogue from './pages/UserResourceCatalogue';
 import UserProfile from './pages/UserProfile';
 import TechnicianDashboard from './pages/TechnicianDashboard';
+import TechnicianTasks from './pages/TechnicianTasks';
 import AdminTest from './pages/AdminTest';
 import OAuth2RedirectHandler from './pages/OAuth2RedirectHandler';
 import AccessDenied from './pages/AccessDenied';
@@ -52,6 +53,10 @@ function App() {
           <Route 
             path="/technician-dashboard" 
             element={<ProtectedRoute allowedRoles={['TECHNICIAN', 'ADMIN']}><TechnicianDashboard /></ProtectedRoute>} 
+          />
+          <Route 
+            path="/technician/tasks" 
+            element={<ProtectedRoute allowedRoles={['TECHNICIAN', 'ADMIN']}><TechnicianTasks /></ProtectedRoute>} 
           />
           <Route 
             path="/admin" 

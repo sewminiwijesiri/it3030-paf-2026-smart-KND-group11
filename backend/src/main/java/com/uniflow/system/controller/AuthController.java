@@ -46,4 +46,24 @@ public class AuthController {
 
         return Map.of("message", "Invalid credentials");
     }
+
+    @GetMapping("/me")
+    public ResponseEntity<?> getCurrentUser(org.springframework.security.core.Authentication authentication) {
+        if (authentication == null) return ResponseEntity.status(401).build();
+        
+        String email = authentication.getName();
+        Optional<User> userOptional = authService.getUserByEmail(email);
+        
+        if (userOptional.isPresent()) {
+            User u = userOptional.get();
+            java.util.Map<String, Object> response = new java.util.HashMap<>();
+            response.put("name", u.getName() != null ? u.getName() : "User");
+            response.put("email", u.getEmail());
+            response.put("role", u.getRole());
+            response.put("id", u.getId());
+            return ResponseEntity.ok(response);
+        }
+        
+        return ResponseEntity.notFound().build();
+    }
 }

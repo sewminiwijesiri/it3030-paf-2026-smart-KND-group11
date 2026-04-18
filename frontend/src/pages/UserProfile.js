@@ -1,23 +1,54 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import api from '../utils/api';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
+import AdminSidebar from '../components/AdminSidebar';
+import TechnicianSidebar from '../components/TechnicianSidebar';
 import Footer from '../components/Footer';
 
 const UserProfile = () => {
-    const name = localStorage.getItem('name') || 'Student';
-    const email = localStorage.getItem('email') || 'student@uniflow.com';
-    const role = localStorage.getItem('role') || 'USER';
+    const [userData, setUserData] = useState({
+        name: localStorage.getItem('name') || 'Student',
+        email: localStorage.getItem('email') || 'student@uniflow.com',
+        role: localStorage.getItem('role') || 'USER',
+        id: ''
+    });
 
     const [isEditing, setIsEditing] = useState(false);
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const response = await api.get('/auth/me');
+                setUserData(response.data);
+                // Also update localStorage to keep it in sync
+                localStorage.setItem('name', response.data.name);
+                localStorage.setItem('email', response.data.email);
+                localStorage.setItem('role', response.data.role);
+            } catch (err) {
+                console.error('Failed to fetch user data', err);
+            }
+        };
+
+        fetchUserData();
+    }, []);
+
+    const renderSidebar = () => {
+        switch (userData.role) {
+            case 'ADMIN': return <AdminSidebar />;
+            case 'TECHNICIAN': return <TechnicianSidebar />;
+            default: return <Sidebar />;
+        }
+    };
 
     return (
         <div className="min-h-screen bg-[#f8fafc] flex flex-col font-sans relative overflow-hidden">
             <Navbar />
             
             <div className="flex flex-1">
-                <Sidebar />
+                {renderSidebar()}
 
-                <main className="flex-1 lg:ml-64 p-6 md:p-10">
+                <main className={`flex-1 ${userData.role === 'USER' ? 'lg:ml-64' : 'lg:ml-72'} p-6 md:p-10 transition-all duration-300`}>
                     <div className="max-w-5xl mx-auto">
                         
                         {/* Header Section */}
@@ -51,11 +82,11 @@ const UserProfile = () => {
                                     <div className="p-10 space-y-6">
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                             <div>
-                                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block">Full Name</label>
+                                                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block">Full Name</label>
                                                 <input 
                                                     type="text" 
                                                     disabled={!isEditing}
-                                                    defaultValue={name}
+                                                    defaultValue={userData.name}
                                                     className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-60 transition-all"
                                                 />
                                             </div>
@@ -64,7 +95,7 @@ const UserProfile = () => {
                                                 <input 
                                                     type="email" 
                                                     disabled={true} 
-                                                    defaultValue={email}
+                                                    defaultValue={userData.email}
                                                     className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm font-bold text-slate-400 cursor-not-allowed opacity-60"
                                                 />
                                             </div>
@@ -72,15 +103,15 @@ const UserProfile = () => {
                                                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block">Account Role</label>
                                                 <div className="w-full bg-indigo-50 border border-indigo-100 text-indigo-600 rounded-xl px-4 py-3 text-sm font-black flex items-center gap-2">
                                                     <span className="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
-                                                    {role}
+                                                    {userData.role}
                                                 </div>
                                             </div>
                                             <div>
-                                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block">Student ID</label>
+                                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block">User ID</label>
                                                 <input 
                                                     type="text" 
                                                     disabled={true}
-                                                    defaultValue="STU-2026-081"
+                                                    defaultValue={userData.id || 'N/A'}
                                                     className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm font-bold text-slate-400 cursor-not-allowed opacity-60"
                                                 />
                                             </div>
@@ -113,12 +144,12 @@ const UserProfile = () => {
                                 {/* Avatar Card */}
                                 <section className="bg-white p-8 rounded-[2.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 text-center group">
                                     <div className="w-32 h-32 bg-indigo-50 text-indigo-600 rounded-[2.5rem] mx-auto mb-6 flex items-center justify-center text-5xl font-black italic shadow-inner relative overflow-hidden ring-4 ring-white shadow-xl">
-                                        {name.charAt(0)}
+                                        {userData.name.charAt(0)}
                                         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-[10px] font-black uppercase tracking-widest pointer-events-none">
                                             Change
                                         </div>
                                     </div>
-                                    <h3 className="text-xl font-black text-slate-800 leading-none mb-1">{name}</h3>
+                                    <h3 className="text-xl font-black text-slate-800 leading-none mb-1">{userData.name}</h3>
                                     <span className="inline-block px-3 py-1 bg-emerald-50 text-emerald-600 text-[9px] font-black uppercase tracking-widest rounded-lg border border-emerald-100">
                                         Verified
                                     </span>

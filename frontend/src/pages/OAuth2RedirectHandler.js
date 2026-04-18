@@ -15,10 +15,14 @@ const OAuth2RedirectHandler = () => {
 
         const token = getUrlParameter('token');
         const role = getUrlParameter('role');
+        const name = getUrlParameter('name');
+        const email = getUrlParameter('email');
 
         if (token) {
             localStorage.setItem('token', token);
             localStorage.setItem('role', role);
+            if (name) localStorage.setItem('name', name);
+            if (email) localStorage.setItem('email', email);
             
             // Redirect based on role
             if (role === 'ADMIN') {

@@ -19,16 +19,16 @@ const AdminSidebar = () => {
             key={index}
             to={item.path}
             className={({ isActive }) =>
-              `flex items-center gap-4 px-5 py-3.5 rounded-2xl font-bold transition-all duration-300 group ${
+              `flex items-center gap-4 px-5 py-3.5 rounded-2xl font-bold transition-all duration-200 group ${
                 isActive
-                  ? 'bg-slate-900 text-white shadow-xl shadow-slate-200 translate-x-1'
-                  : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900 hover:translate-x-1'
+                  ? 'bg-[#5B5FEF] text-white shadow-lg shadow-indigo-100 translate-x-1'
+                  : 'text-[#64748B] hover:bg-[#E0E7FF] hover:text-[#0F172A] hover:translate-x-1'
               }`
             }
           >
             {({ isActive }) => (
               <>
-                <svg className={`w-5 h-5 transition-colors duration-300 ${isActive ? 'text-blue-400' : 'text-slate-400 group-hover:text-slate-900'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className={`w-5 h-5 transition-colors duration-200 ${isActive ? 'text-white' : 'text-slate-400 group-hover:text-slate-900'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d={item.icon} />
                 </svg>
                 <span className="text-sm tracking-tight">{item.label}</span>

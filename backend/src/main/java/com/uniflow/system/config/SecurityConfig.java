@@ -45,7 +45,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/auth/**", "/login/**", "/oauth2/**").permitAll() // Public
                 .requestMatchers("/admin/**").hasRole("ADMIN") // Admin only
-                .requestMatchers("/technician/**").hasRole("TECHNICIAN") // Technician only
+                .requestMatchers("/api/technician/**").hasRole("TECHNICIAN") // Technician only
                 .requestMatchers("/user/**").hasRole("USER") // User only
                 .anyRequest().authenticated() // All others must be logged in (any role)
             )
