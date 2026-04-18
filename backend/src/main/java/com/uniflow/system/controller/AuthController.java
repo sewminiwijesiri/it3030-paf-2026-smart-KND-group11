@@ -33,15 +33,15 @@ public class AuthController {
 
         if (found.isPresent()) {
             User u = found.get();
-
             String token = jwtUtil.generateToken(u.getEmail(), u.getRole().name());
 
-            return Map.of(
-                    "token", token,
-                    "role", u.getRole(),
-                    "name", u.getName(),
-                    "email", u.getEmail()
-            );
+            java.util.Map<String, Object> response = new java.util.HashMap<>();
+            response.put("token", token);
+            response.put("role", u.getRole());
+            response.put("name", u.getName() != null ? u.getName() : "Admin User");
+            response.put("email", u.getEmail());
+            
+            return response;
         }
 
         return Map.of("message", "Invalid credentials");

@@ -5,6 +5,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminResourceManagement from './pages/AdminResourceManagement';
+import AdminUserManagement from './pages/AdminUserManagement';
 import UserDashboard from './pages/UserDashboard';
 import UserResourceCatalogue from './pages/UserResourceCatalogue';
 import UserProfile from './pages/UserProfile';
@@ -31,6 +32,10 @@ function App() {
           <Route 
             path="/admin/resources" 
             element={<ProtectedRoute allowedRoles={['ADMIN']}><AdminResourceManagement /></ProtectedRoute>} 
+          />
+          <Route 
+            path="/admin/users" 
+            element={<ProtectedRoute allowedRoles={['ADMIN']}><AdminUserManagement /></ProtectedRoute>} 
           />
           <Route 
             path="/user-dashboard" 

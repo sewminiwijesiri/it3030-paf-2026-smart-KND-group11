@@ -76,6 +76,7 @@ const Login = () => {
                                 placeholder="name@example.edu"
                                 value={credentials.email}
                                 onChange={handleChange}
+                                autoComplete="off"
                                 required
                             />
                         </div>
@@ -94,6 +95,7 @@ const Login = () => {
                                 placeholder="••••••••"
                                 value={credentials.password}
                                 onChange={handleChange}
+                                autoComplete="new-password"
                                 required
                             />
                         </div>
