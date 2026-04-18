@@ -5,7 +5,7 @@ import Footer from './Footer';
 
 const TechnicianLayout = ({ children }) => {
   return (
-    <div className="min-h-screen flex flex-col bg-bg-soft">
+    <div className="min-h-screen flex flex-col bg-[#F1F5F9]">
       <Navbar />
       <div className="flex flex-1 pt-[2px]">
         <TechnicianSidebar />

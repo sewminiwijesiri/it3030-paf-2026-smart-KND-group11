@@ -33,7 +33,12 @@ const TechnicianTasks = () => {
 
     return (
         <TechnicianLayout>
-            <div className="animate-up">
+            <div className="relative overflow-x-hidden">
+                {/* Background Aesthetic Blobs */}
+                <div className="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] bg-sky-100/30 rounded-full blur-[120px] pointer-events-none z-[-1]"></div>
+                <div className="absolute bottom-[-20%] left-[-10%] w-[500px] h-[500px] bg-indigo-100/20 rounded-full blur-[100px] pointer-events-none z-[-1]"></div>
+
+                <div className="animate-up">
                 <header className="mb-12 border-b border-slate-100 pb-8 flex justify-between items-end">
                     <div>
                         <h1 className="text-4xl font-black text-slate-900 tracking-tight mb-2">Service Assignments</h1>
@@ -75,8 +80,8 @@ const TechnicianTasks = () => {
                                     <div className="flex flex-col items-center md:items-end mr-4">
                                         <span className="text-[10px] font-black text-slate-300 uppercase mb-1">Status</span>
                                         <span className={`px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-sm ${
-                                            task.status === 'PENDING' ? 'bg-amber-50 text-amber-600' : 
-                                            task.status === 'IN_PROGRESS' ? 'bg-blue-50 text-blue-600' : 'bg-emerald-50 text-emerald-600'
+                                            task.status === 'PENDING' ? 'bg-[#FFF7ED] text-[#F59E0B] border border-[#F59E0B]/10' : 
+                                            task.status === 'IN_PROGRESS' ? 'bg-[#EFF6FF] text-[#3B82F6] border border-[#3B82F6]/10' : 'bg-[#ECFDF5] text-[#22C55E] border border-[#22C55E]/10'
                                         }`}>
                                             {task.status.replace('_', ' ')}
                                         </span>
@@ -86,7 +91,7 @@ const TechnicianTasks = () => {
                                         {task.status === 'PENDING' && (
                                             <button 
                                                 onClick={() => updateStatus(task.id, 'IN_PROGRESS')}
-                                                className="px-6 py-2.5 bg-indigo-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-900 transition shadow-lg"
+                                                className="px-6 py-2.5 bg-[#5B5FEF] text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-[#4A4EDB] transition shadow-lg"
                                             >
                                                 Start Task
                                             </button>
@@ -94,7 +99,7 @@ const TechnicianTasks = () => {
                                         {task.status === 'IN_PROGRESS' && (
                                             <button 
                                                 onClick={() => updateStatus(task.id, 'COMPLETED')}
-                                                className="px-6 py-2.5 bg-emerald-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-900 transition shadow-lg"
+                                                className="px-6 py-2.5 bg-[#22C55E] text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-emerald-700 transition shadow-lg"
                                             >
                                                 Mark Done
                                             </button>
@@ -108,6 +113,7 @@ const TechnicianTasks = () => {
                         ))}
                     </div>
                 )}
+            </div>
             </div>
         </TechnicianLayout>
     );

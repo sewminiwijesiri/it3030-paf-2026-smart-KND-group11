@@ -19,10 +19,10 @@ const Sidebar = () => {
             key={index}
             to={item.path}
             className={({ isActive }) =>
-              `flex items-center gap-4 px-4 py-3 rounded-xl font-bold transition-all duration-200 group ${
+              `flex items-center gap-4 px-5 py-3.5 rounded-2xl font-bold transition-all duration-200 group ${
                 isActive
-                  ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-200'
-                  : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900'
+                  ? 'bg-[#5B5FEF] text-white shadow-lg shadow-indigo-100 translate-x-1'
+                  : 'text-[#64748B] hover:bg-[#E0E7FF] hover:text-[#0F172A] hover:translate-x-1'
               }`
             }
           >

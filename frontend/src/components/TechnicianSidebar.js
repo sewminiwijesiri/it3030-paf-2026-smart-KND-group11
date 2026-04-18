@@ -10,7 +10,7 @@ const TechnicianSidebar = () => {
   ];
 
   return (
-    <aside className="fixed left-0 top-[72px] bottom-0 w-72 bg-white border-r border-slate-200 hidden lg:flex flex-col z-[50]">
+    <aside className="fixed left-0 top-[72px] bottom-0 w-72 bg-[#CBD5E1] border-r border-slate-400/20 hidden lg:flex flex-col z-[50]">
       <div className="flex-1 py-10 px-6 space-y-4 overflow-y-auto">
         <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4 ml-4">Technician Panel</p>
         {menuItems.map((item, index) => (
@@ -18,10 +18,10 @@ const TechnicianSidebar = () => {
             key={index}
             to={item.path}
             className={({ isActive }) =>
-              `flex items-center gap-4 px-5 py-3.5 rounded-2xl font-bold transition-all duration-300 group ${
+              `flex items-center gap-4 px-5 py-3.5 rounded-2xl font-bold transition-all duration-200 group ${
                 isActive
-                  ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-100 translate-x-1'
-                  : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900 hover:translate-x-1'
+                  ? 'bg-[#5B5FEF] text-white shadow-lg shadow-indigo-100 translate-x-1'
+                  : 'text-[#64748B] hover:bg-white/40 hover:text-[#0F172A] hover:translate-x-1'
               }`
             }
           >

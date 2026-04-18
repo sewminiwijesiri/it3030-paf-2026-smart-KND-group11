@@ -1,3 +1,37 @@
+:root {
+  /* Primary Brand Colors */
+  --primary: #5B5FEF;
+  --primary-hover: #4A4EDB;
+  --primary-light: #EEF0FF;
+  --primary-grad: linear-gradient(135deg, #5B5FEF, #7C3AED);
+  
+  /* Status Colors */
+  --success: #22C55E;
+  --success-bg: #ECFDF5;
+  --warning: #F59E0B;
+  --warning-bg: #FFF7ED;
+  --info: #3B82F6;
+  --info-bg: #EFF6FF;
+  --danger: #EF4444;
+  --danger-bg: #FEF2F2;
+
+  /* Neutral Surface Colors */
+  --bg-page: #F8FAFC;
+  --bg-card: #FFFFFF;
+  --bg-sidebar: #F1F5F9;
+  
+  /* Typography Colors */
+  --text-main: #0F172A;
+  --text-sub: #64748B;
+  --text-muted: #94A3B8;
+
+  /* Effects */
+  --shadow-sm: 0 4px 12px rgba(15, 23, 42, 0.05);
+  --shadow-md: 0 8px 30px rgba(15, 23, 42, 0.08);
+  --radius-xl: 16px;
+  --radius-2xl: 24px;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -6,49 +40,45 @@
 
 @layer base {
   body {
-    @apply font-sans bg-bg text-text-main antialiased leading-relaxed;
+    @apply font-sans bg-[var(--bg-page)] text-[var(--text-main)] antialiased leading-relaxed;
   }
   
   h1, h2, h3, h4, h5, h6 {
-    @apply font-bold leading-tight text-text-main tracking-tight;
+    @apply font-bold leading-tight text-[var(--text-main)] tracking-tight;
   }
 }
 
 @layer components {
   .btn {
-    @apply inline-flex items-center justify-center px-6 py-3 rounded font-semibold text-sm transition-all duration-300 gap-2 border-2 border-transparent cursor-pointer;
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-[12px] font-bold text-sm transition-all duration-200 gap-2 border-2 border-transparent cursor-pointer shadow-sm active:scale-95;
   }
   
   .btn-primary {
-    @apply bg-primary text-white shadow-[0_4px_14px_0_rgba(59,130,246,0.39)] hover:bg-primary-dark hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(59,130,246,0.23)];
+    @apply bg-[var(--primary)] text-white hover:bg-[var(--primary-hover)] hover:-translate-y-0.5 hover:shadow-lg shadow-indigo-100;
   }
   
   .btn-outline {
-    @apply bg-transparent border-gray-200 text-text-main hover:border-primary hover:text-primary hover:bg-primary-light;
+    @apply bg-transparent border-slate-200 text-[var(--text-main)] hover:border-[var(--primary)] hover:text-[var(--primary)] hover:bg-[var(--primary-light)];
   }
   
   .card {
-    @apply bg-white rounded p-8 border border-gray-200 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:border-primary-light;
+    @apply bg-white rounded-[16px] p-8 border border-slate-100 transition-all duration-300 shadow-[var(--shadow-sm)] hover:shadow-[var(--shadow-md)] hover:-translate-y-1;
   }
   
   .input-field {
-    @apply w-full px-4 py-3.5 bg-bg-soft border border-gray-200 rounded font-sans text-sm transition-all duration-300 outline-none focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/10;
+    @apply w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-[12px] font-sans text-sm transition-all duration-200 outline-none focus:border-[var(--primary)] focus:bg-white focus:ring-4 focus:ring-indigo-500/10;
   }
   
   .glass {
     @apply bg-white/70 backdrop-blur-md border border-white/30;
   }
   
-  .glass-dark {
-    @apply bg-slate-900/80 backdrop-blur-md border border-white/10 text-white;
+  .sidebar-item {
+    @apply flex items-center gap-4 px-5 py-3.5 rounded-2xl font-bold transition-all duration-200 text-[var(--text-sub)] hover:bg-[#E0E7FF] hover:text-[var(--text-main)];
   }
-  
-  .badge {
-    @apply inline-block px-3 py-1 rounded-full text-[0.8rem] font-semibold uppercase tracking-wider;
-  }
-  
-  .badge-primary {
-    @apply bg-primary-light text-primary;
+
+  .sidebar-item-active {
+    @apply bg-[var(--primary)] text-white shadow-lg shadow-indigo-100 translate-x-1;
   }
 }
 
@@ -57,20 +87,8 @@
     animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
   
-  .animate-scale {
-    animation: fadeInScale 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  }
-  
-  .float {
-    animation: float 4s ease-in-out infinite;
-  }
-
   .grad-primary {
-    @apply bg-gradient-to-br from-primary to-accent;
-  }
-  
-  .grad-text {
-    @apply bg-gradient-to-br from-primary to-accent bg-clip-text text-transparent;
+    background: var(--primary-grad);
   }
 }
 
@@ -87,6 +105,17 @@
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
   50% { transform: translateY(-10px); }
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+* {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
 
 /* Autofill Fix */
