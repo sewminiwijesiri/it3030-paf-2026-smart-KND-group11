@@ -22,11 +22,13 @@ const Login = () => {
 
         try {
             const response = await api.post('/auth/login', credentials);
-            const { token, role, message } = response.data;
+            const { token, role, name, email, message } = response.data;
 
             if (token) {
                 localStorage.setItem('token', token);
                 localStorage.setItem('role', role);
+                localStorage.setItem('name', name);
+                localStorage.setItem('email', email);
                 
                 if (role === 'ADMIN') {
                     navigate('/admin-dashboard');

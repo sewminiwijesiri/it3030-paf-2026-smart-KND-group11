@@ -6,6 +6,8 @@ import Register from './pages/Register';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminResourceManagement from './pages/AdminResourceManagement';
 import UserDashboard from './pages/UserDashboard';
+import UserResourceCatalogue from './pages/UserResourceCatalogue';
+import UserProfile from './pages/UserProfile';
 import TechnicianDashboard from './pages/TechnicianDashboard';
 import AdminTest from './pages/AdminTest';
 import OAuth2RedirectHandler from './pages/OAuth2RedirectHandler';
@@ -33,6 +35,14 @@ function App() {
           <Route 
             path="/user-dashboard" 
             element={<ProtectedRoute allowedRoles={['USER', 'ADMIN', 'TECHNICIAN']}><UserDashboard /></ProtectedRoute>} 
+          />
+          <Route 
+            path="/book" 
+            element={<ProtectedRoute allowedRoles={['USER', 'ADMIN', 'TECHNICIAN']}><UserResourceCatalogue /></ProtectedRoute>} 
+          />
+          <Route 
+            path="/profile" 
+            element={<ProtectedRoute allowedRoles={['USER', 'ADMIN', 'TECHNICIAN']}><UserProfile /></ProtectedRoute>} 
           />
           <Route 
             path="/technician-dashboard" 
