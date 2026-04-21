@@ -1,7 +1,6 @@
 import React from 'react';
 import Navbar from './Navbar';
 import AdminSidebar from './AdminSidebar';
-import Footer from './Footer';
 
 const AdminLayout = ({ children }) => {
   return (
@@ -14,9 +13,6 @@ const AdminLayout = ({ children }) => {
             {children}
           </div>
         </main>
-      </div>
-      <div className="lg:ml-72 transition-all duration-300">
-        <Footer />
       </div>
     </div>
   );
