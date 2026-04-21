@@ -2,151 +2,192 @@ import React from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { Link } from 'react-router-dom';
+import { ArrowRight, CheckCircle, Zap } from 'lucide-react';
 import heroBg from '../assets/hero-bg.png';
 import showcaseImg from '../assets/campus-showcase.png';
 
 const Home = () => {
-    return (
-        <div className="min-h-screen bg-bg-soft">
-            <Navbar />
-            <main>
-                {/* Modern Hero Section */}
-                <section className="relative py-40 md:py-60 overflow-hidden bg-cover bg-center flex items-center" style={{ backgroundImage: `url(${heroBg})` }}>
-                    {/* Dark Overlay for Readability */}
-                    <div className="absolute inset-0 bg-gradient-to-b from-slate-900/90 to-slate-900/70 z-[1]"></div>
+    // Local assets for primary sections, Unsplash for secondary ones
+    const aboutImg = showcaseImg;
+    const resourceImgs = [
+        "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=600",
+        "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=600",
+        "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=600"
+    ];
 
-                    <div className="container mx-auto px-4 md:px-8 relative z-[10]">
-                        <div className="animate-up text-center max-w-[900px] mx-auto">
-                            <span className="badge bg-primary text-white border-none mb-6 px-6 py-2">Next-Gen Learning Platform</span>
-                            <h1 className="text-4xl md:text-7xl font-extrabold mb-6 text-white tracking-tight leading-tight">
-                                Master Your Future <br className="hidden md:block" /> With UniFlow
-                            </h1>
-                            <p className="text-lg md:text-xl text-white/85 mb-10 max-w-[750px] mx-auto leading-relaxed">
-                                UniFlow is a role-based platform designed to manage facility bookings, maintenance requests, and campus workflows efficiently.
+    return (
+        <div className="min-h-screen bg-white">
+            <Navbar />
+            
+            <main>
+                {/* 1. HERO SECTION - Premium Local Background */}
+                <section 
+                    id="hero"
+                    className="relative min-h-screen flex items-center justify-center bg-cover bg-center overflow-hidden"
+                    style={{ backgroundImage: `url(${heroBg})` }}
+                >
+                    <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-[2px]"></div>
+                    
+                    <div className="container mx-auto px-4 md:px-8 relative z-10 text-center">
+                        <div className="animate-up max-w-[850px] mx-auto">
+                            <p className="text-[#FFD166] font-black text-xs uppercase tracking-[0.4em] mb-6 drop-shadow-md">
+                                Next-Generation Campus Management
                             </p>
-                            <div className="flex flex-wrap gap-4 justify-center">
-                                <Link to="/register" className="btn btn-primary !px-10 !py-4 shadow-xl shadow-primary/20">
+                            <h1 className="text-5xl md:text-8xl font-black text-white mb-8 leading-[1.05] tracking-tighter">
+                                Master Your Future <br/> 
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-white/60">
+                                    With UniFlow
+                                </span>
+                            </h1>
+                            <div className="flex flex-col sm:flex-row gap-5 justify-center mt-12">
+                                <Link to="/register" className="bg-[#FFD166] text-slate-900 px-10 py-5 rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-white hover:scale-105 transition-all shadow-2xl shadow-[#FFD166]/20">
                                     Start Learning
                                 </Link>
-                                <Link to="/login" className="btn btn-outline !px-10 !py-4 text-white border-white/30 hover:bg-white/10">
-                                    View Courses
-                                </Link>
+                                <button className="bg-white/10 backdrop-blur-md border border-white/20 text-white px-10 py-5 rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-white/20 transition-all">
+                                    Learn More
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Dark Feature Bar Overlay */}
+                    <div id="features" className="absolute bottom-0 left-0 right-0 bg-[#0F172A] py-12 z-20 border-t border-white/5">
+                        <div className="container mx-auto px-4 md:px-8">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+                                {[
+                                    { title: 'SMART BOOKING', icon: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z', desc: 'Reserved seating and equipment at your fingertips.' },
+                                    { title: 'MAINTENANCE HUB', icon: 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z', desc: 'Instant reporting and resolution of campus issues.' },
+                                    { title: 'ROLE CONTROL', icon: 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z', desc: 'Secure, role-based access for students and staff.' },
+                                ].map((feature, i) => (
+                                    <div key={i} className="flex gap-6 group">
+                                        <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center shrink-0 border border-white/10 group-hover:bg-[#FFD166] group-hover:border-transparent transition-all">
+                                            <svg className="w-6 h-6 text-[#FFD166] group-hover:text-slate-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={feature.icon} />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h3 className="text-white font-black text-xs uppercase tracking-widest mb-1">{feature.title}</h3>
+                                            <p className="text-slate-400 text-[11px] font-medium leading-relaxed uppercase opacity-70 tracking-tight">{feature.desc}</p>
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     </div>
                 </section>
 
-                {/* Feature Cards Section */}
-                <section id="features" className="py-20 bg-bg-soft">
-                    <div className="container mx-auto px-4 md:px-8 -mt-32 relative z-20">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                            {[
-                                { title: 'Booking Management', desc: 'Request and manage room, lab, and equipment bookings with automated conflict prevention.', icon: '📅', color: '#3b82f6' },
-                                { title: 'Maintenance System', desc: 'Report issues with resources and track ticket status from Open to Closed in real-time.', icon: '🛠', color: '#10b981' },
-                                { title: 'Secure Authentication', desc: 'Enterprise-grade security featuring JWT-based login and Google OAuth 2.0 integration.', icon: '🔐', color: '#8b5cf6' },
-                                { title: 'Role-Based Dashboards', desc: 'Dedicated portals for Admins, Technicians, and Users to manage their specific tasks.', icon: '👥', color: '#f59e0b' }
-                            ].map((card, index) => (
-                                <div key={index} className="card bg-blue-50 border border-blue-500/10 shadow-xl shadow-blue-900/5 rounded-[24px] p-10 flex flex-col items-center text-center justify-center min-h-[320px] animate-scale" style={{ animationDelay: `${index * 0.1}s` }}>
-                                    <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-lg shadow-blue-500/10" style={{ color: card.color }}>
-                                        {card.icon}
-                                    </div>
-                                    <h3 className="text-xl font-bold mb-4 text-blue-900">{card.title}</h3>
-                                    <p className="text-sm leading-relaxed text-slate-500">{card.desc}</p>
+                {/* 2. ABOUT SECTION - UniFlow Insights */}
+                <section id="about-us" className="py-24 bg-white">
+                    <div className="container mx-auto px-4 md:px-8">
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 md:gap-24 items-center">
+                            <div className="animate-up max-w-[550px]">
+                                <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-8 tracking-tight">
+                                    UniFlow Platform
+                                </h2>
+                                <p className="text-[15px] text-slate-400 mb-6 leading-relaxed">
+                                    For years, UniFlow has empowered campuses with digital transformation, managing more than 1,700 resources and saving thousands of hours in administrative effort across higher education institutions.
+                                </p>
+                                <p className="text-[15px] text-slate-400 mb-10 leading-relaxed">
+                                    We are home to an intricate network of students, technicians, and expert faculty representing an interconnected community. We are proud of our seamless operational ethos, and the way our platform supports academic achievement every single day.
+                                </p>
+                                <div className="pt-2">
+                                    <span 
+                                        className="text-4xl text-slate-800" 
+                                        style={{ fontFamily: '"Brush Script MT", "Lucida Handwriting", cursive' }}
+                                    >
+                                        The UniFlow Team
+                                    </span>
                                 </div>
-                            ))}
+                            </div>
+                            <div className="relative">
+                                <img 
+                                    src={aboutImg} 
+                                    alt="Academic Excellence" 
+                                    className="relative z-10 w-full object-cover shadow-md h-[400px] md:h-[500px]" 
+                                />
+                            </div>
                         </div>
                     </div>
                 </section>
 
-                {/* Workflow Section - How it Works */}
-                <section className="py-24 bg-white">
+                {/* 3. STATISTICS BAR - Vibrant Accent */}
+                <section className="bg-[#FFCC29] py-20 relative overflow-hidden">
+                    <div className="container mx-auto px-4 md:px-8 relative z-10">
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
+                            {[
+                                { val: '5500', label: 'People Active' },
+                                { val: '280+', label: 'Managed Assets' },
+                                { val: '12+', label: 'Years Experience' },
+                                { val: '100%', label: 'Efficiency Goal' },
+                            ].map((stat, i) => (
+                                <div key={i} className="text-center">
+                                    <h3 className="text-4xl md:text-6xl font-black text-slate-900 mb-2 tracking-tighter italic">{stat.val}</h3>
+                                    <p className="text-slate-800 font-black text-[10px] uppercase tracking-widest opacity-70">{stat.label}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                    {/* Decorative Blob */}
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-white/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+                </section>
+
+                {/* 4. RESOURCE HIGHLIGHTS - eSchool Themed Cards */}
+                <section id="catalogue" className="py-24 bg-white border-t border-slate-50">
                     <div className="container mx-auto px-4 md:px-8">
                         <div className="text-center mb-16">
-                            <span className="text-primary font-bold text-xs uppercase tracking-[0.2em] mb-3 block">Operational Flow</span>
-                            <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">How UniFlow Works</h2>
+                            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">Explore Campus Resources</h2>
                         </div>
-                        
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
-                            {[
-                                { step: '01', title: 'Resource Request', desc: 'User requests a booking or reports a campus incident with key details.', icon: '📝' },
-                                { step: '02', title: 'Rapid Assignment', desc: 'Admin reviews requests or assigns a Technician to relevant tickets.', icon: '🤝' },
-                                { step: '03', title: 'Live Resolution', desc: 'Real-time updates and notifications are sent throughout the workflow.', icon: '✅' }
-                            ].map((item, index) => (
-                                <div key={index} className="text-center p-8 relative group">
-                                    <div className="w-20 h-20 bg-primary text-white rounded-full flex items-center justify-center text-3xl mx-auto mb-6 shadow-xl shadow-primary/30 relative z-[2]">
-                                        {item.icon}
-                                        <div className="absolute -top-1 -right-1 bg-slate-900 text-white w-7 h-7 rounded-full text-[10px] font-bold flex items-center justify-center border-2 border-white">{item.step}</div>
-                                    </div>
-                                    <h3 className="text-xl font-bold mb-4 text-blue-900 tracking-tight">{item.title}</h3>
-                                    <p className="text-slate-500 leading-relaxed text-sm">{item.desc}</p>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </section>
 
-                {/* Showcase Section - Detailed Modules */}
-                <section className="py-32 bg-slate-50">
-                    <div className="container mx-auto px-4 md:px-8">
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-                            <div className="animate-up relative">
-                                <div className="absolute -inset-4 bg-gradient-to-br from-primary to-secondary rounded-[32px] -rotate-2 opacity-10"></div>
-                                <img 
-                                    src={showcaseImg} 
-                                    alt="Campus Operations" 
-                                    className="w-full rounded-3xl shadow-2xl relative z-[1]"
-                                />
-                                <div className="glass float absolute bottom-[10%] -right-5 p-5 rounded-2xl shadow-xl z-[2] flex items-center gap-3 bg-white/95 border border-blue-100">
-                                    <div className="bg-success w-2.5 h-2.5 rounded-full"></div>
-                                    <span className="font-bold text-slate-800 text-xs tracking-tight">Automated Conflict Checking</span>
-                                </div>
-                            </div>
-                            <div className="animate-up delay-200">
-                                <span className="text-primary font-bold text-xs uppercase tracking-[0.2em] mb-4 block">Operational Excellence</span>
-                                <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold my-8 leading-[1.1] tracking-tight text-slate-900">Unified Hub for Smart Campus Management</h2>
-                                <p className="text-lg text-slate-500 mb-10 leading-relaxed">
-                                    Our platform streamlines daily university operations by digitizing resource allocation and maintenance workflows.
-                                </p>
-                                <div className="grid grid-cols-2 gap-8 mb-12">
-                                    {[
-                                        { label: 'Facility Catalogue', icon: '🏛️' },
-                                        { label: 'Conflict Prevention', icon: '⚖️' },
-                                        { label: 'Incident Evidence', icon: '📸' },
-                                        { label: 'Live Notifications', icon: '🔔' }
-                                    ].map((item, i) => (
-                                        <div key={i} className="flex items-center gap-3">
-                                            <span className="text-2xl drop-shadow-sm">{item.icon}</span>
-                                            <span className="font-semibold text-slate-800 text-sm">{item.label}</span>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                            {[
+                                { title: 'Advanced Laboratories', category: 'Science & Tech', price: 'Free', img: resourceImgs[0], rating: 4.9 },
+                                { title: 'Creative Studios', category: 'Arts & Media', price: 'Bookable', img: resourceImgs[1], rating: 4.8 },
+                                { title: 'Collaborative Spaces', category: 'General', price: 'Open', img: resourceImgs[2], rating: 5.0 },
+                            ].map((res, i) => (
+                                <div key={i} className="bg-white rounded border border-slate-200 overflow-hidden hover:shadow-xl transition-all duration-300">
+                                    <div className="relative h-[240px]">
+                                        <img src={res.img} alt={res.title} className="w-full h-full object-cover" />
+                                        <div className="absolute top-4 right-4">
+                                            <span className="bg-[#3f4175] text-white px-3 py-1 text-[11px] font-bold shadow-md">
+                                                {res.price}
+                                            </span>
                                         </div>
-                                    ))}
-                                </div>
-                                <Link to="/register" className="btn btn-primary !px-8 !py-3.5">Explore Platform Capabilities</Link>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                {/* Real-time Campus Stats Section */}
-                <section className="py-24 bg-sky-100 relative overflow-hidden">
-                    <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_50%_50%,var(--primary),transparent)]"></div>
-                    <div className="container mx-auto px-4 md:px-8 relative z-[1]">
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-12 text-center">
-                            {[
-                                { val: '250+', label: 'Managed Assets' },
-                                { val: '99.8%', label: 'Conflict Accuracy' },
-                                { val: '45m', label: 'Avg. Response' },
-                                { val: '24/7', label: 'Live Monitoring' }
-                            ].map((stat, i) => (
-                                <div key={i} className="animate-up" style={{ animationDelay: `${i * 0.1}s` }}>
-                                    <div className="text-4xl md:text-5xl font-extrabold text-blue-900 mb-2">{stat.val}</div>
-                                    <div className="text-slate-600 font-bold text-xs uppercase tracking-widest">{stat.label}</div>
+                                    </div>
+                                    <div className="p-6">
+                                        <div className="flex items-center gap-3 mb-4">
+                                            <div className="w-8 h-8 rounded-full bg-slate-100 overflow-hidden border border-slate-200">
+                                                <img src={`https://ui-avatars.com/api/?name=Campus+System&background=f1f5f9&color=64748b`} alt="Admin" />
+                                            </div>
+                                            <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">{res.category}</p>
+                                        </div>
+                                        
+                                        <h3 className="text-xl font-bold text-slate-800 mb-2">{res.title}</h3>
+                                        
+                                        <div className="flex items-center gap-1 mb-8">
+                                            {[...Array(5)].map((_, i) => (
+                                                <svg key={i} className={`w-4 h-4 ${i < Math.floor(res.rating) ? 'text-[#FFD166]' : 'text-slate-200'}`} fill="currentColor" viewBox="0 0 20 20">
+                                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                                </svg>
+                                            ))}
+                                            <span className="text-xs text-slate-500 font-medium ml-1">({res.rating})</span>
+                                        </div>
+                                        
+                                        <div className="flex justify-start">
+                                            <button className="bg-[#FFD166] text-slate-900 px-6 py-2.5 rounded-full font-bold text-[11px] uppercase tracking-widest hover:scale-105 transition-transform">
+                                                Book Now
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             ))}
                         </div>
                     </div>
                 </section>
             </main>
-            <Footer />
+            
+            <footer id="contact">
+                <Footer />
+            </footer>
         </div>
     );
 };
