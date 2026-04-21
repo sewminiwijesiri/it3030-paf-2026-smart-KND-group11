@@ -22,9 +22,9 @@ const TechnicianDashboard = () => {
 
     const stats = [
         { label: 'Assigned Tasks', val: tasks.length, color: 'text-[#3B82F6]', bg: 'bg-[#EFF6FF]', icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2' },
-        { label: 'Pending', val: tasks.filter(t => t.status === 'PENDING').length, color: 'text-[#F59E0B]', bg: 'bg-[#FFF7ED]', icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' },
+        { label: 'Pending', val: tasks.filter(t => t.status === 'OPEN').length, color: 'text-[#F59E0B]', bg: 'bg-[#FFF7ED]', icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' },
         { label: 'In Progress', val: tasks.filter(t => t.status === 'IN_PROGRESS').length, color: 'text-[#3B82F6]', bg: 'bg-[#EFF6FF]', icon: 'M13 10V3L4 14h7v7l9-11h-7z' },
-        { label: 'Completed', val: tasks.filter(t => t.status === 'COMPLETED').length, color: 'text-[#22C55E]', bg: 'bg-[#ECFDF5]', icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' }
+        { label: 'Completed', val: tasks.filter(t => t.status === 'RESOLVED').length, color: 'text-[#22C55E]', bg: 'bg-[#ECFDF5]', icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' }
     ];
 
     return (
@@ -99,7 +99,7 @@ const TechnicianDashboard = () => {
                                             </td>
                                             <td className="px-8 py-6">
                                                 <span className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest ${
-                                                    task.status === 'PENDING' ? 'bg-[#FFF7ED] text-[#F59E0B]' : 
+                                                    task.status === 'OPEN' ? 'bg-[#FFF7ED] text-[#F59E0B]' : 
                                                     task.status === 'IN_PROGRESS' ? 'bg-[#EFF6FF] text-[#3B82F6]' : 'bg-[#ECFDF5] text-[#22C55E]'
                                                 }`}>
                                                     {task.status.replace('_', ' ')}

@@ -47,6 +47,7 @@ public class SecurityConfig {
                 .requestMatchers("/admin/**").hasRole("ADMIN") // Admin only
                 .requestMatchers("/api/technician/**").hasRole("TECHNICIAN") // Technician only
                 .requestMatchers("/user/**").hasRole("USER") // User only
+                .requestMatchers("/api/files/download/**").permitAll() // Allow viewing images publically/easily
                 .anyRequest().authenticated() // All others must be logged in (any role)
             )
             .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Enable CORS

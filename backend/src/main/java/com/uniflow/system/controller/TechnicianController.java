@@ -28,8 +28,13 @@ public class TechnicianController {
     @PutMapping("/tasks/{id}/status")
     public ResponseEntity<MaintenanceRequest> updateTaskStatus(
             @PathVariable String id, 
-            @RequestParam MaintenanceRequest.MaintenanceStatus status) {
-        return ResponseEntity.ok(maintenanceService.updateStatus(id, status));
+            @RequestParam MaintenanceRequest.MaintenanceStatus status,
+            @RequestBody(required = false) MaintenanceRequest updateDetails) {
+        
+        String notes = updateDetails != null ? updateDetails.getResolutionNotes() : null;
+        List<String> attachments = updateDetails != null ? updateDetails.getAttachments() : null;
+        
+        return ResponseEntity.ok(maintenanceService.updateTicketDetails(id, status, notes, attachments));
     }
 
     @GetMapping("/test")

@@ -11,6 +11,10 @@ import UserResourceCatalogue from './pages/UserResourceCatalogue';
 import UserProfile from './pages/UserProfile';
 import TechnicianDashboard from './pages/TechnicianDashboard';
 import TechnicianTasks from './pages/TechnicianTasks';
+import TicketSubmission from './pages/TicketSubmission';
+import MyTickets from './pages/MyTickets';
+import TicketDetails from './pages/TicketDetails';
+import AdminMaintenance from './pages/AdminMaintenance';
 import AdminTest from './pages/AdminTest';
 import OAuth2RedirectHandler from './pages/OAuth2RedirectHandler';
 import AccessDenied from './pages/AccessDenied';
@@ -39,8 +43,24 @@ function App() {
             element={<ProtectedRoute allowedRoles={['ADMIN']}><AdminUserManagement /></ProtectedRoute>} 
           />
           <Route 
+            path="/admin/maintenance" 
+            element={<ProtectedRoute allowedRoles={['ADMIN']}><AdminMaintenance /></ProtectedRoute>} 
+          />
+          <Route 
             path="/user-dashboard" 
             element={<ProtectedRoute allowedRoles={['USER', 'ADMIN', 'TECHNICIAN']}><UserDashboard /></ProtectedRoute>} 
+          />
+          <Route 
+            path="/my-tickets" 
+            element={<ProtectedRoute allowedRoles={['USER', 'ADMIN', 'TECHNICIAN']}><MyTickets /></ProtectedRoute>} 
+          />
+          <Route 
+            path="/report-incident" 
+            element={<ProtectedRoute allowedRoles={['USER', 'ADMIN', 'TECHNICIAN']}><TicketSubmission /></ProtectedRoute>} 
+          />
+          <Route 
+            path="/tickets/:id" 
+            element={<ProtectedRoute allowedRoles={['USER', 'ADMIN', 'TECHNICIAN']}><TicketDetails /></ProtectedRoute>} 
           />
           <Route 
             path="/book" 

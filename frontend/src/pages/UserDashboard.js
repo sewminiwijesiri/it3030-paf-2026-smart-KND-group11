@@ -163,7 +163,7 @@ const UserDashboard = () => {
                                 <section className="bg-white p-6 rounded-[2.5rem] shadow-sm border border-slate-100 text-center relative overflow-hidden group">
                                     <div className="absolute top-0 left-0 w-full h-1 bg-indigo-600"></div>
                                     <div className="w-20 h-20 bg-indigo-50 text-indigo-600 rounded-[2rem] mx-auto mb-4 flex items-center justify-center text-3xl font-black italic shadow-inner group-hover:scale-95 transition-transform duration-500">
-                                        {userData.name.charAt(0)}
+                                        {userData.name?.charAt(0) || '?'}
                                     </div>
                                     <h3 className="text-base font-black text-slate-800 leading-none mb-1">{userData.name}</h3>
                                     <p className="text-[10px] font-bold text-slate-300 uppercase tracking-widest mb-4 italic">{userData.email}</p>
