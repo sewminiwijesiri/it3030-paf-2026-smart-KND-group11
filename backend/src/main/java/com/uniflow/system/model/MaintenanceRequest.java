@@ -14,13 +14,17 @@ public class MaintenanceRequest {
     private String requesterEmail;
     private String technicianEmail;
     private String description;
+    private String category;
+    private String preferredContact;
+    private java.util.List<String> attachments;
+    private String resolutionNotes;
     private MaintenanceStatus status;
     private MaintenancePriority priority;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
     public enum MaintenanceStatus {
-        PENDING, IN_PROGRESS, COMPLETED, CANCELLED
+        OPEN, IN_PROGRESS, RESOLVED, CLOSED, REJECTED, PENDING
     }
 
     public enum MaintenancePriority {
@@ -40,6 +44,14 @@ public class MaintenanceRequest {
     public void setTechnicianEmail(String technicianEmail) { this.technicianEmail = technicianEmail; }
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
+    public String getCategory() { return category; }
+    public void setCategory(String category) { this.category = category; }
+    public String getPreferredContact() { return preferredContact; }
+    public void setPreferredContact(String preferredContact) { this.preferredContact = preferredContact; }
+    public java.util.List<String> getAttachments() { return attachments; }
+    public void setAttachments(java.util.List<String> attachments) { this.attachments = attachments; }
+    public String getResolutionNotes() { return resolutionNotes; }
+    public void setResolutionNotes(String resolutionNotes) { this.resolutionNotes = resolutionNotes; }
     public MaintenanceStatus getStatus() { return status; }
     public void setStatus(MaintenanceStatus status) { this.status = status; }
     public MaintenancePriority getPriority() { return priority; }

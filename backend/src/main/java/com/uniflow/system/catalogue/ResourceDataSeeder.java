@@ -41,7 +41,7 @@ public class ResourceDataSeeder implements CommandLineRunner {
         req1.setDescription("Network switches in rack 4 are unresponsive. High latency reported by students.");
         req1.setTechnicianEmail(technicianEmail);
         req1.setPriority(com.uniflow.system.model.MaintenanceRequest.MaintenancePriority.HIGH);
-        req1.setStatus(com.uniflow.system.model.MaintenanceRequest.MaintenanceStatus.PENDING);
+        req1.setStatus(com.uniflow.system.model.MaintenanceRequest.MaintenanceStatus.OPEN);
         req1.setCreatedAt(java.time.LocalDateTime.now());
         
         com.uniflow.system.model.MaintenanceRequest req2 = new com.uniflow.system.model.MaintenanceRequest();
