@@ -1,7 +1,9 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 const AdminSidebar = () => {
+  const navigate = useNavigate();
+
   const menuItems = [
     { label: 'Admin Core', path: '/admin-dashboard', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
     { label: 'Facilities', path: '/admin/resources', icon: 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4' },
@@ -10,43 +12,89 @@ const AdminSidebar = () => {
     { label: 'System Logs', path: '/admin/logs', icon: 'M9 17v-2m3 2v-4m3 2v-6m-8-4h8a2 2 0 012 2v12a2 2 0 01-2 2H7a2 2 0 01-2-2V5a2 2 0 012-2z' },
   ];
 
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate('/login');
+  };
+
   return (
     <aside className="fixed left-0 top-[72px] bottom-0 w-72 bg-white border-r border-slate-200 hidden lg:flex flex-col z-[50]">
-      <div className="flex-1 py-10 px-6 space-y-4 overflow-y-auto">
-        <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4 ml-4">Command Center</p>
+      
+      {/* Brand Tag */}
+      <div className="px-6 pt-8 pb-4">
+        <div className="flex items-center gap-2 mb-1">
+          <span className="w-2 h-2 rounded-full bg-[#FFD166]"></span>
+          <p className="text-[10px] font-black text-[#3f4175] uppercase tracking-[0.3em]">Command Center</p>
+        </div>
+        <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest pl-4">Admin Panel</p>
+      </div>
+
+      {/* Divider */}
+      <div className="mx-6 mb-4 h-px bg-slate-100"></div>
+
+      {/* Nav Items */}
+      <div className="flex-1 px-4 space-y-1 overflow-y-auto">
         {menuItems.map((item, index) => (
           <NavLink
             key={index}
             to={item.path}
             className={({ isActive }) =>
-              `flex items-center gap-4 px-5 py-3.5 rounded-2xl font-bold transition-all duration-200 group ${
+              `flex items-center gap-4 px-5 py-3.5 rounded font-bold transition-all duration-200 group ${
                 isActive
-                  ? 'bg-[#5B5FEF] text-white shadow-lg shadow-indigo-100 translate-x-1'
-                  : 'text-[#64748B] hover:bg-[#E0E7FF] hover:text-[#0F172A] hover:translate-x-1'
+                  ? 'bg-[#FFD166] text-slate-900 shadow-md shadow-[#FFD166]/20'
+                  : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
               }`
             }
           >
             {({ isActive }) => (
               <>
-                <svg className={`w-5 h-5 transition-colors duration-200 ${isActive ? 'text-white' : 'text-slate-400 group-hover:text-slate-900'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d={item.icon} />
-                </svg>
-                <span className="text-sm tracking-tight">{item.label}</span>
+                <div className={`w-8 h-8 rounded flex items-center justify-center shrink-0 transition-colors ${
+                  isActive ? 'bg-white/60' : 'bg-slate-100 group-hover:bg-slate-200'
+                }`}>
+                  <svg className={`w-4 h-4 transition-colors ${isActive ? 'text-slate-900' : 'text-slate-500 group-hover:text-slate-800'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.1" d={item.icon} />
+                  </svg>
+                </div>
+                <span className="text-sm tracking-tight font-semibold">{item.label}</span>
+                {isActive && (
+                  <span className="ml-auto w-1.5 h-1.5 rounded-full bg-slate-900 shrink-0"></span>
+                )}
               </>
             )}
           </NavLink>
         ))}
       </div>
-      
+
+      {/* Divider */}
+      <div className="mx-6 mt-4 h-px bg-slate-100"></div>
+
       {/* Sidebar Footer */}
-      <div className="p-8">
-        <div className="bg-slate-50 border border-slate-100 p-5 rounded-3xl text-center">
-          <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.3em] mb-2">Build v2.4.0</p>
-          <div className="flex items-center justify-center gap-2">
-            <span className="w-2 h-2 bg-success rounded-full animate-pulse"></span>
-            <p className="text-xs font-bold text-slate-900">Node-Secure OK</p>
+      <div className="p-5 space-y-3">
+        {/* System Status */}
+        <div className="bg-[#0F172A] p-4 rounded border border-slate-800 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-16 h-16 bg-[#FFD166]/10 rounded-full blur-xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
+          <div className="relative z-10 flex items-center justify-between">
+            <div>
+              <p className="text-[9px] font-black text-slate-500 uppercase tracking-[0.3em] mb-1">UniFlow v2.4</p>
+              <p className="text-xs font-black text-white">Admin Portal</p>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
+              <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest">Live</span>
+            </div>
           </div>
         </div>
+
+        {/* Logout */}
+        <button
+          onClick={handleLogout}
+          className="w-full flex items-center gap-3 px-5 py-3 text-slate-500 hover:text-rose-600 hover:bg-rose-50 rounded font-semibold text-sm transition-all border border-transparent hover:border-rose-100 group"
+        >
+          <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+          </svg>
+          <span className="text-sm uppercase tracking-widest font-black text-[10px]">Sign Out</span>
+        </button>
       </div>
     </aside>
   );

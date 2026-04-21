@@ -21,7 +21,6 @@ const UserProfile = () => {
             try {
                 const response = await api.get('/auth/me');
                 setUserData(response.data);
-                // Also update localStorage to keep it in sync
                 localStorage.setItem('name', response.data.name);
                 localStorage.setItem('email', response.data.email);
                 localStorage.setItem('role', response.data.role);
@@ -42,44 +41,56 @@ const UserProfile = () => {
     };
 
     return (
-        <div className="min-h-screen bg-[#f8fafc] flex flex-col font-sans relative overflow-hidden">
+        <div className="min-h-screen bg-slate-50 flex flex-col font-sans relative">
             <Navbar />
             
-            <div className="flex flex-1">
+            <div className="flex flex-1 relative z-10 w-full overflow-hidden">
                 {renderSidebar()}
 
-                <main className={`flex-1 ${userData.role === 'USER' ? 'lg:ml-64' : 'lg:ml-72'} p-6 md:p-10 transition-all duration-300`}>
-                    <div className="max-w-5xl mx-auto">
-                        
-                        {/* Header Section */}
-                        <header className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-slate-100 pb-8">
-                            <div>
-                                <h1 className="text-3xl font-black text-slate-900 tracking-tight leading-none mb-2">
-                                    Account Settings
-                                </h1>
-                                <p className="text-slate-400 font-medium">Manage your personal information and security preferences.</p>
+                <main className={`flex-1 ${userData.role === 'USER' ? 'lg:ml-64' : 'lg:ml-72'} h-[calc(100vh-72px)] overflow-y-auto scroll-smooth`}>
+                    
+                    {/* Header Area styled like Dashboard */}
+                    <div className="bg-white border-b border-slate-200 py-10">
+                        <div className="max-w-[1000px] mx-auto px-6">
+                            <p className="text-[#3f4175] font-black text-xs uppercase tracking-[0.4em] mb-4 drop-shadow-sm flex items-center gap-2">
+                                <span className="w-2 h-2 rounded-full bg-[#FFD166]"></span>
+                                Account Management
+                            </p>
+                            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                                <div>
+                                    <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight leading-none mb-2">
+                                        Account Settings
+                                    </h1>
+                                    <p className="text-slate-500 font-bold uppercase tracking-wider text-[11px] max-w-sm">
+                                        Manage your personal information and security preferences.
+                                    </p>
+                                </div>
+                                <button 
+                                    onClick={() => setIsEditing(!isEditing)}
+                                    className={`shrink-0 px-8 py-3 rounded-full font-black text-[11px] uppercase tracking-widest transition-all shadow-lg ${
+                                        isEditing 
+                                        ? 'bg-[#0F172A] text-white hover:bg-slate-800' 
+                                        : 'bg-[#FFD166] text-slate-900 shadow-[#FFD166]/20 hover:scale-[1.02] hover:bg-[#FFCC29]'
+                                    }`}
+                                >
+                                    {isEditing ? 'Save Changes' : 'Edit Profile'}
+                                </button>
                             </div>
-                            <button 
-                                onClick={() => setIsEditing(!isEditing)}
-                                className={`px-6 py-3 rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-md ${
-                                    isEditing ? 'bg-slate-900 text-white' : 'bg-white text-indigo-600 border border-slate-200 hover:border-indigo-600'
-                                }`}
-                            >
-                                {isEditing ? 'Save Changes' : 'Edit Profile'}
-                            </button>
-                        </header>
+                        </div>
+                    </div>
 
-                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+                    <div className="max-w-[1000px] mx-auto px-6 py-10">
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                             
                             {/* Left Column: Profile Card & Info */}
                             <div className="lg:col-span-2 space-y-8">
                                 
                                 {/* Personal Information Card */}
-                                <section className="bg-white rounded-[2.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 overflow-hidden">
-                                    <div className="px-10 py-6 border-b border-slate-50 bg-slate-50/20">
-                                        <h2 className="text-sm font-black text-slate-800 uppercase tracking-widest">Personal Information</h2>
+                                <section className="bg-white rounded border border-slate-200 overflow-hidden shadow-sm">
+                                    <div className="px-8 py-6 border-b border-slate-100 bg-slate-50/50">
+                                        <h2 className="text-sm font-bold text-slate-800 uppercase tracking-widest">Personal Information</h2>
                                     </div>
-                                    <div className="p-10 space-y-6">
+                                    <div className="p-8 space-y-8">
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                             <div>
                                                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block">Full Name</label>
@@ -87,7 +98,7 @@ const UserProfile = () => {
                                                     type="text" 
                                                     disabled={!isEditing}
                                                     defaultValue={userData.name}
-                                                    className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-60 transition-all"
+                                                    className="w-full bg-slate-50 border border-slate-200 rounded px-5 py-4 text-sm font-bold text-slate-800 focus:outline-none focus:ring-1 focus:ring-[#0F172A] disabled:opacity-60 transition-all placeholder:text-slate-400"
                                                 />
                                             </div>
                                             <div>
@@ -96,13 +107,13 @@ const UserProfile = () => {
                                                     type="email" 
                                                     disabled={true} 
                                                     defaultValue={userData.email}
-                                                    className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm font-bold text-slate-400 cursor-not-allowed opacity-60"
+                                                    className="w-full bg-slate-50 border border-slate-200 rounded px-5 py-4 text-sm font-bold text-slate-500 cursor-not-allowed opacity-60"
                                                 />
                                             </div>
                                             <div>
                                                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block">Account Role</label>
-                                                <div className="w-full bg-indigo-50 border border-indigo-100 text-indigo-600 rounded-xl px-4 py-3 text-sm font-black flex items-center gap-2">
-                                                    <span className="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
+                                                <div className="w-full bg-slate-100 border border-slate-200 text-[#3f4175] rounded px-5 py-4 text-sm font-black flex items-center gap-2 uppercase tracking-wide">
+                                                    <span className="w-2 h-2 rounded-full bg-[#FFD166]"></span>
                                                     {userData.role}
                                                 </div>
                                             </div>
@@ -112,7 +123,7 @@ const UserProfile = () => {
                                                     type="text" 
                                                     disabled={true}
                                                     defaultValue={userData.id || 'N/A'}
-                                                    className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm font-bold text-slate-400 cursor-not-allowed opacity-60"
+                                                    className="w-full bg-slate-50 border border-slate-200 rounded px-5 py-4 text-sm font-bold text-slate-500 cursor-not-allowed opacity-60"
                                                 />
                                             </div>
                                         </div>
@@ -120,17 +131,17 @@ const UserProfile = () => {
                                 </section>
 
                                 {/* Account Security Card */}
-                                <section className="bg-white rounded-[2.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 overflow-hidden">
-                                    <div className="px-10 py-6 border-b border-slate-50 bg-slate-50/20">
-                                        <h2 className="text-sm font-black text-slate-800 uppercase tracking-widest">Account Security</h2>
+                                <section className="bg-white rounded border border-slate-200 overflow-hidden shadow-sm">
+                                    <div className="px-8 py-6 border-b border-slate-100 bg-slate-50/50">
+                                        <h2 className="text-sm font-bold text-slate-800 uppercase tracking-widest">Account Security</h2>
                                     </div>
-                                    <div className="p-10">
+                                    <div className="p-8">
                                         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
                                             <div>
-                                                <h3 className="text-base font-black text-slate-800 mb-1">Update Password</h3>
-                                                <p className="text-xs text-slate-400 font-medium">Ensure your account is using a long, random password to stay secure.</p>
+                                                <h3 className="text-lg font-bold text-slate-800 mb-1">Update Password</h3>
+                                                <p className="text-xs text-slate-500 font-semibold uppercase tracking-wider">Ensure your account is using a secure, random password.</p>
                                             </div>
-                                            <button className="px-5 py-2.5 bg-slate-900 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-indigo-600 transition shadow-md">
+                                            <button className="shrink-0 px-6 py-3 bg-[#0F172A] text-white rounded font-black text-[10px] uppercase tracking-widest hover:bg-slate-800 transition shadow-md">
                                                 Change Password
                                             </button>
                                         </div>
@@ -142,36 +153,37 @@ const UserProfile = () => {
                             <div className="space-y-8">
                                 
                                 {/* Avatar Card */}
-                                <section className="bg-white p-8 rounded-[2.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 text-center group">
-                                    <div className="w-32 h-32 bg-indigo-50 text-indigo-600 rounded-[2.5rem] mx-auto mb-6 flex items-center justify-center text-5xl font-black italic shadow-inner relative overflow-hidden ring-4 ring-white shadow-xl">
+                                <section className="bg-white p-8 rounded border border-slate-200 text-center group shadow-sm relative overflow-hidden">
+                                    <div className="absolute top-0 left-0 w-full h-2 bg-[#FFD166]"></div>
+                                    <div className="w-32 h-32 bg-slate-50 border border-slate-200 text-[#0F172A] rounded-full mx-auto mb-6 flex items-center justify-center text-5xl font-black italic relative overflow-hidden">
                                         {userData.name.charAt(0)}
-                                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-[10px] font-black uppercase tracking-widest pointer-events-none">
-                                            Change
-                                        </div>
+                                        <button className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-[10px] font-black uppercase tracking-widest cursor-pointer">
+                                            Update
+                                        </button>
                                     </div>
-                                    <h3 className="text-xl font-black text-slate-800 leading-none mb-1">{userData.name}</h3>
-                                    <span className="inline-block px-3 py-1 bg-emerald-50 text-emerald-600 text-[9px] font-black uppercase tracking-widest rounded-lg border border-emerald-100">
+                                    <h3 className="text-2xl font-bold text-slate-800 leading-none mb-2">{userData.name}</h3>
+                                    <span className="inline-block px-3 py-1 bg-[#3f4175] text-white text-[9px] font-black uppercase tracking-widest rounded border border-transparent shadow-[0_2px_10px_rgba(63,65,117,0.3)]">
                                         Verified
                                     </span>
                                 </section>
 
                                 {/* Preferences Card */}
-                                <section className="bg-white p-8 rounded-[2.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100">
-                                    <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-6">Preferences</h3>
+                                <section className="bg-white p-8 rounded border border-slate-200 shadow-sm">
+                                    <h3 className="text-sm font-bold text-slate-800 uppercase tracking-widest mb-6">Preferences</h3>
                                     <div className="space-y-6">
                                         <div className="flex items-center justify-between">
                                             <div>
-                                                <p className="text-xs font-black text-slate-700">Email Notifications</p>
-                                                <p className="text-[10px] text-slate-400 font-medium">Stay updated with requests</p>
+                                                <p className="text-xs font-bold text-slate-800 uppercase tracking-wider">Notifications</p>
+                                                <p className="text-[10px] text-slate-500 font-semibold uppercase tracking-widest">Receive email alerts</p>
                                             </div>
-                                            <div className="w-10 h-6 bg-indigo-600 rounded-full relative shadow-inner">
+                                            <div className="w-10 h-6 bg-[#3f4175] rounded-full relative shadow-inner cursor-pointer">
                                                 <div className="absolute right-1 top-1 w-4 h-4 bg-white rounded-full shadow-sm"></div>
                                             </div>
                                         </div>
                                         <div className="flex items-center justify-between">
                                             <div>
-                                                <p className="text-xs font-black text-slate-700">Dark Mode</p>
-                                                <p className="text-[10px] text-slate-400 font-medium">Coming soon</p>
+                                                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Dark Mode</p>
+                                                <p className="text-[10px] text-slate-300 font-semibold uppercase tracking-widest">WIP Feature</p>
                                             </div>
                                             <div className="w-10 h-6 bg-slate-200 rounded-full relative shadow-inner cursor-not-allowed">
                                                 <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full shadow-sm"></div>
@@ -181,11 +193,12 @@ const UserProfile = () => {
                                 </section>
 
                                 {/* Quick Tools Badge */}
-                                <div className="bg-indigo-600 p-8 rounded-[2.5rem] shadow-xl shadow-indigo-100 text-white relative overflow-hidden">
+                                <div className="bg-[#0F172A] p-8 rounded border border-slate-800 text-white relative overflow-hidden shadow-lg">
+                                     <div className="absolute top-0 right-0 w-32 h-32 bg-[#FFD166]/20 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2"></div>
                                      <div className="relative z-10">
-                                        <p className="text-[10px] font-black text-indigo-200 uppercase tracking-widest mb-1">Help Center</p>
-                                        <p className="text-sm font-bold leading-snug mb-4">Having trouble with your account settings?</p>
-                                        <button className="text-[10px] font-black uppercase bg-white/20 px-4 py-2 rounded-xl hover:bg-white/40 transition">Contact Support</button>
+                                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Help Center</p>
+                                        <p className="text-sm font-bold leading-snug mb-5">Having trouble with your account settings?</p>
+                                        <button className="text-[10px] font-black uppercase tracking-widest bg-white/10 border border-white/20 px-5 py-2.5 rounded hover:bg-white/20 transition-all">Support Desk</button>
                                      </div>
                                 </div>
                             </div>
