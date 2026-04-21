@@ -4,6 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import logoIcon from '../assets/uniflow-icon.svg';
+import heroBg from '../assets/hero-bg.png';
 
 const Login = () => {
     const [credentials, setCredentials] = useState({ email: '', password: '' });
@@ -51,28 +52,31 @@ const Login = () => {
     };
 
     return (
-        <div className="min-h-screen flex flex-col bg-bg-soft">
+        <div className="min-h-screen flex flex-col bg-slate-900">
             <Navbar />
-            <main className="flex-1 flex items-center justify-center py-10 px-5 relative overflow-hidden">
-                {/* Decorative background elements */}
-                <div className="absolute inset-0 opacity-60 z-0 bg-sky-50"></div>
+            <main 
+                className="flex-1 flex items-center justify-center p-5 relative overflow-hidden bg-cover bg-center min-h-[90vh]"
+                style={{ backgroundImage: `url(${heroBg})` }}
+            >
+                {/* Premium Dark Overlay */}
+                <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-[2px]"></div>
                 
-                <div className="card animate-up glass w-full max-w-[400px] p-8 z-[1] shadow-2xl">
-                    <div className="text-center mb-8">
-                        <img src={logoIcon} alt="UniFlow Logo" className="w-[64px] h-auto mx-auto mb-6" />
-                        <h2 className="text-2xl font-extrabold mb-1 tracking-tight text-slate-900">Welcome Back</h2>
-                        <p className="text-text-muted text-sm">Secure portal access</p>
+                <div className="bg-white rounded-[32px] w-full max-w-[360px] p-8 z-[1] shadow-2xl relative border border-white/20">
+                    <div className="text-center mb-6">
+                        <img src={logoIcon} alt="UniFlow Logo" className="w-[48px] h-auto mx-auto mb-4" />
+                        <h2 className="text-xl font-black mb-1.5 tracking-tight text-slate-900">Welcome Back</h2>
+                        <p className="font-bold text-[10px] uppercase tracking-widest text-slate-400">Secure Portal Access</p>
                     </div>
 
-                    <form onSubmit={handleLogin}>
-                        <div className="mb-4">
-                            <label className="block text-[10px] font-bold text-slate-700 mb-1.5 uppercase tracking-wider">
+                    <form onSubmit={handleLogin} className="space-y-4">
+                        <div>
+                            <label className="block text-[10px] font-black text-slate-800 mb-1.5 uppercase tracking-widest">
                                 Email Address
                             </label>
                             <input
                                 type="email"
                                 name="email"
-                                className="input-field !py-2.5 !px-3.5 !text-sm"
+                                className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-4 text-sm font-semibold focus:outline-none focus:ring-4 focus:ring-[#FFD166]/20 focus:border-[#FFD166] transition-all"
                                 placeholder="name@example.edu"
                                 value={credentials.email}
                                 onChange={handleChange}
@@ -81,17 +85,17 @@ const Login = () => {
                             />
                         </div>
 
-                        <div className="mb-6">
+                        <div>
                             <div className="flex justify-between items-center mb-1.5">
-                                <label className="text-[10px] font-bold text-slate-700 uppercase tracking-wider">
+                                <label className="text-[10px] font-black text-slate-800 uppercase tracking-widest">
                                     Password
                                 </label>
-                                <Link to="/" className="text-[10px] font-bold text-primary no-underline">Forgot?</Link>
+                                <Link to="/" className="text-[10px] font-black text-[#5B5FEF] hover:text-slate-900 transition-colors uppercase tracking-widest underline decoration-2 underline-offset-4">Forgot?</Link>
                             </div>
                             <input
                                 type="password"
                                 name="password"
-                                className="input-field !py-2.5 !px-3.5 !text-sm"
+                                className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-4 text-sm font-semibold focus:outline-none focus:ring-4 focus:ring-[#FFD166]/20 focus:border-[#FFD166] transition-all"
                                 placeholder="••••••••"
                                 value={credentials.password}
                                 onChange={handleChange}
@@ -101,14 +105,14 @@ const Login = () => {
                         </div>
 
                         {error && (
-                            <div className="text-xs text-error font-medium mb-4 p-3 bg-error/5 border border-error/10 rounded-lg">
+                            <div className="text-xs text-rose-600 font-bold mb-3 p-3 bg-rose-50 border border-rose-100 rounded-xl flex items-center justify-center">
                                 {error}
                             </div>
                         )}
 
                         <button 
                             type="submit" 
-                            className="btn btn-primary w-full !py-3 !text-sm mt-1" 
+                            className="bg-[#FFD166] text-slate-900 w-full py-3.5 rounded-full font-black text-[11px] uppercase tracking-widest hover:bg-[#FFC033] hover:scale-[1.02] transition-all shadow-lg shadow-[#FFD166]/30 mt-1" 
                             disabled={loading}
                         >
                             {loading ? 'Authenticating...' : 'Sign In'}
@@ -116,25 +120,26 @@ const Login = () => {
                     </form>
 
                     <div className="flex items-center my-6">
-                        <div className="flex-1 h-px bg-slate-200"></div>
-                        <span className="px-3 text-[10px] text-slate-400 font-bold uppercase">OR CONNECT</span>
-                        <div className="flex-1 h-px bg-slate-200"></div>
+                        <div className="flex-1 h-px bg-slate-100"></div>
+                        <span className="px-3 text-[9px] text-slate-400 font-black uppercase tracking-widest">OR CONNECT</span>
+                        <div className="flex-1 h-px bg-slate-100"></div>
                     </div>
 
                     <a 
                         href="http://localhost:8081/oauth2/authorization/google" 
-                        className="btn btn-outline w-full !py-2.5 !text-sm bg-white hover:bg-slate-50 transition-colors"
+                        className="flex items-center justify-center w-full py-3 rounded-full font-black text-[11px] uppercase tracking-widest border-2 border-slate-100 text-slate-700 bg-white hover:bg-slate-50 hover:border-slate-200 transition-all"
                     >
                         <img 
                             src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" 
                             alt="Google" 
                             className="w-4 h-4 mr-2"
                         />
-                        Google Auth
+                        Sign in with Google
                     </a>
 
-                    <div className="text-center mt-8 text-slate-500 text-sm">
-                        New here? <Link to="/register" className="text-primary font-bold no-underline ml-1">Join UniFlow</Link>
+                    <div className="text-center mt-6 pt-5 border-t border-slate-50">
+                        <span className="text-slate-500 text-[10px] font-bold">NEW HERE?</span> 
+                        <Link to="/register" className="text-[#5B5FEF] font-black uppercase tracking-widest text-[10px] ml-2 hover:text-slate-900 transition-colors">Join UniFlow</Link>
                     </div>
                 </div>
             </main>

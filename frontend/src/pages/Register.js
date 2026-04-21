@@ -4,6 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import logoIcon from '../assets/uniflow-icon.svg';
+import heroBg from '../assets/hero-bg.png';
 
 const Register = () => {
     const [user, setUser] = useState({ 
@@ -46,25 +47,29 @@ const Register = () => {
     };
 
     return (
-        <div className="min-h-screen flex flex-col bg-bg-soft">
+        <div className="min-h-screen flex flex-col bg-slate-900">
             <Navbar />
-            <main className="flex-1 flex items-center justify-center py-12 px-5 relative overflow-hidden">
-                <div className="absolute inset-0 opacity-60 z-0 bg-sky-50"></div>
+            <main 
+                className="flex-1 flex items-center justify-center p-5 relative overflow-hidden bg-cover bg-center min-h-[100vh]"
+                style={{ backgroundImage: `url(${heroBg})` }}
+            >
+                {/* Premium Dark Overlay */}
+                <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-[2px]"></div>
                 
-                <div className="card animate-up glass w-full max-w-[440px] p-8 z-[1] shadow-2xl">
-                    <div className="text-center mb-8">
-                        <img src={logoIcon} alt="UniFlow Logo" className="w-[64px] h-auto mx-auto mb-6" />
-                        <h2 className="text-2xl font-extrabold mb-1 tracking-tight text-slate-900">Join UniFlow</h2>
-                        <p className="text-text-muted text-sm">Global learning community</p>
+                <div className="bg-white rounded-[32px] w-full max-w-[380px] p-6 z-[1] shadow-2xl relative border border-white/20">
+                    <div className="text-center mb-4">
+                        <img src={logoIcon} alt="UniFlow Logo" className="w-[40px] h-auto mx-auto mb-2" />
+                        <h2 className="text-lg font-black mb-0.5 tracking-tight text-slate-900">Join UniFlow</h2>
+                        <p className="font-bold text-[9px] uppercase tracking-widest text-slate-400">Global Learning Community</p>
                     </div>
 
-                    <form onSubmit={handleRegister}>
-                        <div className="mb-4">
-                            <label className="block text-[10px] font-bold text-slate-700 mb-1.5 uppercase tracking-wider">Full Name</label>
+                    <form onSubmit={handleRegister} className="space-y-2.5">
+                        <div>
+                            <label className="block text-[8px] font-black text-slate-800 mb-0.5 uppercase tracking-widest">Full Name</label>
                             <input
                                 type="text"
                                 name="name"
-                                className="input-field !py-2.5 !px-3.5 !text-sm"
+                                className="w-full bg-slate-50 border border-slate-200 rounded-xl py-1.5 px-3.5 text-[13px] font-semibold focus:outline-none focus:ring-4 focus:ring-[#FFD166]/20 focus:border-[#FFD166] transition-all"
                                 placeholder="Your Name"
                                 value={user.name}
                                 onChange={handleChange}
@@ -72,12 +77,12 @@ const Register = () => {
                             />
                         </div>
 
-                        <div className="mb-4">
-                            <label className="block text-[10px] font-bold text-slate-700 mb-1.5 uppercase tracking-wider">Email Address</label>
+                        <div>
+                            <label className="block text-[8px] font-black text-slate-800 mb-0.5 uppercase tracking-widest">Email Address</label>
                             <input
                                 type="email"
                                 name="email"
-                                className="input-field !py-2.5 !px-3.5 !text-sm"
+                                className="w-full bg-slate-50 border border-slate-200 rounded-xl py-1.5 px-3.5 text-[13px] font-semibold focus:outline-none focus:ring-4 focus:ring-[#FFD166]/20 focus:border-[#FFD166] transition-all"
                                 placeholder="name@university.edu"
                                 value={user.email}
                                 onChange={handleChange}
@@ -85,13 +90,13 @@ const Register = () => {
                             />
                         </div>
 
-                        <div className="grid grid-cols-2 gap-4 mb-4">
+                        <div className="grid grid-cols-2 gap-2">
                             <div>
-                                <label className="block text-[10px] font-bold text-slate-700 mb-1.5 uppercase tracking-wider">Password</label>
+                                <label className="block text-[8px] font-black text-slate-800 mb-0.5 uppercase tracking-widest">Password</label>
                                 <input
                                     type="password"
                                     name="password"
-                                    className="input-field !py-2.5 !px-3.5 !text-sm"
+                                    className="w-full bg-slate-50 border border-slate-200 rounded-xl py-1.5 px-3.5 text-[13px] font-semibold focus:outline-none focus:ring-4 focus:ring-[#FFD166]/20 focus:border-[#FFD166] transition-all"
                                     placeholder="••••••••"
                                     value={user.password}
                                     onChange={handleChange}
@@ -99,11 +104,11 @@ const Register = () => {
                                 />
                             </div>
                             <div>
-                                <label className="block text-[10px] font-bold text-slate-700 mb-1.5 uppercase tracking-wider">Confirm</label>
+                                <label className="block text-[8px] font-black text-slate-800 mb-0.5 uppercase tracking-widest">Confirm</label>
                                 <input
                                     type="password"
                                     name="confirmPassword"
-                                    className="input-field !py-2.5 !px-3.5 !text-sm"
+                                    className="w-full bg-slate-50 border border-slate-200 rounded-xl py-1.5 px-3.5 text-[13px] font-semibold focus:outline-none focus:ring-4 focus:ring-[#FFD166]/20 focus:border-[#FFD166] transition-all"
                                     placeholder="••••••••"
                                     value={user.confirmPassword}
                                     onChange={handleChange}
@@ -112,43 +117,43 @@ const Register = () => {
                             </div>
                         </div>
 
-                        <div className="mb-6">
-                            <label className="block text-[10px] font-bold text-slate-700 mb-1.5 uppercase tracking-wider">Account Role</label>
+                        <div>
+                            <label className="block text-[8px] font-black text-slate-800 mb-0.5 uppercase tracking-widest">Account Role</label>
                             <select 
                                 name="role" 
-                                className="input-field !py-2.5 !px-3.5 !text-sm cursor-pointer" 
+                                className="w-full bg-slate-50 border border-slate-200 rounded-xl py-1.5 px-3.5 text-[13px] font-semibold text-slate-700 cursor-pointer focus:outline-none focus:ring-4 focus:ring-[#FFD166]/20 focus:border-[#FFD166] transition-all" 
                                 value={user.role} 
                                 onChange={handleChange}
                             >
-                                <option value="USER">Student / Standard User</option>
-                                <option value="TECHNICIAN">Technician / Researcher</option>
+                                <option value="USER">Student User</option>
+                                <option value="TECHNICIAN">Technician</option>
                             </select>
                         </div>
 
                         {error && (
-                            <div className="text-xs text-error font-medium mb-4 p-3 bg-error/5 border border-error/10 rounded-lg">
+                            <div className="text-[10px] text-rose-600 font-bold mb-1 p-2 bg-rose-50 border border-rose-100 rounded-xl flex items-center justify-center">
                                 {error}
                             </div>
                         )}
 
                         <button 
                             type="submit" 
-                            className="btn btn-primary w-full !py-3 !text-sm mt-1" 
+                            className="bg-[#FFD166] text-slate-900 w-full py-2.5 rounded-full font-black text-[10px] uppercase tracking-widest hover:bg-[#FFC033] hover:scale-[1.02] transition-all shadow-lg shadow-[#FFD166]/30 mt-1" 
                             disabled={loading}
                         >
                             {loading ? 'Processing...' : 'Register'}
                         </button>
                     </form>
 
-                    <div className="flex items-center my-6">
-                        <div className="flex-1 h-px bg-slate-200"></div>
-                        <span className="px-3 text-[10px] text-slate-400 font-bold uppercase">OR JOIN WITH</span>
-                        <div className="flex-1 h-px bg-slate-200"></div>
+                    <div className="flex items-center my-3">
+                        <div className="flex-1 h-px bg-slate-100"></div>
+                        <span className="px-3 text-[8px] text-slate-400 font-black uppercase tracking-widest">OR JOIN WITH</span>
+                        <div className="flex-1 h-px bg-slate-100"></div>
                     </div>
 
                     <a 
                         href="http://localhost:8081/oauth2/authorization/google" 
-                        className="btn btn-outline w-full !py-2.5 !text-sm bg-white hover:bg-slate-50 transition-colors"
+                        className="flex items-center justify-center w-full py-2.5 rounded-full font-black text-[10px] uppercase tracking-widest border-2 border-slate-100 text-slate-700 bg-white hover:bg-slate-50 hover:border-slate-200 transition-all"
                     >
                         <img 
                             src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" 
@@ -158,8 +163,9 @@ const Register = () => {
                         Google Sign Up
                     </a>
 
-                    <div className="text-center mt-8 text-slate-500 text-sm">
-                        Member already? <Link to="/login" className="text-primary font-bold no-underline ml-1">Log in</Link>
+                    <div className="text-center mt-4 pt-3 border-t border-slate-50">
+                        <span className="text-slate-500 text-[9px] font-bold">MEMBER ALREADY?</span> 
+                        <Link to="/login" className="text-[#5B5FEF] font-black uppercase tracking-widest text-[9px] ml-2 hover:text-slate-900 transition-colors">Log In</Link>
                     </div>
                 </div>
             </main>
