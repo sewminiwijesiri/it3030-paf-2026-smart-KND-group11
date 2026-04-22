@@ -37,7 +37,16 @@ const ResourceTable = ({ resources, onEdit, onDelete }) => {
             {resources.map((resource) => (
               <tr key={resource.id} className="hover:bg-gray-50 transition duration-150">
                 <td className="py-4 px-6">
-                  <span className="font-semibold text-gray-800 block">{resource.name}</span>
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-gray-100 flex-shrink-0 flex items-center justify-center overflow-hidden border border-gray-100">
+                      {resource.imageUrl ? (
+                        <img src={resource.imageUrl} alt={resource.name} className="w-full h-full object-cover" />
+                      ) : (
+                        <span className="text-[10px] text-gray-300 font-bold">N/A</span>
+                      )}
+                    </div>
+                    <span className="font-semibold text-gray-800 block">{resource.name}</span>
+                  </div>
                 </td>
                 <td className="py-4 px-6">
                   <span className="text-sm text-gray-600 font-medium">{resource.type.replace('_', ' ')}</span>

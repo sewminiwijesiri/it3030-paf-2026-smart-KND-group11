@@ -10,6 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import com.uniflow.system.service.CloudinaryService;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.http.MediaType;
 import java.util.List;
 
 @RestController
@@ -18,19 +21,30 @@ import java.util.List;
 public class ResourceController {
 
     private final ResourceService resourceService;
+    private final CloudinaryService cloudinaryService;
 
     // Constructor Injection
-    public ResourceController(ResourceService resourceService) {
+    public ResourceController(ResourceService resourceService, CloudinaryService cloudinaryService) {
         this.resourceService = resourceService;
+        this.cloudinaryService = cloudinaryService;
     }
 
     // CREATE a new resource
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Resource> createResource(@Valid @RequestBody Resource resource) {
+    public ResponseEntity<Resource> createResource(
+            @Valid @RequestPart("resource") Resource resource,
+            @RequestPart(value = "file", required = false) MultipartFile file) {
+        
+        if (file != null && !file.isEmpty()) {
+            String imageUrl = cloudinaryService.uploadFile(file);
+            resource.setImageUrl(imageUrl);
+        }
+        
         Resource savedResource = resourceService.createResource(resource);
         return new ResponseEntity<>(savedResource, HttpStatus.CREATED);
     }
+
 
     // GET all resources OR Filtered resources
     @GetMapping
@@ -62,11 +76,18 @@ public class ResourceController {
     }
 
     // UPDATE a resource
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Resource> updateResource(
             @PathVariable String id,
-            @Valid @RequestBody Resource resourceDetails) {
+            @Valid @RequestPart("resource") Resource resourceDetails,
+            @RequestPart(value = "file", required = false) MultipartFile file) {
+        
+        if (file != null && !file.isEmpty()) {
+            String imageUrl = cloudinaryService.uploadFile(file);
+            resourceDetails.setImageUrl(imageUrl);
+        }
+        
         Resource updatedResource = resourceService.updateResource(id, resourceDetails);
         return ResponseEntity.ok(updatedResource);
     }

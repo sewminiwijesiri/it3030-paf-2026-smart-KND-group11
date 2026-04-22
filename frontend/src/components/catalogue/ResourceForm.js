@@ -4,19 +4,22 @@ import { X, Plus, Clock, AlertCircle } from 'lucide-react';
 const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
 const ResourceForm = ({ resource, onSubmit, onCancel }) => {
+  const [availabilityWindows, setAvailabilityWindows] = useState([]);
+  const [previewUrl, setPreviewUrl] = useState(null);
+  const [currentWindow, setCurrentWindow] = useState({
+    days: [],
+    startTime: '08:00',
+    endTime: '17:00'
+  });
+
   const [formData, setFormData] = useState({
     name: '',
     type: 'LECTURE_HALL',
     capacity: 1,
     location: '',
-    status: 'AVAILABLE'
-  });
-
-  const [availabilityWindows, setAvailabilityWindows] = useState([]);
-  const [currentWindow, setCurrentWindow] = useState({
-    days: [],
-    startTime: '08:00',
-    endTime: '17:00'
+    status: 'AVAILABLE',
+    imageUrl: '',
+    file: null
   });
 
   const [errors, setErrors] = useState({});
@@ -29,7 +32,9 @@ const ResourceForm = ({ resource, onSubmit, onCancel }) => {
         type: resource.type,
         capacity: resource.capacity,
         location: resource.location,
-        status: resource.status
+        status: resource.status,
+        imageUrl: resource.imageUrl || '',
+        file: null
       });
 
       if (resource.availabilityWindows) {
@@ -199,11 +204,11 @@ const ResourceForm = ({ resource, onSubmit, onCancel }) => {
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-[24px] shadow-2xl w-full max-w-[480px] overflow-hidden animate-fade-in-up border border-slate-100 max-h-[90vh] overflow-y-auto">
-        <div className="p-7">
-          <div className="flex justify-between items-center mb-6">
+      <div className="bg-white rounded-[24px] shadow-2xl w-full max-w-[600px] overflow-hidden animate-fade-in-up border border-slate-100 max-h-[90vh] overflow-y-auto">
+        <div className="p-6">
+          <div className="flex justify-between items-center mb-5">
             <h2 className="text-xl font-extrabold text-slate-800 tracking-tight">
-              {resource ? 'Edit Resource' : 'New Resource'}
+              {resource ? 'Edit Resource' : 'Add New Resource'}
             </h2>
             <button onClick={onCancel} className="text-slate-400 hover:text-slate-600 transition-colors">
               <X size={20} />
@@ -212,18 +217,32 @@ const ResourceForm = ({ resource, onSubmit, onCancel }) => {
           
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-1 gap-4">
-              <div>
-                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-[0.15em] mb-1.5 ml-1">Resource Name</label>
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  className={`w-full bg-slate-50 border ${getFieldError('name') ? 'border-rose-400 ring-2 ring-rose-50' : 'border-slate-100'} rounded-2xl py-2.5 px-4 focus:ring-4 focus:ring-indigo-500/5 focus:border-[var(--primary)] focus:bg-white focus:outline-none text-xs font-semibold transition-all`}
-                  placeholder="e.g. Main Auditorium"
-                />
-                {getFieldError('name') && <p className="text-[10px] text-rose-500 mt-1 ml-1 font-medium flex items-center gap-1"><AlertCircle size={10}/> {errors.name}</p>}
+              <div className="grid grid-cols-3 gap-4">
+                <div className="col-span-2">
+                  <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-[0.15em] mb-1.5 ml-1">Resource Name</label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    className={`w-full bg-slate-50 border ${getFieldError('name') ? 'border-rose-400 ring-2 ring-rose-50' : 'border-slate-100'} rounded-2xl py-2.5 px-4 focus:ring-4 focus:ring-indigo-500/5 focus:border-[var(--primary)] focus:bg-white focus:outline-none text-xs font-semibold transition-all`}
+                    placeholder="e.g. Main Auditorium"
+                  />
+                  {getFieldError('name') && <p className="text-[10px] text-rose-500 mt-1 ml-1 font-medium flex items-center gap-1"><AlertCircle size={10}/> {errors.name}</p>}
+                </div>
+                <div className="col-span-1">
+                  <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-[0.15em] mb-1.5 ml-1">Capacity</label>
+                  <input
+                    type="number"
+                    name="capacity"
+                    value={formData.capacity}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    className={`w-full bg-slate-50 border ${getFieldError('capacity') ? 'border-rose-400 ring-2 ring-rose-50' : 'border-slate-100'} rounded-2xl py-2.5 px-4 focus:ring-4 focus:ring-indigo-500/5 focus:border-[var(--primary)] focus:bg-white focus:outline-none text-xs font-semibold`}
+                  />
+                  {getFieldError('capacity') && <p className="text-[10px] text-rose-500 mt-1 ml-1 font-medium flex items-center gap-1"><AlertCircle size={10}/> {errors.capacity}</p>}
+                </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
@@ -244,96 +263,7 @@ const ResourceForm = ({ resource, onSubmit, onCancel }) => {
                     <option value="LAPTOP">Laptop</option>
                     <option value="OTHER">Other</option>
                   </select>
-                  {getFieldError('type') && <p className="text-[10px] text-rose-500 mt-1 ml-1 font-medium flex items-center gap-1"><AlertCircle size={10}/> {errors.type}</p>}
                 </div>
-                <div>
-                  <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-[0.15em] mb-1.5 ml-1">Capacity</label>
-                  <input
-                    type="number"
-                    name="capacity"
-                    value={formData.capacity}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    className={`w-full bg-slate-50 border ${getFieldError('capacity') ? 'border-rose-400 ring-2 ring-rose-50' : 'border-slate-100'} rounded-2xl py-2.5 px-4 focus:ring-4 focus:ring-indigo-500/5 focus:border-[var(--primary)] focus:bg-white focus:outline-none text-xs font-semibold`}
-                  />
-                  {getFieldError('capacity') && <p className="text-[10px] text-rose-500 mt-1 ml-1 font-medium flex items-center gap-1"><AlertCircle size={10}/> {errors.capacity}</p>}
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-[0.15em] mb-1.5 ml-1">Availability Slots</label>
-                <div className={`bg-slate-50 border ${errors.availability ? 'border-rose-400 ring-2 ring-rose-50' : 'border-slate-100'} rounded-2xl p-4 space-y-4`}>
-                  {availabilityWindows.length > 0 && (
-                    <div className="space-y-2 mb-3">
-                      {availabilityWindows.map((window, idx) => (
-                        <div key={idx} className="flex items-center justify-between bg-white border border-slate-100 px-3 py-2 rounded-xl text-[11px] shadow-sm animate-fade-in-up">
-                          <div className="flex items-center gap-2">
-                            <div className="flex gap-0.5">
-                              {window.days.map(d => (
-                                <span key={d} className="bg-indigo-50 text-indigo-600 px-1 rounded font-bold text-[9px]">{d[0]}</span>
-                              ))}
-                            </div>
-                            <span className="text-slate-500 font-medium">{window.startTime} - {window.endTime}</span>
-                          </div>
-                          <button type="button" onClick={() => removeWindow(idx)} className="text-rose-400 hover:text-rose-600 transition-colors"><X size={14} /></button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  <div className="space-y-3">
-                    <div className="flex justify-between gap-1">
-                      {DAYS.map(day => (
-                        <button
-                          key={day}
-                          type="button"
-                          onClick={() => toggleDay(day)}
-                          className={`w-8 h-8 rounded-full text-[10px] font-bold transition-all border ${
-                            currentWindow.days.includes(day)
-                              ? 'bg-[var(--primary)] text-white border-transparent shadow-lg shadow-indigo-100'
-                              : 'bg-white text-slate-400 border-slate-100 hover:border-slate-300'
-                          }`}
-                        >
-                          {day[0]}
-                        </button>
-                      ))}
-                    </div>
-                    
-                    <div className="flex items-center gap-2">
-                       <div className="relative flex-1">
-                        <Clock className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={14} />
-                        <input
-                          type="time"
-                          value={currentWindow.startTime}
-                          onChange={(e) => setCurrentWindow({...currentWindow, startTime: e.target.value})}
-                          className="w-full bg-white border border-slate-100 rounded-xl py-1.5 pl-9 pr-3 text-[11px] focus:outline-none focus:ring-2 focus:ring-indigo-100"
-                        />
-                       </div>
-                       <span className="text-slate-300 text-xs">to</span>
-                       <div className="relative flex-1">
-                        <Clock className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={14} />
-                        <input
-                          type="time"
-                          value={currentWindow.endTime}
-                          onChange={(e) => setCurrentWindow({...currentWindow, endTime: e.target.value})}
-                          className="w-full bg-white border border-slate-100 rounded-xl py-1.5 pl-9 pr-3 text-[11px] focus:outline-none focus:ring-2 focus:ring-indigo-100"
-                        />
-                       </div>
-                       <button
-                        type="button"
-                        onClick={addWindow}
-                        className="bg-indigo-50 text-indigo-600 p-2 rounded-xl hover:bg-indigo-600 hover:text-white transition-all"
-                       >
-                        <Plus size={16} />
-                       </button>
-                    </div>
-                    {errors.currentWindow && <p className="text-[10px] text-rose-500 font-medium flex items-center gap-1"><AlertCircle size={10}/> {errors.currentWindow}</p>}
-                  </div>
-                </div>
-                {errors.availability && <p className="text-[10px] text-rose-500 mt-1 ml-1 font-medium flex items-center gap-1"><AlertCircle size={10}/> {errors.availability}</p>}
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-[0.15em] mb-1.5 ml-1">Location</label>
                   <input
@@ -345,26 +275,128 @@ const ResourceForm = ({ resource, onSubmit, onCancel }) => {
                     className={`w-full bg-slate-50 border ${getFieldError('location') ? 'border-rose-400 ring-2 ring-rose-50' : 'border-slate-100'} rounded-2xl py-2.5 px-4 focus:ring-4 focus:ring-indigo-500/5 focus:border-[var(--primary)] focus:bg-white focus:outline-none text-xs font-semibold`}
                     placeholder="Bldg A, Fl 2"
                   />
-                  {getFieldError('location') && <p className="text-[10px] text-rose-500 mt-1 ml-1 font-medium flex items-center gap-1"><AlertCircle size={10}/> {errors.location}</p>}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 gap-4">
+                <div>
+                  <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-[0.15em] mb-1.5 ml-1">Availability Slots</label>
+                  <div className={`bg-slate-50 border ${errors.availability ? 'border-rose-400 ring-2 ring-rose-50' : 'border-slate-100'} rounded-2xl p-3 space-y-3`}>
+                    {availabilityWindows.length > 0 && (
+                      <div className="flex flex-wrap gap-2">
+                        {availabilityWindows.map((window, idx) => (
+                          <div key={idx} className="flex items-center gap-2 bg-white border border-slate-100 pl-2 pr-1 py-1 rounded-lg text-[9px] shadow-sm animate-fade-in-up">
+                            <div className="flex gap-0.5">
+                              {window.days.map(d => (
+                                <span key={d} className="text-indigo-600 font-bold">{d[0]}</span>
+                              ))}
+                            </div>
+                            <span className="text-slate-500">{window.startTime}-{window.endTime}</span>
+                            <button type="button" onClick={() => removeWindow(idx)} className="text-rose-400 hover:text-rose-600 ml-1"><X size={10} /></button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    <div className="flex items-center gap-3">
+                      <div className="flex gap-1">
+                        {DAYS.map(day => (
+                          <button
+                            key={day}
+                            type="button"
+                            onClick={() => toggleDay(day)}
+                            className={`w-6 h-6 rounded-md text-[9px] font-bold transition-all border ${
+                              currentWindow.days.includes(day)
+                                ? 'bg-indigo-600 text-white border-transparent'
+                                : 'bg-white text-slate-400 border-slate-100'
+                            }`}
+                          >
+                            {day[0]}
+                          </button>
+                        ))}
+                      </div>
+                      
+                      <div className="flex items-center gap-1.5 flex-1">
+                        <input
+                          type="time"
+                          value={currentWindow.startTime}
+                          onChange={(e) => setCurrentWindow({...currentWindow, startTime: e.target.value})}
+                          className="w-full bg-white border border-slate-100 rounded-lg py-1 px-2 text-[10px] focus:outline-none"
+                        />
+                        <span className="text-slate-300 text-[10px]">to</span>
+                        <input
+                          type="time"
+                          value={currentWindow.endTime}
+                          onChange={(e) => setCurrentWindow({...currentWindow, endTime: e.target.value})}
+                          className="w-full bg-white border border-slate-100 rounded-lg py-1 px-2 text-[10px] focus:outline-none"
+                        />
+                        <button
+                          type="button"
+                          onClick={addWindow}
+                          className="bg-indigo-600 text-white p-1.5 rounded-lg hover:shadow-lg transition-all"
+                        >
+                          <Plus size={12} />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-[0.15em] mb-1.5 ml-1">Asset Image</label>
+                  <div className="flex items-center gap-3 bg-slate-50 border border-slate-100 rounded-2xl p-2 px-3 h-[60px]">
+                    <div className="w-10 h-10 bg-white border border-slate-100 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
+                      {previewUrl || formData.imageUrl ? (
+                        <img src={previewUrl || formData.imageUrl} alt="Resource Preview" className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="text-[8px] text-slate-300 font-bold uppercase text-center p-1">No Image</div>
+                      )}
+                    </div>
+                    <div className="flex-1 flex items-center justify-between">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        id="resource-image"
+                        className="hidden"
+                        onChange={(e) => {
+                          const file = e.target.files[0];
+                          if (file) {
+                            setFormData({ ...formData, file });
+                            setPreviewUrl(URL.createObjectURL(file));
+                          }
+                        }}
+                      />
+                      <label 
+                        htmlFor="resource-image"
+                        className="px-3 py-1.5 bg-white text-indigo-600 rounded-lg text-[9px] font-bold uppercase tracking-widest cursor-pointer hover:bg-indigo-50 transition-all border border-indigo-100"
+                      >
+                        {formData.file ? 'Change' : 'Upload'}
+                      </label>
+                      {(previewUrl || formData.file) && (
+                        <button type="button" onClick={() => { setFormData({ ...formData, file: null }); setPreviewUrl(null); }} className="text-rose-400 hover:text-rose-600"><X size={14} /></button>
+                      )}
+                    </div>
+                  </div>
                 </div>
                 <div>
-                  <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-[0.15em] mb-1.5 ml-1">Status</label>
+                  <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-[0.15em] mb-1.5 ml-1">Initial Status</label>
                   <select
                     name="status"
                     value={formData.status}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    className={`w-full bg-slate-50 border ${getFieldError('status') ? 'border-rose-400 ring-2 ring-rose-50' : 'border-slate-100'} rounded-2xl py-2.5 px-4 focus:outline-none focus:ring-4 focus:ring-indigo-500/5 focus:border-[var(--primary)] focus:bg-white text-xs font-semibold appearance-none`}
+                    className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-2.5 px-4 focus:outline-none text-xs font-semibold appearance-none"
                   >
-                    <option value="AVAILABLE">Active (Available)</option>
-                    <option value="BUSY">Reserved</option>
-                    <option value="MAINTENANCE">Under Maintenance</option>
-                    <option value="OUT_OF_ORDER">Out of Service</option>
+                    <option value="AVAILABLE">Active</option>
+                    <option value="MAINTENANCE">Maintenance</option>
+                    <option value="OUT_OF_ORDER">Decommissioned</option>
                   </select>
-                  {getFieldError('status') && <p className="text-[10px] text-rose-500 mt-1 ml-1 font-medium flex items-center gap-1"><AlertCircle size={10}/> {errors.status}</p>}
                 </div>
               </div>
             </div>
+
 
             <div className="flex gap-3 pt-4">
               <button
