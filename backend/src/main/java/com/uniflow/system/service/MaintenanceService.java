@@ -71,4 +71,11 @@ public class MaintenanceService {
         if (request.getStatus() == null) request.setStatus(MaintenanceRequest.MaintenanceStatus.OPEN);
         return maintenanceRepository.save(request);
     }
+
+    public void deleteRequest(String id) {
+        if (!maintenanceRepository.existsById(id)) {
+            throw new RuntimeException("Request not found");
+        }
+        maintenanceRepository.deleteById(id);
+    }
 }
