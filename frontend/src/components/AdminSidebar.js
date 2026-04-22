@@ -18,22 +18,9 @@ const AdminSidebar = () => {
   };
 
   return (
-    <aside className="fixed left-0 top-[72px] bottom-0 w-72 bg-white border-r border-slate-200 hidden lg:flex flex-col z-[50]">
-      
-      {/* Brand Tag */}
-      <div className="px-6 pt-8 pb-4">
-        <div className="flex items-center gap-2 mb-1">
-          <span className="w-2 h-2 rounded-full bg-[#FFD166]"></span>
-          <p className="text-[10px] font-black text-[#3f4175] uppercase tracking-[0.3em]">Command Center</p>
-        </div>
-        <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest pl-4">Admin Panel</p>
-      </div>
-
-      {/* Divider */}
-      <div className="mx-6 mb-4 h-px bg-slate-100"></div>
-
-      {/* Nav Items */}
-      <div className="flex-1 px-4 space-y-1 overflow-y-auto">
+    <aside className="fixed left-0 top-[72px] bottom-0 w-72 bg-[#1E293B] border-r border-[#334155] hidden lg:flex flex-col z-[50]">
+      <div className="flex-1 py-8 px-5 space-y-3 overflow-y-auto">
+        <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4 ml-4">Command Center</p>
         {menuItems.map((item, index) => (
           <NavLink
             key={index}

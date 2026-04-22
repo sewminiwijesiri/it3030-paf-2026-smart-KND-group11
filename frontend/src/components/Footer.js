@@ -12,12 +12,12 @@ const Footer = () => {
     };
 
     return (
-        <footer className="bg-slate-950 text-slate-500 py-20 pb-10 border-t border-white/5">
+        <footer className="bg-[#0F172A] text-slate-400 py-20 pb-10 border-t border-white/5">
             <div className="container mx-auto px-4 md:px-8 text-center">
                 <div className="mb-10">
                     <div className="inline-flex items-center gap-3 mb-5">
                         <img src={logoIcon} alt="UniFlow" className="w-[40px] h-auto" />
-                        <span className="text-white text-2xl font-extrabold tracking-tight">UniFlow</span>
+                        <span className="text-white text-3xl font-black tracking-tighter">UniFlow</span>
                     </div>
                     <p className="max-w-[500px] mx-auto text-[0.95rem] leading-relaxed">
                         Providing smart solutions for project tracking and team collaboration. Streamlining workflows with precision and ease.
@@ -29,7 +29,7 @@ const Footer = () => {
                         <Link 
                             key={key} 
                             to="/" 
-                            className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white no-underline transition-all duration-300 border border-white/5 hover:bg-primary hover:border-primary hover:-translate-y-1"
+                            className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white no-underline transition-all duration-300 border border-white/5 hover:bg-[#FFD166] hover:text-slate-900 hover:border-[#FFD166] hover:-translate-y-1"
                         >
                            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
                                <path d={path} />
@@ -38,7 +38,7 @@ const Footer = () => {
                     ))}
                 </div>
 
-                <div className="border-t border-white/5 pt-10 text-[0.85rem]">
+                <div className="border-t border-white/5 pt-10 text-[0.85rem] font-bold uppercase tracking-widest text-[9px] text-slate-500">
                     <p>© 2026 UniFlow. All rights reserved.</p>
                 </div>
             </div>

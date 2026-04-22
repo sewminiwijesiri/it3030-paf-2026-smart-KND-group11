@@ -130,6 +130,22 @@ const AdminDashboard = () => {
                                 <span className="text-[8px] font-black text-emerald-400 tracking-widest bg-emerald-400/10 px-2.5 py-1 rounded border border-emerald-400/20">OPERATIONAL</span>
                             </div>
                         ))}
+                    
+                    {/* System Integrity */}
+                    <div className="xl:col-span-1 bg-[#0F172A] rounded p-8 flex flex-col shadow-lg relative overflow-hidden group">
+                        <div className="absolute top-[-20px] right-[-20px] w-32 h-32 bg-[#3f4175]/30 rounded-full blur-3xl transition-all group-hover:bg-[#3f4175]/40"></div>
+                        <h3 className="text-white text-lg font-bold mb-8 tracking-tight">Integrity Nodes</h3>
+                        <div className="flex flex-col gap-5 flex-1 relative z-10">
+                            {['Database Cluster', 'Media Storage', 'Auth Gateway', 'Email Node'].map((service, i) => (
+                                <div key={i} className="flex justify-between items-center group/item hover:bg-white/5 p-2.5 rounded transition-colors">
+                                    <span className="text-[11px] text-slate-300 group-hover/item:text-white transition-colors uppercase font-semibold tracking-wider">{service}</span>
+                                    <span className="text-[9px] font-bold text-emerald-400 tracking-widest bg-emerald-400/10 px-2.5 py-1 rounded border border-emerald-400/20">OPERATIONAL</span>
+                                </div>
+                            ))}
+                        </div>
+                        <button className="w-full mt-10 py-3 bg-[#FFD166] text-slate-900 rounded-full font-bold text-[11px] uppercase tracking-widest hover:bg-[#FFC033] transition-all hover:-translate-y-0.5 shadow-md">
+                            Full System Scan
+                        </button>
                     </div>
                     <button className="w-full mt-8 py-4 bg-[#FFD166] text-slate-900 rounded font-black text-[10px] uppercase tracking-widest hover:bg-[#FFCC29] transition-colors shadow-lg relative z-10">
                         Full System Scan
