@@ -6,7 +6,6 @@ import ResourceForm from '../components/catalogue/ResourceForm';
 import ResourceFilters from '../components/catalogue/ResourceFilters';
 
 const AdminResourceManagement = () => {
-    // ... same state and effects
     const [resources, setResources] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
@@ -107,51 +106,65 @@ const AdminResourceManagement = () => {
 
     return (
         <AdminLayout>
-            <div className="animate-up">
-                {/* Header Section */}
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+            {/* Page Header */}
+            <div className="bg-white border-b border-slate-200 -mx-6 md:-mx-10 -mt-6 md:-mt-10 px-6 md:px-10 py-10 mb-10">
+                <p className="text-[#3f4175] font-black text-xs uppercase tracking-[0.4em] mb-4 flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-[#FFD166]"></span>
+                    Management Console
+                </p>
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                     <div>
-                        <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight">Facilities & Assets</h1>
-                        <p className="mt-1 text-xs text-slate-500 font-bold uppercase tracking-widest">Management Console</p>
+                        <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight leading-none mb-2">
+                            Facilities & Assets
+                        </h1>
+                        <p className="text-slate-500 font-bold uppercase tracking-wider text-[11px]">
+                            Create, update and manage all campus resources.
+                        </p>
                     </div>
                     <button
                         onClick={openAddForm}
-                        className="btn btn-primary !rounded-xl shadow-lg"
+                        className="shrink-0 bg-[#FFD166] text-slate-900 px-8 py-3 rounded-full font-black text-[11px] uppercase tracking-widest hover:scale-105 hover:bg-[#FFCC29] transition-all shadow-lg shadow-[#FFD166]/20 flex items-center gap-2"
                     >
-                        + Add New Resource
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 4v16m8-8H4" /></svg>
+                        Add New Resource
                     </button>
                 </div>
-
-                {/* Feedback Messages */}
-                {success && (
-                    <div className="mb-6 p-4 bg-emerald-50 border-l-4 border-emerald-500 text-emerald-700 rounded-xl shadow-sm">
-                        <span className="font-bold">Success:</span> {success}
-                    </div>
-                )}
-                {error && (
-                    <div className="mb-6 p-4 bg-rose-50 border-l-4 border-rose-500 text-rose-700 rounded-xl shadow-sm flex justify-between items-center">
-                        <div><span className="font-bold">Error:</span> {error}</div>
-                        <button onClick={() => setError('')} className="font-black text-lg opacity-50 hover:opacity-100">&times;</button>
-                    </div>
-                )}
-
-                {/* Filters Section */}
-                <ResourceFilters filters={filters} setFilters={setFilters} />
-
-                {/* Main Content */}
-                {loading ? (
-                    <div className="flex flex-col items-center justify-center h-64 space-y-4">
-                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-                        <p className="text-slate-400 font-bold text-xs uppercase tracking-widest">Fetching catalogue...</p>
-                    </div>
-                ) : (
-                    <ResourceTable 
-                        resources={resources} 
-                        onEdit={openEditForm} 
-                        onDelete={handleDelete} 
-                    />
-                )}
             </div>
+
+            {/* Feedback Messages */}
+            {success && (
+                <div className="mb-6 p-4 bg-white border border-emerald-200 border-l-4 border-l-emerald-500 text-emerald-700 rounded shadow-sm flex justify-between items-center">
+                    <span className="font-bold text-sm">{success}</span>
+                    <button onClick={() => setSuccess('')} className="font-black text-lg text-emerald-400 hover:text-emerald-700">×</button>
+                </div>
+            )}
+            {error && (
+                <div className="mb-6 p-4 bg-white border border-rose-200 border-l-4 border-l-rose-500 text-rose-700 rounded shadow-sm flex justify-between items-center">
+                    <span className="font-bold text-sm">{error}</span>
+                    <button onClick={() => setError('')} className="font-black text-lg text-rose-400 hover:text-rose-700">×</button>
+                </div>
+            )}
+
+            {/* Filters Section */}
+            <div className="bg-white p-6 rounded border border-slate-200 shadow-sm mb-8">
+                <ResourceFilters filters={filters} setFilters={setFilters} />
+            </div>
+
+            {/* Main Content */}
+            {loading ? (
+                <div className="flex flex-col items-center justify-center h-64 gap-4">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-[#0F172A]"></div>
+                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Fetching catalogue...</p>
+                </div>
+            ) : (
+                <div className="bg-white rounded border border-slate-200 shadow-sm overflow-hidden">
+                    <ResourceTable
+                        resources={resources}
+                        onEdit={openEditForm}
+                        onDelete={handleDelete}
+                    />
+                </div>
+            )}
 
             {/* Resource Modal Form */}
             {isFormOpen && (

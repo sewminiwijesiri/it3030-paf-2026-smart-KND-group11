@@ -5,7 +5,7 @@ import api from '../utils/api';
 const TechnicianTasks = () => {
     const [tasks, setTasks] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [resolving, setResolving] = useState(null); // ID of task being resolved
+    const [resolving, setResolving] = useState(null);
     const [notes, setNotes] = useState('');
     const [files, setFiles] = useState([]);
     const [updating, setUpdating] = useState(false);
@@ -22,9 +22,7 @@ const TechnicianTasks = () => {
         }
     };
 
-    useEffect(() => {
-        fetchTasks();
-    }, []);
+    useEffect(() => { fetchTasks(); }, []);
 
     const updateStatus = async (taskId, newStatus) => {
         setUpdating(true);
@@ -49,12 +47,10 @@ const TechnicianTasks = () => {
                 const res = await api.post('/api/files/upload', uploadData);
                 attachmentUrls.push(res.data.fileUrl);
             }
-
             await api.put(`/api/technician/tasks/${resolving}/status?status=RESOLVED`, {
                 resolutionNotes: notes,
                 attachments: attachmentUrls
             });
-            
             setResolving(null);
             setNotes('');
             setFiles([]);
@@ -66,92 +62,158 @@ const TechnicianTasks = () => {
         }
     };
 
+    const getStatusStyle = (status) => {
+        switch (status) {
+            case 'OPEN': return 'bg-[#FFD166] text-slate-900 border-[#FFCC29]';
+            case 'IN_PROGRESS': return 'bg-slate-100 text-slate-600 border-slate-200';
+            case 'RESOLVED': return 'bg-[#3f4175] text-white border-transparent';
+            default: return 'bg-slate-100 text-slate-500 border-slate-200';
+        }
+    };
+
     return (
         <TechnicianLayout>
-            <div className="relative z-10 p-6 md:p-12 animate-up">
-                 <header className="mb-12 border-b border-slate-100 pb-8 flex justify-between items-end">
-                    <div>
-                        <h1 className="text-5xl font-black text-slate-900 tracking-tighter mb-2">Service Assignments</h1>
-                        <p className="text-slate-400 font-bold uppercase tracking-widest text-[10px]">Execute maintenance & document asset health.</p>
-                    </div>
-                </header>
+            {/* Page Header */}
+            <div className="bg-white border-b border-slate-200 -mx-6 md:-mx-10 -mt-6 md:-mt-10 px-6 md:px-10 py-10 mb-10">
+                <p className="text-[#3f4175] font-black text-xs uppercase tracking-[0.4em] mb-4 flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-[#FFD166]"></span>
+                    Field Operations
+                </p>
+                <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight leading-none mb-2">
+                    Service Assignments
+                </h1>
+                <p className="text-slate-500 font-bold uppercase tracking-wider text-[11px]">
+                    Execute maintenance and document asset health.
+                </p>
+            </div>
 
+            {/* Content */}
+            <div>
                 {loading ? (
-                    <div className="flex flex-col items-center justify-center h-64">
-                         <div className="w-12 h-12 border-4 border-slate-100 border-t-indigo-600 rounded-full animate-spin"></div>
+                    <div className="flex flex-col items-center justify-center h-64 gap-4">
+                        <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-[#0F172A]"></div>
+                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Loading Workload...</p>
                     </div>
                 ) : tasks.length === 0 ? (
-                    <div className="bg-white p-20 rounded-[3rem] border border-slate-100 text-center shadow-sm">
-                         <h3 className="text-2xl font-black text-slate-800 mb-2">Zero Pending Faults</h3>
-                         <p className="text-slate-400 font-bold uppercase text-[10px] tracking-widest">The campus infrastructure is currently stable.</p>
+                    <div className="bg-white p-20 rounded border border-slate-200 text-center shadow-sm">
+                        <div className="text-6xl mb-4 mx-auto w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center border border-slate-200">🛠️</div>
+                        <h3 className="text-xl font-black text-slate-800 mb-2 uppercase tracking-wide">Zero Pending Faults</h3>
+                        <p className="text-slate-400 font-black uppercase text-[10px] tracking-widest">The campus infrastructure is currently stable.</p>
                     </div>
                 ) : (
-                    <div className="grid grid-cols-1 gap-8">
+                    <div className="grid grid-cols-1 gap-6">
                         {tasks.map((task) => (
-                            <div key={task.id} className="bg-white rounded-[3.5rem] border border-slate-100 p-10 flex flex-col gap-8 hover:shadow-2xl transition-all relative overflow-hidden group">
-                                <div className="absolute top-0 left-0 w-2.5 h-full bg-slate-50 group-hover:bg-indigo-600 transition-all duration-500"></div>
+                            <div key={task.id} className="bg-white rounded border border-slate-200 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all relative overflow-hidden group flex flex-col">
                                 
-                                <div className="flex flex-col md:flex-row justify-between items-start gap-6">
+                                {/* Left accent bar */}
+                                <div className="absolute top-0 left-0 w-1.5 h-full bg-[#0F172A] opacity-0 group-hover:opacity-100 transition-opacity"></div>
+
+                                <div className="p-8 flex flex-col md:flex-row justify-between items-start gap-6">
+                                    {/* Left: Task Info */}
                                     <div className="flex-1">
-                                        <div className="flex gap-3 mb-4">
-                                            <span className={`px-4 py-1.5 rounded-2xl text-[9px] font-black uppercase tracking-[0.2em] shadow-sm border ${
-                                                task.priority === 'URGENT' ? 'bg-rose-50 text-rose-600 border-rose-100' : 'bg-indigo-50 text-indigo-600 border-indigo-100'
+                                        <div className="flex flex-wrap gap-3 mb-4 items-center">
+                                            <span className={`px-3 py-1 rounded text-[9px] font-black uppercase tracking-widest border ${
+                                                task.priority === 'URGENT' ? 'bg-rose-50 text-rose-600 border-rose-100' :
+                                                task.priority === 'HIGH' ? 'bg-amber-50 text-amber-600 border-amber-100' :
+                                                'bg-slate-50 text-slate-500 border-slate-100'
                                             }`}>
                                                 {task.priority} Priority
                                             </span>
-                                            <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest self-center">INC-{task.id.slice(-6).toUpperCase()}</span>
+                                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">INC-{task.id.slice(-6).toUpperCase()}</span>
                                         </div>
-                                        <h3 className="text-3xl font-black text-slate-900 tracking-tight mb-4">{task.resourceName}</h3>
-                                        <p className="text-slate-500 font-medium italic leading-relaxed">"{task.description}"</p>
+                                        <h3 className="text-2xl font-black text-slate-900 tracking-tight mb-3">{task.resourceName}</h3>
+                                        <p className="text-slate-500 font-medium italic leading-relaxed text-sm">"{task.description}"</p>
                                     </div>
-                                    
-                                    <div className="flex flex-col items-center md:items-end gap-4 min-w-[200px]">
-                                         <span className={`px-5 py-2 rounded-2xl text-[10px] font-black uppercase tracking-widest border shadow-sm ${
-                                             task.status === 'OPEN' ? 'bg-amber-50 text-amber-600 border-amber-100' : 
-                                             task.status === 'IN_PROGRESS' ? 'bg-blue-50 text-blue-600 border-blue-100' : 'bg-emerald-50 text-emerald-600 border-emerald-100'
-                                         }`}>
-                                             {task.status.replace('_', ' ')}
-                                         </span>
-                                         
-                                         <div className="flex gap-2">
-                                             {task.status === 'OPEN' && (
-                                                 <button onClick={() => updateStatus(task.id, 'IN_PROGRESS')} disabled={updating}
-                                                     className="px-8 py-4 bg-slate-900 text-white rounded-[1.5rem] text-[10px] font-black uppercase tracking-[0.2em] hover:bg-indigo-600 transition-all active:scale-95 shadow-xl shadow-indigo-100">
-                                                     Begin Execution
-                                                 </button>
-                                             )}
-                                             {task.status === 'IN_PROGRESS' && (
-                                                 <button onClick={() => setResolving(task.id)} disabled={updating}
-                                                     className="px-8 py-4 bg-emerald-600 text-white rounded-[1.5rem] text-[10px] font-black uppercase tracking-[0.2em] hover:bg-slate-900 transition-all active:scale-95 shadow-xl shadow-emerald-100">
-                                                     Resolve Asset
-                                                 </button>
-                                             )}
-                                         </div>
+
+                                    {/* Right: Status & Actions */}
+                                    <div className="flex flex-col items-start md:items-end gap-4 shrink-0">
+                                        <span className={`px-4 py-2 rounded text-[10px] font-black uppercase tracking-widest border ${getStatusStyle(task.status)}`}>
+                                            {task.status.replace('_', ' ')}
+                                        </span>
+                                        <div className="flex gap-3">
+                                            {task.status === 'OPEN' && (
+                                                <button
+                                                    onClick={() => updateStatus(task.id, 'IN_PROGRESS')} disabled={updating}
+                                                    className="px-6 py-3 bg-[#0F172A] text-white rounded font-black text-[10px] uppercase tracking-widest hover:bg-[#3f4175] transition-all shadow-md disabled:opacity-50"
+                                                >
+                                                    Begin Execution
+                                                </button>
+                                            )}
+                                            {task.status === 'IN_PROGRESS' && (
+                                                <button
+                                                    onClick={() => setResolving(task.id)} disabled={updating}
+                                                    className="px-6 py-3 bg-[#FFD166] text-slate-900 rounded font-black text-[10px] uppercase tracking-widest border border-[#FFCC29] hover:bg-[#FFCC29] hover:scale-[1.02] transition-all shadow-md shadow-[#FFD166]/20 disabled:opacity-50"
+                                                >
+                                                    Resolve Asset
+                                                </button>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
 
-                                {/* Resolution Form (shown when resolving) */}
-                                {resolving === task.id && (
-                                    <form onSubmit={handleResolve} className="mt-4 p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 animate-up">
-                                        <div className="flex justify-between items-center mb-6">
-                                            <h4 className="text-[11px] font-black text-slate-900 uppercase tracking-widest">Asset Recovery Documentation</h4>
-                                            <button type="button" onClick={() => setResolving(null)} className="text-slate-400 hover:text-rose-600 text-[10px] font-black uppercase tracking-widest">Cancel</button>
+                                {/* Evidence Images */}
+                                {task.attachments && task.attachments.length > 0 && (
+                                    <div className="px-8 pb-6">
+                                        <div className="border-t border-slate-100 pt-6">
+                                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                                                <span className="w-1.5 h-1.5 rounded-full bg-[#FFD166]"></span>
+                                                Evidence Documentation ({task.attachments.length} image{task.attachments.length > 1 ? 's' : ''})
+                                            </p>
+                                            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                                                {task.attachments.map((url, i) => (
+                                                    <a key={i} href={`http://localhost:8081${url}`} target="_blank" rel="noopener noreferrer"
+                                                        className="group relative rounded border border-slate-200 overflow-hidden aspect-video bg-slate-50 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all block">
+                                                        <img
+                                                            src={`http://localhost:8081${url}`}
+                                                            alt={`Evidence ${i + 1}`}
+                                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                                            onError={(e) => { e.target.onerror = null; e.target.src = 'https://via.placeholder.com/400x300?text=Image+Not+Found'; }}
+                                                        />
+                                                        <div className="absolute inset-0 bg-[#0F172A]/0 group-hover:bg-[#0F172A]/30 transition-colors flex items-center justify-center">
+                                                            <span className="opacity-0 group-hover:opacity-100 transition-opacity text-white font-black text-[10px] uppercase tracking-widest bg-black/50 px-3 py-1 rounded">View</span>
+                                                        </div>
+                                                    </a>
+                                                ))}
+                                            </div>
                                         </div>
-                                        <textarea 
-                                            placeholder="Document your findings and technical resolution steps..." required
-                                            className="w-full p-6 rounded-2xl border border-slate-200 focus:ring-4 focus:ring-indigo-100 outline-none font-bold text-slate-700 mb-6 bg-white min-h-[120px]"
+                                    </div>
+                                )}
+
+                                {/* Resolution Form */}
+                                {resolving === task.id && (
+                                    <form onSubmit={handleResolve} className="mx-8 mb-8 p-8 bg-slate-50 rounded border border-slate-200">
+                                        <div className="flex justify-between items-center mb-6">
+                                            <div>
+                                                <p className="text-[10px] font-black text-[#3f4175] uppercase tracking-widest mb-1 flex items-center gap-2">
+                                                    <span className="w-1.5 h-1.5 rounded-full bg-[#FFD166]"></span>
+                                                    Resolution Panel
+                                                </p>
+                                                <h4 className="text-sm font-black text-slate-900 uppercase tracking-wide">Asset Recovery Documentation</h4>
+                                            </div>
+                                            <button type="button" onClick={() => setResolving(null)} className="text-[10px] font-black text-slate-400 hover:text-rose-600 uppercase tracking-widest border border-slate-200 px-3 py-1.5 rounded hover:border-rose-200 transition-all">
+                                                Cancel
+                                            </button>
+                                        </div>
+                                        <textarea
+                                            placeholder="Document your findings and technical resolution steps..."
+                                            required
+                                            className="w-full px-5 py-4 bg-white border border-slate-200 rounded focus:border-[#0F172A] focus:outline-none focus:ring-1 focus:ring-[#0F172A] font-bold text-slate-800 text-sm mb-6 resize-none min-h-[120px] placeholder:text-slate-400 placeholder:font-medium"
                                             value={notes} onChange={(e) => setNotes(e.target.value)}
                                         ></textarea>
-                                        <div className="flex flex-col md:flex-row gap-6 items-end">
+                                        <div className="flex flex-col md:flex-row gap-5 items-end">
                                             <div className="flex-1 w-full">
-                                                <label className="block text-[9px] font-black text-slate-400 uppercase tracking-widest mb-2 px-1">Recovery Evidence (Images)</label>
-                                                <input type="file" multiple accept="image/*" 
+                                                <label className="block text-[9px] font-black text-slate-500 uppercase tracking-widest mb-2">Recovery Evidence (Images)</label>
+                                                <input
+                                                    type="file" multiple accept="image/*"
                                                     onChange={(e) => setFiles(Array.from(e.target.files))}
-                                                    className="w-full p-4 bg-white border border-slate-200 rounded-2xl text-[10px] font-bold text-slate-400 file:mr-4 file:bg-slate-900 file:text-white file:px-4 file:py-1.5 file:rounded-xl file:border-0 file:text-[9px] file:font-black" />
+                                                    className="w-full px-5 py-3 bg-white border border-slate-200 rounded text-[11px] font-bold text-slate-400 file:mr-4 file:bg-[#3f4175] file:text-white file:px-4 file:py-1.5 file:rounded file:border-0 file:text-[9px] file:font-black hover:file:bg-[#0F172A] transition-all cursor-pointer"
+                                                />
                                             </div>
-                                            <button type="submit" disabled={updating}
-                                                className="px-10 py-5 bg-indigo-600 text-white rounded-[2rem] text-[10px] font-black uppercase tracking-[0.2em] hover:bg-slate-900 transition-all shadow-2xl shadow-indigo-100">
-                                                {updating ? 'Transmitting Data...' : 'Finalize Resolution'}
+                                            <button
+                                                type="submit" disabled={updating}
+                                                className="px-8 py-4 bg-[#FFD166] text-slate-900 rounded font-black text-[10px] uppercase tracking-widest border border-[#FFCC29] hover:bg-[#FFCC29] hover:scale-[1.02] transition-all shadow-lg shadow-[#FFD166]/20 disabled:opacity-50 shrink-0"
+                                            >
+                                                {updating ? 'Transmitting...' : 'Finalize Resolution'}
                                             </button>
                                         </div>
                                     </form>
