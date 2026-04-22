@@ -81,21 +81,21 @@ const TicketDetails = () => {
     };
 
     if (loading) return (
-        <div className="h-screen flex flex-col items-center justify-center font-black animate-pulse text-indigo-600 bg-slate-50">
-            <div className="w-16 h-16 border-4 border-slate-200 border-t-indigo-600 rounded-full animate-spin mb-4"></div>
-            <p className="uppercase tracking-[0.3em] text-[10px]">Syncing Asset Data...</p>
+        <div className="h-screen flex flex-col items-center justify-center font-black animate-pulse text-[#0F172A] bg-slate-50">
+            <div className="w-16 h-16 border-4 border-slate-200 border-t-[#0F172A] rounded-full animate-spin mb-4"></div>
+            <p className="uppercase tracking-[0.2em] text-[10px]">Syncing Asset Data...</p>
         </div>
     );
 
     if (error) return (
         <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6 text-center">
-            <div className="bg-white p-12 rounded-[3.5rem] shadow-2xl border border-slate-100 max-w-xl animate-up">
-                <div className="text-6xl mb-6 grayscale text-rose-500">📁</div>
-                <h2 className="text-3xl font-black text-slate-900 tracking-tighter mb-4 uppercase italic">Registry Access Failed</h2>
-                <div className="p-4 bg-rose-50 text-rose-600 rounded-2xl font-bold text-xs mb-8 border border-rose-100 uppercase tracking-widest leading-relaxed">
+            <div className="bg-white p-12 rounded border border-slate-200 max-w-xl shadow-sm">
+                <div className="text-6xl mb-6 text-rose-500">📁</div>
+                <h2 className="text-3xl font-black text-slate-800 tracking-tighter mb-4 uppercase">Registry Access Failed</h2>
+                <div className="p-4 bg-rose-50 text-rose-600 rounded font-bold text-xs mb-8 border border-rose-100 uppercase tracking-widest">
                     CODE: {error}
                 </div>
-                <button onClick={() => navigate(-1)} className="px-10 py-5 bg-slate-900 text-white rounded-[2rem] text-[10px] font-black uppercase tracking-[0.2em] hover:bg-indigo-600 transition-all shadow-xl shadow-indigo-100 active:scale-95">
+                <button onClick={() => navigate(-1)} className="px-8 py-4 bg-[#0F172A] text-white rounded font-black text-[10px] uppercase tracking-[0.2em] hover:bg-slate-800 transition-all shadow-md">
                     Return to Hub
                 </button>
             </div>
@@ -104,11 +104,11 @@ const TicketDetails = () => {
 
     if (!ticket) return (
         <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6 text-center">
-            <div className="bg-white p-12 rounded-[3.5rem] shadow-2xl border border-slate-100 max-w-xl animate-up">
-                <div className="text-6xl mb-6 grayscale text-rose-500">🚫</div>
-                <h2 className="text-3xl font-black text-slate-900 tracking-tighter mb-4 uppercase italic">Incident Registry Missing</h2>
-                <p className="text-slate-400 font-bold mb-8 italic">The requested incident ID does not exist in our secure registry.</p>
-                <button onClick={() => navigate(-1)} className="px-10 py-5 bg-slate-900 text-white rounded-[2rem] text-[10px] font-black uppercase tracking-[0.2em] hover:bg-indigo-600 transition-all shadow-xl shadow-indigo-100 active:scale-95">
+            <div className="bg-white p-12 rounded border border-slate-200 max-w-xl shadow-sm">
+                <div className="text-6xl mb-6 text-slate-300">🚫</div>
+                <h2 className="text-3xl font-black text-slate-800 tracking-tighter mb-4 uppercase">Incident Missing</h2>
+                <p className="text-slate-500 font-bold mb-8 uppercase tracking-widest text-xs">The requested ticket does not exist.</p>
+                <button onClick={() => navigate(-1)} className="px-8 py-4 bg-[#0F172A] text-white rounded font-black text-[10px] uppercase tracking-[0.2em] hover:bg-slate-800 transition-all shadow-md">
                     Return to Hub
                 </button>
             </div>
@@ -116,64 +116,76 @@ const TicketDetails = () => {
     );
 
     return (
-        <div className="min-h-screen bg-[#FDFEFE] flex flex-col font-sans selection:bg-indigo-100">
+        <div className="min-h-screen bg-slate-50 flex flex-col font-sans relative">
             <Navbar />
-            <div className="flex flex-1 relative z-10">
+            <div className="flex flex-1 relative z-10 w-full overflow-hidden">
                 {renderSidebar()}
-                <main className="flex-1 lg:ml-64 p-6 md:p-12 xl:p-16 animate-up">
-                    <div className="max-w-6xl mx-auto">
-                        
-                        {/* Header Section */}
-                        <div className="flex flex-col md:flex-row justify-between items-start gap-8 mb-16">
-                            <div>
-                                <div className="flex gap-3 mb-6">
-                                    <span className="px-5 py-2 bg-indigo-50 text-indigo-600 text-[10px] font-black uppercase tracking-[0.2em] rounded-2xl border border-indigo-100 shadow-sm transition-all hover:scale-105 active:scale-95">#{ticket.id.slice(-8).toUpperCase()}</span>
-                                    <span className={`px-5 py-2 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] border shadow-sm ${
-                                        ticket.status === 'OPEN' ? 'bg-amber-50 text-amber-600 border-amber-100' : 
-                                        ticket.status === 'RESOLVED' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-slate-900 text-white'
-                                    }`}>
-                                        {ticket.status.replace('_', ' ')}
-                                    </span>
+                <main className={`flex-1 ${userRole === 'USER' ? 'lg:ml-64' : 'lg:ml-72'} h-[calc(100vh-72px)] overflow-y-auto scroll-smooth`}>
+                    
+                    {/* Header Area styled like UserDashboard */}
+                    <div className="bg-white border-b border-slate-200 py-10">
+                        <div className="max-w-[1000px] mx-auto px-6">
+                            <div className="flex flex-col md:flex-row justify-between items-start gap-8">
+                                <div>
+                                    <div className="flex gap-3 mb-4">
+                                        <span className="px-3 py-1 bg-slate-100 text-[#0F172A] text-[10px] font-black uppercase tracking-[0.2em] rounded shadow-sm border border-slate-200">
+                                            #{ticket.id.slice(-8).toUpperCase()}
+                                        </span>
+                                        <span className={`px-3 py-1 rounded text-[10px] font-black uppercase tracking-[0.2em] shadow-sm border ${
+                                            ticket.status === 'OPEN' ? 'bg-[#FFD166] text-slate-900 border-[#FFCC29]' : 
+                                            ticket.status === 'RESOLVED' ? 'bg-[#3f4175] text-white border-[#3f4175]' : 'bg-[#0F172A] text-white border-[#0F172A]'
+                                        }`}>
+                                            {ticket.status.replace('_', ' ')}
+                                        </span>
+                                    </div>
+                                    <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight mb-2 uppercase">
+                                        {ticket.resourceName}
+                                    </h1>
+                                    <p className="text-slate-500 font-bold uppercase tracking-[0.2em] text-[10px]">
+                                        Category: {ticket.category} • Created {new Date(ticket.createdAt).toLocaleDateString()}
+                                    </p>
                                 </div>
-                                <h1 className="text-5xl font-black text-slate-900 tracking-tighter mb-4">{ticket.resourceName}</h1>
-                                <p className="text-slate-400 font-bold uppercase tracking-[0.25em] text-[10px] opacity-70">Category: {ticket.category} • Created {new Date(ticket.createdAt).toLocaleDateString()}</p>
+
+                                {/* Admin Controls */}
+                                {userRole === 'ADMIN' && (
+                                    <div className="flex gap-4 shrink-0 mt-4 md:mt-0">
+                                        {ticket.status !== 'CLOSED' && (
+                                            <button onClick={() => handleAction('CLOSED')} disabled={actionLoading}
+                                                className="px-6 py-3 bg-[#3f4175] text-white rounded font-black text-[10px] uppercase tracking-[0.2em] hover:bg-[#2c2d54] transition shadow-md">
+                                                {actionLoading ? 'Finalizing...' : 'Close Incident'}
+                                            </button>
+                                        )}
+                                        {ticket.status !== 'REJECTED' && (ticket.status === 'OPEN' || ticket.status === 'PENDING') && (
+                                            <button onClick={() => handleAction('REJECTED')} disabled={actionLoading}
+                                                className="px-6 py-3 bg-white text-rose-600 border border-rose-200 rounded font-black text-[10px] uppercase tracking-[0.2em] hover:bg-rose-50 transition shadow-sm">
+                                                {actionLoading ? 'Rejecting...' : 'Reject Case'}
+                                            </button>
+                                        )}
+                                    </div>
+                                )}
                             </div>
-
-                            {/* Admin Controls */}
-                            {userRole === 'ADMIN' && (
-                                <div className="flex gap-4">
-                                    {ticket.status !== 'CLOSED' && (
-                                        <button onClick={() => handleAction('CLOSED')} disabled={actionLoading}
-                                            className="px-10 py-5 bg-emerald-600 text-white rounded-[2rem] text-[10px] font-black uppercase tracking-[0.2em] hover:bg-slate-900 transition-all shadow-xl shadow-emerald-100 active:scale-95">
-                                            {actionLoading ? 'Finalizing...' : 'Close Incident'}
-                                        </button>
-                                    )}
-                                    {ticket.status !== 'REJECTED' && (ticket.status === 'OPEN' || ticket.status === 'PENDING') && (
-                                        <button onClick={() => handleAction('REJECTED')} disabled={actionLoading}
-                                            className="px-10 py-5 bg-rose-50 text-rose-600 border border-rose-100 rounded-[2rem] text-[10px] font-black uppercase tracking-[0.2em] hover:bg-rose-600 hover:text-white transition-all shadow-xl shadow-rose-100 active:scale-95">
-                                            {actionLoading ? 'Rejecting...' : 'Reject Case'}
-                                        </button>
-                                    )}
-                                </div>
-                            )}
                         </div>
+                    </div>
 
-                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                    <div className="max-w-[1000px] mx-auto px-6 py-10">
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                            
                             {/* Left: Content */}
-                            <div className="lg:col-span-2 space-y-12 animate-up delay-100">
+                            <div className="lg:col-span-2 space-y-8">
                                 
-                                <section className="bg-white p-12 rounded-[3.5rem] border border-slate-100 shadow-sm hover:shadow-2xl transition-all">
-                                    <h3 className="text-[11px] font-black text-slate-300 uppercase tracking-widest mb-6 px-1">Case Description</h3>
-                                    <p className="text-xl font-bold text-slate-800 leading-relaxed italic">"{ticket.description}"</p>
+                                <section className="bg-white p-8 rounded border border-slate-200 shadow-sm relative overflow-hidden">
+                                     <div className="absolute top-0 left-0 w-full h-2 bg-[#FFD166]"></div>
+                                    <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4">Case Description</h3>
+                                    <p className="text-lg font-bold text-slate-800 leading-relaxed">"{ticket.description}"</p>
                                     
                                     {/* Resolution Area */}
                                     {ticket.resolutionNotes && (
-                                        <div className="mt-12 pt-12 border-t border-slate-50">
-                                            <h3 className="text-[11px] font-black text-emerald-600 uppercase tracking-widest mb-4 px-1 flex items-center gap-2">
-                                                <span className="w-1.5 h-1.5 bg-emerald-600 rounded-full animate-ping"></span>
+                                        <div className="mt-8 pt-8 border-t border-slate-100">
+                                            <h3 className="text-[10px] font-black text-[#3f4175] uppercase tracking-widest mb-4 flex items-center gap-2">
+                                                <span className="w-2 h-2 bg-[#ffD166] rounded-full"></span>
                                                 Official Resolution Notes
                                             </h3>
-                                            <div className="bg-emerald-50/50 p-8 rounded-[2.5rem] border border-emerald-100 italic font-bold text-emerald-800 text-lg leading-relaxed">
+                                            <div className="bg-slate-50 p-6 rounded border border-slate-200 font-bold text-slate-800 text-sm leading-relaxed">
                                                 {ticket.resolutionNotes}
                                             </div>
                                         </div>
@@ -182,15 +194,14 @@ const TicketDetails = () => {
 
                                 {/* Gallery Section */}
                                 {ticket.attachments && ticket.attachments.length > 0 && (
-                                    <section>
-                                        <h3 className="text-[11px] font-black text-slate-300 uppercase tracking-widest mb-6 px-4">Evidentiary Documentation</h3>
-                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    <section className="bg-white p-8 rounded border border-slate-200 shadow-sm">
+                                        <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-6">Evidentiary Documentation</h3>
+                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                             {ticket.attachments.map((url, i) => (
-                                                <div key={i} className="group relative rounded-[2rem] overflow-hidden border border-slate-100 shadow-sm aspect-video bg-slate-50 cursor-zoom-in">
+                                                <div key={i} className="group relative rounded overflow-hidden border border-slate-200 shadow-sm aspect-video bg-slate-50">
                                                     <img src={`http://localhost:8081${url}`} alt="Ticket Evidence" 
-                                                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                                         onError={(e) => { e.target.src = 'https://via.placeholder.com/400x300?text=Asset+Image'; }} />
-                                                    <div className="absolute inset-0 bg-indigo-600/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                                                 </div>
                                             ))}
                                         </div>
@@ -198,60 +209,61 @@ const TicketDetails = () => {
                                 )}
 
                                 {/* Interaction Section */}
-                                <section className="space-y-8 pb-20">
-                                    <h3 className="text-[11px] font-black text-slate-300 uppercase tracking-widest mb-4 px-4">Registry Conversation</h3>
+                                <section className="bg-white p-8 rounded border border-slate-200 shadow-sm space-y-8">
+                                    <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Registry Conversation</h3>
                                     <div className="space-y-6">
                                         {comments.map(comment => (
-                                            <div key={comment.id} className="flex gap-4 group">
-                                                <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center font-black text-[10px] text-slate-400 group-hover:bg-indigo-600 group-hover:text-white transition-all shadow-sm shrink-0 uppercase tracking-tighter">
+                                            <div key={comment.id} className="flex gap-4">
+                                                <div className="w-10 h-10 rounded bg-slate-100 flex items-center justify-center font-black text-[10px] text-slate-500 border border-slate-200 uppercase tracking-tighter shrink-0">
                                                     {(comment.authorEmail || 'U').charAt(0)}
                                                 </div>
-                                                <div className="bg-slate-50/80 p-6 rounded-3xl group-hover:bg-white border border-transparent group-hover:border-slate-100 transition-all flex-1">
+                                                <div className="bg-slate-50 p-6 rounded border border-slate-200 flex-1 relative">
                                                     <div className="flex justify-between items-center mb-2">
-                                                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{comment.authorEmail}</span>
-                                                        <span className="text-[9px] font-bold text-slate-300 italic">{new Date(comment.createdAt).toLocaleString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                                                        <span className="text-[10px] font-black text-slate-800 uppercase tracking-widest">{comment.authorEmail}</span>
+                                                        <span className="text-[9px] font-bold text-slate-400">{new Date(comment.createdAt).toLocaleString([], {hour: '2-digit', minute:'2-digit'})}</span>
                                                     </div>
-                                                    <p className="text-sm font-bold text-slate-700">{comment.content}</p>
+                                                    <p className="text-sm font-bold text-slate-600">{comment.content}</p>
                                                     {comment.authorEmail === userEmail && (
-                                                        <button onClick={() => deleteComment(comment.id)} className="mt-3 text-[9px] font-black text-rose-400 opacity-0 group-hover:opacity-100 transition-opacity uppercase tracking-widest hover:text-rose-600">Erase Comment</button>
+                                                        <button onClick={() => deleteComment(comment.id)} className="absolute bottom-6 right-6 text-[9px] font-black text-rose-500 uppercase tracking-widest hover:underline">Delete</button>
                                                     )}
                                                 </div>
                                             </div>
                                         ))}
                                     </div>
-                                    <form onSubmit={submitComment} className="relative group">
+                                    <form onSubmit={submitComment} className="relative pt-6 border-t border-slate-100">
                                         <textarea 
-                                            placeholder="Append to incident registry..." required
-                                            className="w-full px-8 py-8 bg-white border border-slate-100 rounded-[3rem] focus:ring-8 focus:ring-indigo-50 focus:border-indigo-200 outline-none font-bold text-slate-700 shadow-2xl shadow-indigo-100/20 resize-none min-h-[100px]"
+                                            placeholder="Add a comment to the incident thread..." required
+                                            className="w-full px-6 py-5 bg-slate-50 border border-slate-200 rounded focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#0F172A] font-bold text-slate-800 shadow-sm resize-none min-h-[100px] placeholder:text-slate-400"
                                             value={newComment} onChange={(e) => setNewComment(e.target.value)}
                                         ></textarea>
-                                        <button type="submit" className="absolute right-6 bottom-6 px-8 py-3 bg-slate-900 text-white rounded-[1.5rem] text-[10px] font-black uppercase tracking-widest hover:bg-indigo-600 transition-all active:scale-95 shadow-xl">Transmit</button>
+                                        <button type="submit" className="mt-4 px-8 py-3 bg-[#0F172A] text-white rounded font-black text-[10px] uppercase tracking-widest hover:bg-slate-800 transition shadow-md">Post Comment</button>
                                     </form>
                                 </section>
                             </div>
 
                             {/* Right: Meta Info */}
-                            <div className="lg:col-span-1 space-y-8 animate-up delay-200">
-                                <div className="bg-slate-900 p-10 rounded-[3rem] text-white shadow-2xl">
-                                    <h4 className="text-[10px] font-black text-indigo-400 uppercase tracking-[0.3em] mb-8">Metadata Proxy</h4>
-                                    <div className="space-y-8">
-                                        <div className="group">
-                                            <p className="text-[9px] font-black text-white/30 uppercase tracking-[0.2em] mb-1 group-hover:text-white/50 transition-colors">Incident Creator</p>
-                                            <p className="font-bold text-xs truncate group-hover:text-indigo-300 transition-colors">{ticket.requesterEmail}</p>
+                            <div className="lg:col-span-1 space-y-8">
+                                <div className="bg-[#0F172A] p-8 rounded border border-slate-800 text-white shadow-lg relative overflow-hidden">
+                                     <div className="absolute top-0 right-0 w-32 h-32 bg-[#FFD166]/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2"></div>
+                                    <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-8 relative z-10">Metadata Summary</h4>
+                                    <div className="space-y-6 relative z-10">
+                                        <div>
+                                            <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">Incident Creator</p>
+                                            <p className="font-bold text-xs truncate text-slate-200">{ticket.requesterEmail}</p>
                                         </div>
-                                        <div className="group">
-                                            <p className="text-[9px] font-black text-white/30 uppercase tracking-[0.2em] mb-1 group-hover:text-white/50 transition-colors">Active Technician</p>
-                                            <p className="font-bold text-xs truncate group-hover:text-indigo-300 transition-colors">{ticket.technicianEmail || 'PENDING ASSIGNMENT'}</p>
+                                        <div>
+                                            <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">Active Technician</p>
+                                            <p className="font-bold text-xs truncate text-[#FFD166]">{ticket.technicianEmail || 'PENDING ASSIGNMENT'}</p>
                                         </div>
-                                        <div className="group">
-                                            <p className="text-[9px] font-black text-white/30 uppercase tracking-[0.2em] mb-1 group-hover:text-white/50 transition-colors">Response priority</p>
+                                        <div>
+                                            <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">Priority Classification</p>
                                             <p className={`font-black text-xs uppercase tracking-widest ${
-                                                ticket.priority === 'URGENT' ? 'text-rose-400' : 'text-emerald-400'
+                                                ticket.priority === 'URGENT' ? 'text-rose-400' : 'text-slate-200'
                                             }`}>{ticket.priority}</p>
                                         </div>
-                                        <div className="group">
-                                            <p className="text-[9px] font-black text-white/30 uppercase tracking-[0.2em] mb-1 group-hover:text-white/50 transition-colors">Internal Registry</p>
-                                            <p className="font-bold text-xs">SMART-CAMPUS-v2.1</p>
+                                        <div className="pt-6 border-t border-slate-800">
+                                            <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">Internal System</p>
+                                            <p className="font-bold text-xs text-slate-300">WASSUP-PROD</p>
                                         </div>
                                     </div>
                                 </div>

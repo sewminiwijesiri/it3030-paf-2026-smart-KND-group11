@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
+import AdminSidebar from '../components/AdminSidebar';
+import TechnicianSidebar from '../components/TechnicianSidebar';
 import Footer from '../components/Footer';
 import api from '../utils/api';
 import { useNavigate } from 'react-router-dom';
@@ -89,89 +91,96 @@ const TicketSubmission = () => {
         }
     };
 
+    const role = localStorage.getItem('role') || 'USER';
+
+    const renderSidebar = () => {
+        switch (role) {
+            case 'ADMIN': return <AdminSidebar />;
+            case 'TECHNICIAN': return <TechnicianSidebar />;
+            default: return <Sidebar />;
+        }
+    };
+
     return (
-        <div className="min-h-screen bg-[#FDFEFE] flex flex-col font-sans relative overflow-x-hidden">
-             {/* Gradient Aesthetic Blobs */}
-             <div className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] bg-indigo-50/40 rounded-full blur-[140px] pointer-events-none"></div>
-            
+        <div className="min-h-screen bg-slate-50 flex flex-col font-sans relative">
             <Navbar />
             
-            <div className="flex flex-1 relative z-10">
-                <Sidebar />
-                <main className="flex-1 lg:ml-64 p-6 md:p-12 xl:p-16 transition-all duration-300">
-                    <div className="max-w-4xl mx-auto">
-                        <div className="animate-up">
-                            
-                            <header className="mb-14">
-                                <span className="inline-block px-5 py-2 bg-indigo-50 text-indigo-600 text-[10px] font-black uppercase tracking-[0.2em] rounded-2xl mb-4 border border-indigo-100 shadow-sm">
-                                    Incident Portal
-                                </span>
-                                <h1 className="text-5xl font-black text-slate-900 tracking-tighter leading-none mb-4">
-                                    Report an Issue<span className="text-indigo-600">.</span>
-                                </h1>
-                                <p className="text-slate-400 font-bold text-base leading-relaxed max-w-xl">Submit details about the resource malfunction or facility damage.</p>
-                            </header>
+            <div className="flex flex-1 relative z-10 w-full overflow-hidden">
+                {renderSidebar()}
+                
+                <main className={`flex-1 ${role === 'USER' ? 'lg:ml-64' : 'lg:ml-72'} h-[calc(100vh-72px)] overflow-y-auto scroll-smooth`}>
+                    
+                    {/* Header Area styled identically to UserDashboard and Home */}
+                    <div className="bg-white border-b border-slate-200 py-10">
+                        <div className="max-w-[800px] mx-auto px-6">
+                            <p className="text-[#3f4175] font-black text-xs uppercase tracking-[0.4em] mb-4 drop-shadow-sm flex items-center gap-2">
+                                <span className="w-2 h-2 rounded-full bg-[#FFD166]"></span>
+                                Incident Portal
+                            </p>
+                            <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight leading-none mb-4">
+                                Report an Issue
+                            </h1>
+                            <p className="text-slate-500 font-bold uppercase tracking-wider text-[11px] max-w-xl">
+                                Submit details about the resource malfunction or facility damage to request maintenance.
+                            </p>
+                        </div>
+                    </div>
 
+                    <div className="max-w-[800px] mx-auto px-6 py-10">
+                        <div className="bg-white border border-slate-200 rounded p-8 md:p-12 shadow-sm relative overflow-hidden">
+                            {/* Accent line like in profile */}
+                            <div className="absolute top-0 left-0 w-full h-2 bg-[#0F172A]"></div>
+                            
                             {success ? (
-                                <div className="bg-white border border-slate-100 p-20 rounded-[3.5rem] text-center shadow-2xl shadow-indigo-100/50">
-                                    <div className="w-24 h-24 bg-gradient-to-br from-indigo-500 to-purple-600 text-white rounded-[2rem] flex items-center justify-center mx-auto mb-8 text-4xl shadow-xl shadow-indigo-200 rotate-12 animate-pulse">✓</div>
-                                    <h2 className="text-3xl font-black text-slate-900 mb-2">Request Transmitted.</h2>
-                                    <p className="text-slate-400 font-bold uppercase tracking-widest text-[10px]">Syncing with maintenance queue...</p>
+                                <div className="text-center py-16">
+                                    <div className="w-20 h-20 bg-white border-2 border-[#FFD166] text-[#FFD166] rounded-full flex items-center justify-center mx-auto mb-6 text-3xl font-black shadow-lg">✓</div>
+                                    <h2 className="text-2xl font-black text-slate-900 mb-2 uppercase tracking-wide">Request Transmitted</h2>
+                                    <p className="text-slate-500 font-bold uppercase tracking-[0.2em] text-[10px]">Syncing with maintenance queue...</p>
                                 </div>
                             ) : (
-                                <form onSubmit={handleSubmit} className="space-y-12">
+                                <form onSubmit={handleSubmit} className="space-y-10">
                                     {error && (
-                                        <div className="p-5 bg-rose-50 border-l-4 border-rose-500 text-rose-700 rounded-2xl text-[12px] font-black uppercase tracking-tight shadow-sm animate-shake">
+                                        <div className="p-4 bg-white border border-rose-200 border-l-4 border-l-rose-500 text-rose-600 rounded text-xs font-black uppercase tracking-wider shadow-sm">
                                             {error}
                                         </div>
                                     )}
 
                                     {/* Row 1: Resource & Category */}
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                         <div className="space-y-3">
-                                            <label className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] px-1">Resource / Location</label>
-                                            <div className="relative group">
-                                                <select 
-                                                    onChange={handleResourceSelect} required
-                                                    className="w-full px-8 py-5 bg-slate-50 border border-slate-100 rounded-[2rem] focus:bg-white focus:ring-8 focus:ring-indigo-50 focus:border-indigo-200 transition-all outline-none font-bold text-slate-700 appearance-none shadow-sm cursor-pointer"
-                                                >
-                                                    <option value="">Select a resource</option>
-                                                    {resources.map(res => <option key={res.id} value={res.id}>{res.name}</option>)}
-                                                </select>
-                                                <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-slate-300 group-hover:text-indigo-400 transition-colors">
-                                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M19 9l-7 7-7-7" /></svg>
-                                                </div>
-                                            </div>
+                                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Resource / Location</label>
+                                            <select 
+                                                onChange={handleResourceSelect} required
+                                                className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded focus:bg-white focus:border-[#3f4175] focus:outline-none focus:ring-1 focus:ring-[#3f4175] transition-all font-bold text-slate-800 text-sm shadow-sm cursor-pointer"
+                                            >
+                                                <option value="">Select a resource</option>
+                                                {!fetching && resources.map(res => <option key={res.id} value={res.id}>{res.name}</option>)}
+                                            </select>
                                         </div>
 
                                         <div className="space-y-3">
-                                            <label className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] px-1">Incident Category</label>
-                                            <div className="relative group">
-                                                <select 
-                                                    name="category" onChange={handleChange}
-                                                    className="w-full px-8 py-5 bg-slate-50 border border-slate-100 rounded-[2rem] focus:bg-white focus:ring-8 focus:ring-indigo-50 focus:border-indigo-200 transition-all outline-none font-bold text-slate-700 appearance-none shadow-sm cursor-pointer"
-                                                >
-                                                    {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
-                                                </select>
-                                                <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-slate-300 group-hover:text-indigo-400 transition-colors">
-                                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M19 9l-7 7-7-7" /></svg>
-                                                </div>
-                                            </div>
+                                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Incident Category</label>
+                                            <select 
+                                                name="category" onChange={handleChange}
+                                                className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded focus:bg-white focus:border-[#3f4175] focus:outline-none focus:ring-1 focus:ring-[#3f4175] transition-all font-bold text-slate-800 text-sm shadow-sm cursor-pointer"
+                                            >
+                                                {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+                                            </select>
                                         </div>
                                     </div>
 
                                     {/* Toggle Priority */}
                                     <div className="space-y-4">
-                                        <label className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] px-1">Priority Level</label>
-                                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Priority Level</label>
+                                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
                                             {priorities.map(p => (
                                                 <button
                                                     key={p} type="button"
                                                     onClick={() => setFormData({...formData, priority: p})}
-                                                    className={`py-5 px-6 rounded-[2rem] font-black text-[11px] uppercase tracking-widest transition-all duration-300 ${
+                                                    className={`py-4 px-4 rounded font-black text-[10px] uppercase tracking-widest transition-all duration-300 border ${
                                                         formData.priority === p 
-                                                        ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-200 -translate-y-1' 
-                                                        : 'bg-slate-50 text-slate-400 border border-slate-100 hover:bg-white hover:text-slate-600'
+                                                        ? 'bg-[#0F172A] text-white border-[#0F172A] shadow-md' 
+                                                        : 'bg-white text-slate-500 border-slate-200 hover:border-slate-300 hover:bg-slate-50'
                                                     }`}
                                                 >
                                                     {p}
@@ -182,49 +191,44 @@ const TicketSubmission = () => {
 
                                     {/* Description */}
                                     <div className="space-y-3">
-                                        <label className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] px-1">Incident Description</label>
+                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Incident Description</label>
                                         <textarea 
-                                            name="description" required rows="6"
+                                            name="description" required rows="5"
                                             onChange={handleChange}
-                                            className="w-full px-8 py-8 bg-slate-50 border border-slate-100 rounded-[3rem] focus:bg-white focus:ring-8 focus:ring-indigo-50 focus:border-indigo-200 transition-all outline-none font-bold text-slate-700 resize-none italic shadow-sm"
-                                            placeholder="Please explain the situation in detail..."
+                                            className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded focus:bg-white focus:border-[#3f4175] focus:outline-none focus:ring-1 focus:ring-[#3f4175] transition-all font-bold text-slate-800 text-sm resize-none shadow-sm placeholder:text-slate-400 placeholder:font-medium"
+                                            placeholder="Please describe the malfunction or issue..."
                                         ></textarea>
                                     </div>
 
                                     {/* Contact & Attachments */}
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                         <div className="space-y-3">
-                                            <label className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] px-1">Direct Contact (Email/Ext)</label>
-                                            <div className="relative group">
-                                                <input 
-                                                    type="text" name="preferredContact" onChange={handleChange}
-                                                    className="w-full px-8 py-5 bg-slate-50 border border-slate-100 rounded-[2rem] focus:bg-white focus:ring-8 focus:ring-indigo-50 focus:border-indigo-200 transition-all outline-none font-bold text-slate-700 shadow-sm" 
-                                                    placeholder="How can we reach you quickly?"
-                                                />
-                                                <div className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-300 group-hover:text-indigo-400 transition-colors">
-                                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-                                                </div>
-                                            </div>
+                                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Direct Contact</label>
+                                            <input 
+                                                type="text" name="preferredContact" onChange={handleChange}
+                                                className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded focus:bg-white focus:border-[#3f4175] focus:outline-none focus:ring-1 focus:ring-[#3f4175] transition-all font-bold text-slate-800 text-sm shadow-sm placeholder:text-slate-400 placeholder:font-medium" 
+                                                placeholder="Email or Ext No."
+                                            />
                                         </div>
 
                                         <div className="space-y-3">
-                                            <label className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] px-1">Visual Evidence (Files)</label>
-                                            <div className="relative group">
-                                                <input 
-                                                    type="file" multiple accept="image/*"
-                                                    onChange={handleFileChange}
-                                                    className="w-full px-8 py-4 bg-slate-50 border border-slate-100 rounded-[2rem] text-[11px] font-bold text-slate-400 file:mr-4 file:py-1.5 file:px-4 file:rounded-xl file:border-0 file:text-[10px] file:font-black file:bg-indigo-600 file:text-white hover:file:bg-slate-900 transition-all shadow-sm cursor-pointer"
-                                                />
-                                            </div>
+                                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Visual Evidence</label>
+                                            <input 
+                                                type="file" multiple accept="image/*"
+                                                onChange={handleFileChange}
+                                                className="w-full px-5 py-3 bg-slate-50 border border-slate-200 rounded text-[11px] font-bold text-slate-400 file:mr-4 file:py-1.5 file:px-4 file:rounded file:border-0 file:text-[10px] file:font-black file:bg-[#3f4175] file:text-white hover:file:bg-[#0F172A] transition-all shadow-sm cursor-pointer"
+                                            />
                                         </div>
                                     </div>
 
-                                    <button 
-                                        type="submit" disabled={loading}
-                                        className="w-full py-6 bg-slate-900 text-white font-black text-xs uppercase tracking-[0.3em] rounded-[2.5rem] hover:bg-indigo-600 transition-all transform hover:scale-[1.01] active:scale-95 shadow-2xl shadow-indigo-100 disabled:opacity-50 mt-8"
-                                    >
-                                        {loading ? 'Initializing Secure Support...' : 'Initialize Support Ticket'}
-                                    </button>
+                                    <div className="pt-6 border-t border-slate-100">
+                                        <button 
+                                            type="submit" disabled={loading}
+                                            className="w-full py-5 bg-[#FFD166] text-slate-900 border border-[#FFCC29] font-black text-xs uppercase tracking-widest rounded shadow-lg shadow-[#FFD166]/20 hover:scale-[1.02] transition-transform disabled:opacity-50"
+                                        >
+                                            {loading ? 'Initializing Secure Report...' : 'Submit Maintenance Request'}
+                                        </button>
+                                    </div>
                                 </form>
                             )}
                         </div>
