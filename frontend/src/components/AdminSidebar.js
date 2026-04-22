@@ -11,24 +11,24 @@ const AdminSidebar = () => {
   ];
 
   return (
-    <aside className="fixed left-0 top-[72px] bottom-0 w-72 bg-white border-r border-slate-200 hidden lg:flex flex-col z-[50]">
-      <div className="flex-1 py-10 px-6 space-y-4 overflow-y-auto">
+    <aside className="fixed left-0 top-[72px] bottom-0 w-72 bg-[#1E293B] border-r border-[#334155] hidden lg:flex flex-col z-[50]">
+      <div className="flex-1 py-8 px-5 space-y-3 overflow-y-auto">
         <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4 ml-4">Command Center</p>
         {menuItems.map((item, index) => (
           <NavLink
             key={index}
             to={item.path}
             className={({ isActive }) =>
-              `flex items-center gap-4 px-5 py-3.5 rounded-2xl font-bold transition-all duration-200 group ${
+              `flex items-center gap-4 px-5 py-3.5 rounded-xl font-bold transition-all duration-200 group border ${
                 isActive
-                  ? 'bg-[#5B5FEF] text-white shadow-lg shadow-indigo-100 translate-x-1'
-                  : 'text-[#64748B] hover:bg-[#E0E7FF] hover:text-[#0F172A] hover:translate-x-1'
+                  ? 'bg-[#0F172A] text-[#FFD166] border-[#0F172A] shadow-md translate-x-1'
+                  : 'bg-transparent text-slate-400 border-transparent hover:bg-white/5 hover:text-white hover:border-white/5 hover:translate-x-1'
               }`
             }
           >
             {({ isActive }) => (
               <>
-                <svg className={`w-5 h-5 transition-colors duration-200 ${isActive ? 'text-white' : 'text-slate-400 group-hover:text-slate-900'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className={`w-5 h-5 transition-colors duration-200 ${isActive ? 'text-[#FFD166]' : 'text-slate-500 group-hover:text-white'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d={item.icon} />
                 </svg>
                 <span className="text-sm tracking-tight">{item.label}</span>
@@ -39,12 +39,12 @@ const AdminSidebar = () => {
       </div>
       
       {/* Sidebar Footer */}
-      <div className="p-8">
-        <div className="bg-slate-50 border border-slate-100 p-5 rounded-3xl text-center">
-          <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.3em] mb-2">Build v2.4.0</p>
+      <div className="p-6">
+        <div className="bg-[#1E293B]/50 border border-white/5 p-5 rounded-xl text-center shadow-sm">
+          <p className="text-[9px] font-black text-slate-500 uppercase tracking-[0.3em] mb-2">Build v2.4.0</p>
           <div className="flex items-center justify-center gap-2">
-            <span className="w-2 h-2 bg-success rounded-full animate-pulse"></span>
-            <p className="text-xs font-bold text-slate-900">Node-Secure OK</p>
+            <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]"></span>
+            <p className="text-[11px] font-bold text-slate-200 uppercase tracking-widest">Node-Secure OK</p>
           </div>
         </div>
       </div>
