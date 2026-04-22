@@ -49,11 +49,29 @@ const AdminResourceManagement = () => {
 
     const handleCreateOrUpdate = async (formData) => {
         try {
+            const data = new FormData();
+            
+            // Extract file from formData
+            const { file, ...resourceData } = formData;
+            
+            // Create the resource JSON blob
+            const resourceBlob = new Blob([JSON.stringify({
+                ...resourceData,
+                name: resourceData.name.trim(),
+                location: resourceData.location.trim(),
+            })], { type: 'application/json' });
+            
+            data.append('resource', resourceBlob);
+            
+            if (file) {
+                data.append('file', file);
+            }
+
             if (editingResource) {
-                await api.put(`/api/resources/${editingResource.id}`, formData);
+                await api.put(`/api/resources/${editingResource.id}`, data);
                 setSuccess('Resource updated successfully!');
             } else {
-                await api.post('/api/resources', formData);
+                await api.post('/api/resources', data);
                 setSuccess('Resource created successfully!');
             }
             setIsFormOpen(false);

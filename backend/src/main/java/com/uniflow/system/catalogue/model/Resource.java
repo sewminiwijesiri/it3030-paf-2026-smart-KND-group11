@@ -28,6 +28,8 @@ public class Resource {
     private String location;
 
     private List<String> availabilityWindows;
+    
+    private String imageUrl;
 
     @NotNull(message = "Resource status is required")
     private ResourceStatus status;
@@ -36,17 +38,32 @@ public class Resource {
     public Resource() {
     }
 
-    // Parameterized Constructor
+    // Parameterized Constructor (Legacy)
     public Resource(String name, ResourceType type, Integer capacity, String location, List<String> availabilityWindows, ResourceStatus status) {
+        this(name, type, capacity, location, availabilityWindows, status, null);
+    }
+
+    // Parameterized Constructor
+    public Resource(String name, ResourceType type, Integer capacity, String location, List<String> availabilityWindows, ResourceStatus status, String imageUrl) {
         this.name = name;
         this.type = type;
         this.capacity = capacity;
         this.location = location;
         this.availabilityWindows = availabilityWindows;
         this.status = status;
+        this.imageUrl = imageUrl;
     }
 
     // Getters and Setters
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
 
     public String getId() {
         return id;
