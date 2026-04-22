@@ -62,4 +62,9 @@ public class MaintenanceController {
         
         return ResponseEntity.ok(maintenanceService.updateTicketDetails(id, status, notes, attachments));
     }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTicket(@PathVariable String id) {
+        maintenanceService.deleteRequest(id);
+        return ResponseEntity.ok().build();
+    }
 }
