@@ -17,4 +17,7 @@ public interface BookingRepository extends MongoRepository<Booking, String> {
 
     @Query("{ 'resource_id': ?0, 'booking_date': ?1, 'status': { $in: ['PENDING', 'APPROVED'] }, 'start_time': { $lt: ?3 }, 'end_time': { $gt: ?2 } }")
     List<Booking> findConflictingBookings(String resourceId, LocalDate bookingDate, java.time.LocalTime startTime, java.time.LocalTime endTime);
+
+    @Query(value = "{ 'resource_id': ?0, 'booking_date': ?1, 'status': { $ne: 'CANCELLED' }, 'start_time': { $lt: ?3 }, 'end_time': { $gt: ?2 }, '_id': { $ne: ?4 } }", exists = true)
+    boolean existsOverlap(String resourceId, LocalDate date, java.time.LocalTime startTime, java.time.LocalTime endTime, String excludeId);
 }

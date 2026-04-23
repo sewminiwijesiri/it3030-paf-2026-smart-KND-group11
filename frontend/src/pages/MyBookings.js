@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useBookings } from '../hooks/useBookings';
 import BookingStatusBadge from '../components/Booking/BookingStatusBadge';
-import BookingFormModal from '../components/Booking/BookingFormModal';
 import { BOOKING_STATUS } from '../utils/bookingConstants';
 import { Trash2, PlusCircle, AlertCircle, Calendar, Clock, MapPin, Users, Filter } from 'lucide-react';
 import Navbar from '../components/Navbar';
@@ -12,7 +11,6 @@ import TechnicianSidebar from '../components/TechnicianSidebar';
 const MyBookings = () => {
   const { bookings, loading, error, fetchMyBookings, cancelBooking, createBooking } = useBookings();
   const [filterStatus, setFilterStatus] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     fetchMyBookings();
@@ -61,13 +59,6 @@ const MyBookings = () => {
                   <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-2">Total Bookings:</span>
                   <span className="bg-indigo-600 text-white px-3 py-1 rounded-xl text-xs font-black">{filteredBookings.length}</span>
                 </div>
-                <button
-                  onClick={() => setIsModalOpen(true)}
-                  className="flex items-center gap-2 bg-indigo-600 text-white px-5 py-3 rounded-2xl hover:bg-indigo-700 hover:shadow-lg hover:shadow-indigo-200 hover:-translate-y-0.5 transition-all font-black text-[11px] uppercase tracking-[0.15em]"
-                >
-                  <PlusCircle className="w-4 h-4" />
-                  <span>New Booking</span>
-                </button>
               </div>
             </header>
 
@@ -115,12 +106,6 @@ const MyBookings = () => {
                 </div>
                 <h3 className="text-xl font-black text-slate-800 mb-2">No Bookings Found</h3>
                 <p className="text-slate-400 text-sm font-medium mb-8">You don't have any bookings matching this criteria.</p>
-                <button
-                  onClick={() => setIsModalOpen(true)}
-                  className="bg-indigo-50 text-indigo-600 hover:bg-indigo-100 px-6 py-3 rounded-xl font-black text-[11px] uppercase tracking-wider transition-colors inline-flex items-center gap-2"
-                >
-                  <PlusCircle className="w-4 h-4" /> Create Your First Booking
-                </button>
               </div>
             ) : (
               /* Bookings List */
@@ -200,12 +185,6 @@ const MyBookings = () => {
           </div>
         </main>
       </div>
-
-      <BookingFormModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
-        onSubmit={createBooking} 
-      />
     </div>
   );
 };
