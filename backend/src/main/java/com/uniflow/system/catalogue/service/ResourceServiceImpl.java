@@ -52,6 +52,10 @@ public class ResourceServiceImpl implements ResourceService {
         existingResource.setAvailabilityWindows(resourceDetails.getAvailabilityWindows());
         existingResource.setStatus(resourceDetails.getStatus());
         
+        if (resourceDetails.getImageUrl() != null && !resourceDetails.getImageUrl().isEmpty()) {
+            existingResource.setImageUrl(resourceDetails.getImageUrl());
+        }
+        
         return resourceRepository.save(existingResource);
     }
 

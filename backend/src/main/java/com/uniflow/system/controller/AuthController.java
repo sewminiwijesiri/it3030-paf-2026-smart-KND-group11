@@ -66,4 +66,32 @@ public class AuthController {
         
         return ResponseEntity.notFound().build();
     }
+    @PostMapping("/change-password")
+    public ResponseEntity<?> changePassword(@RequestBody Map<String, String> request, org.springframework.security.core.Authentication authentication) {
+        if (authentication == null) return ResponseEntity.status(401).build();
+        
+        String email = authentication.getName();
+        String currentPassword = request.get("currentPassword");
+        String newPassword = request.get("newPassword");
+        
+        if (authService.changePassword(email, currentPassword, newPassword)) {
+            return ResponseEntity.ok(Map.of("message", "Password changed successfully"));
+        } else {
+            return ResponseEntity.status(400).body(Map.of("message", "Invalid current password"));
+        }
+    }
+
+    @PutMapping("/update-profile")
+    public ResponseEntity<?> updateProfile(@RequestBody Map<String, String> request, org.springframework.security.core.Authentication authentication) {
+        if (authentication == null) return ResponseEntity.status(401).build();
+        
+        String email = authentication.getName();
+        String newName = request.get("name");
+        
+        if (authService.updateProfile(email, newName)) {
+            return ResponseEntity.ok(Map.of("message", "Profile updated successfully"));
+        } else {
+            return ResponseEntity.status(400).body(Map.of("message", "Failed to update profile"));
+        }
+    }
 }
