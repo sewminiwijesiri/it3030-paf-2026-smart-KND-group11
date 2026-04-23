@@ -44,7 +44,7 @@ const TechnicianDashboard = () => {
     };
 
     const resolutionRate = tasks.length > 0 ? Math.round((resolvedTasks.length / tasks.length) * 100) : 0;
-    
+
     const categoryCounts = tasks.reduce((acc, task) => {
         const cat = task.category || 'UNASSIGNED';
         if (cat !== 'NULL') {
@@ -108,7 +108,7 @@ const TechnicianDashboard = () => {
                         </p>
                     </div>
                     <div className="flex items-center gap-4">
-                        <button 
+                        <button
                             onClick={handleDownloadReport}
                             className="flex items-center gap-2 px-8 py-4 bg-[#0F172A] text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-800 transition-all shadow-2xl shadow-slate-900/20 active:scale-95"
                         >
@@ -142,7 +142,7 @@ const TechnicianDashboard = () => {
 
             {/* Analytics Section */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 mb-12">
-                
+
                 {/* Resolution Report Card - Previous Dark Blue style */}
                 <div className="lg:col-span-2 bg-[#0F172A] text-white rounded-[40px] p-12 shadow-2xl relative overflow-hidden group transition-all duration-500">
                     <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2"></div>
@@ -185,8 +185,8 @@ const TechnicianDashboard = () => {
                                 <p className="text-[10px] font-black text-white/20 uppercase tracking-[0.2em] italic mb-1">UniFlow Operational Registry</p>
                                 <span className="px-3 py-1 bg-white/5 rounded-full text-[9px] font-black text-white/40 uppercase tracking-widest border border-white/5 w-fit">System OK</span>
                             </div>
-                            <Link 
-                                to="/technician/reports" 
+                            <Link
+                                to="/technician/reports"
                                 className="px-8 py-3 bg-[#FFD166] text-slate-900 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-white hover:scale-105 transition-all shadow-lg active:scale-95 flex items-center gap-2"
                             >
                                 <FileText size={12} />
@@ -212,8 +212,8 @@ const TechnicianDashboard = () => {
                                     <span className="text-slate-900 font-bold">{count} Units</span>
                                 </div>
                                 <div className="w-full h-2 bg-slate-50 rounded-full overflow-hidden border border-slate-100">
-                                    <div 
-                                        className={`h-full transition-all duration-1000 shadow-sm ${i % 2 === 0 ? 'bg-[#0F172A]' : 'bg-[#FFD166]'}`} 
+                                    <div
+                                        className={`h-full transition-all duration-1000 shadow-sm ${i % 2 === 0 ? 'bg-[#0F172A]' : 'bg-[#FFD166]'}`}
                                         style={{ width: `${(count / tasks.length) * 100}%` }}
                                     ></div>
                                 </div>
@@ -268,11 +268,10 @@ const TechnicianDashboard = () => {
                                             </div>
                                         </td>
                                         <td className="px-10 py-10">
-                                            <span className={`px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest border transition-all ${
-                                                task.priority === 'URGENT' ? 'bg-rose-50 text-rose-600 border-rose-100 shadow-rose-100/50' :
-                                                task.priority === 'HIGH' ? 'bg-amber-50 text-amber-600 border-amber-100 shadow-amber-100/50' :
-                                                'bg-slate-50 text-slate-500 border-slate-100'
-                                            }`}>
+                                            <span className={`px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest border transition-all ${task.priority === 'URGENT' ? 'bg-rose-50 text-rose-600 border-rose-100 shadow-rose-100/50' :
+                                                    task.priority === 'HIGH' ? 'bg-amber-50 text-amber-600 border-amber-100 shadow-amber-100/50' :
+                                                        'bg-slate-50 text-slate-500 border-slate-100'
+                                                }`}>
                                                 {task.priority}
                                             </span>
                                         </td>
