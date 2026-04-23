@@ -20,11 +20,15 @@ import AdminTest from './pages/AdminTest';
 import OAuth2RedirectHandler from './pages/OAuth2RedirectHandler';
 import AccessDenied from './pages/AccessDenied';
 import ProtectedRoute from './components/ProtectedRoute';
+import MyBookings from './pages/MyBookings';
+import AdminBookings from './pages/AdminBookings';
+import { Toaster } from 'react-hot-toast';
 
 function App() {
   return (
     <Router>
       <div className="App">
+        <Toaster position="top-right" />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
@@ -79,6 +83,15 @@ function App() {
             path="/technician/tasks"
             element={<ProtectedRoute allowedRoles={['TECHNICIAN', 'ADMIN']}><TechnicianTasks /></ProtectedRoute>}
           />
+          <Route 
+            path="/my-bookings" 
+            element={<ProtectedRoute allowedRoles={['USER', 'ADMIN', 'TECHNICIAN']}><MyBookings /></ProtectedRoute>} 
+          />
+          <Route 
+            path="/admin-bookings" 
+            element={<ProtectedRoute allowedRoles={['ADMIN']}><AdminBookings /></ProtectedRoute>} 
+          />
+          
           <Route
             path="/technician/reports"
             element={<ProtectedRoute allowedRoles={['TECHNICIAN', 'ADMIN']}><TechnicianReports /></ProtectedRoute>}

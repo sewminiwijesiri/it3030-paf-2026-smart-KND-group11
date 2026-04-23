@@ -5,6 +5,8 @@ import Sidebar from '../components/Sidebar';
 import AdminSidebar from '../components/AdminSidebar';
 import TechnicianSidebar from '../components/TechnicianSidebar';
 import ResourceFilters from '../components/catalogue/ResourceFilters';
+import BookingFormModal from '../components/BookingFormModal';
+import { toast } from 'react-hot-toast';
 import Footer from '../components/Footer';
 
 const UserResourceCatalogue = () => {
@@ -17,6 +19,19 @@ const UserResourceCatalogue = () => {
         location: '',
         status: 'AVAILABLE'
     });
+
+    const [selectedResource, setSelectedResource] = useState(null);
+    const [showModal, setShowModal] = useState(false);
+
+    const handleBookClick = (resource) => {
+        setSelectedResource(resource);
+        setShowModal(true);
+    };
+
+    const handleBookingSuccess = (resourceName) => {
+        toast.success(`${resourceName} booking request submitted!`);
+        fetchResources(); // Refresh to update status if needed
+    };
 
     const fetchResources = useCallback(async () => {
         setLoading(true);
@@ -152,9 +167,13 @@ const UserResourceCatalogue = () => {
                                                 </div>
                                             </div>
 
-                                            <button className="w-full py-4 bg-[#FFD166] text-slate-900 font-bold rounded-full text-[11px] uppercase tracking-widest shadow-lg shadow-[#FFD166]/20 hover:scale-105 hover:bg-[#FFCC29] transition-transform">
-                                                Book This Slot
-                                            </button>
+
+                                            <button 
+  onClick={() => handleBookClick(resource)}
+  className="w-full py-4 bg-[#FFD166] text-slate-900 font-bold rounded-full text-[11px] uppercase tracking-widest shadow-lg shadow-[#FFD166]/20 hover:scale-105 hover:bg-[#FFCC29] transition-transform active:scale-95"
+>
+  Book This Slot
+</button>
                                         </div>
                                     </div>
                                 ))}
@@ -164,6 +183,14 @@ const UserResourceCatalogue = () => {
                     <Footer />
                 </main>
             </div>
+
+            {showModal && selectedResource && (
+                <BookingFormModal
+                    resource={selectedResource}
+                    onClose={() => setShowModal(false)}
+                    onSuccess={handleBookingSuccess}
+                />
+            )}
         </div>
     );
 };
