@@ -129,8 +129,6 @@ const TicketSubmission = () => {
       </p>
     </div>
   </div>
-                        </div>
-                    </div>
 
                     <div className="max-w-[900px] mx-auto px-8 py-12">
                         <div className="bg-white rounded-[40px] border border-slate-100 shadow-xl shadow-slate-200/50 p-10 md:p-16 relative overflow-hidden group">

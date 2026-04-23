@@ -67,45 +67,25 @@ const MyTickets = () => {
                 <Sidebar />
                 <main className="flex-1 lg:ml-72 h-[calc(100vh-72px)] overflow-y-auto scroll-smooth">
                     
-{/* Header */}
-<div className="bg-white border-b border-slate-200 py-6">
-  <div className="max-w-[1000px] mx-auto px-6">
-    <p className="text-[#3f4175] font-black text-[10px] uppercase tracking-[0.4em] mb-2 drop-shadow-sm flex items-center gap-2">
-      <span className="w-1.5 h-1.5 rounded-full bg-[#FFD166]"></span>
-      Support Dashboard
-    </p>
-
-    <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-      <div>
-        <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight leading-tight mb-1">
-          My Requests
-        </h1>
-      </div>
-    </div>
-  </div>
-</div>
+                    {/* Header matches styling of User Dashboard / Home */}
+                    <div className="bg-white border-b border-slate-200 py-6">
+                        <div className="max-w-[1000px] mx-auto px-6">
+                            <p className="text-[#3f4175] font-black text-[10px] uppercase tracking-[0.4em] mb-2 drop-shadow-sm flex items-center gap-2">
+                                <span className="w-1.5 h-1.5 rounded-full bg-[#FFD166]"></span>
+                                Support Dashboard
+                            </p>
+                            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                                <div>
+                                    <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight leading-tight mb-1">
+                                        My Requests
                                     </h1>
-                                    <p className="text-slate-500 font-bold uppercase tracking-wider text-[11px] max-w-md ml-1">
-                                        Monitoring <span className="text-slate-900">{tickets.length}</span> active data packets in the maintenance queue.
+                                    <p className="text-slate-500 font-bold uppercase tracking-wider text-[11px] max-w-sm">
+                                        Monitoring <span className="text-slate-900">{tickets.length}</span> active records in the maintenance queue.
                                     </p>
                                 </div>
-{/* Header */}
-<div className="bg-white border-b border-slate-200 py-6">
-  <div className="max-w-[1000px] mx-auto px-6">
-    <p className="text-[#3f4175] font-black text-[10px] uppercase tracking-[0.4em] mb-2 drop-shadow-sm flex items-center gap-2">
-      <span className="w-1.5 h-1.5 rounded-full bg-[#FFD166]"></span>
-      Support Dashboard
-    </p>
-
-    <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-      <div>
-        <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight leading-tight mb-1">
-          My Requests
-        </h1>
-      </div>
-    </div>
-  </div>
-</div>
+                                <Link to="/report-incident" className="shrink-0 bg-[#FFD166] text-slate-900 px-8 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest hover:scale-105 hover:bg-[#FFCC29] transition-all shadow-lg shadow-[#FFD166]/20">
+                                    Create New Ticket
+                                </Link>
                             </div>
                         </div>
                     </div>
