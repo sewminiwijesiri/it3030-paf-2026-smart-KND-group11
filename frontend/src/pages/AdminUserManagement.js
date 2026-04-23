@@ -48,23 +48,23 @@ const AdminUserManagement = () => {
     return (
         <AdminLayout>
             {/* Page Header */}
-            <div className="bg-white border-b border-slate-200 -mx-6 md:-mx-10 -mt-6 md:-mt-10 px-6 md:px-10 py-10 mb-10">
-                <p className="text-[#3f4175] font-black text-xs uppercase tracking-[0.4em] mb-4 flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-[#FFD166]"></span>
+            <div className="bg-white border-b border-slate-200 -mx-6 md:-mx-10 -mt-6 md:-mt-10 px-6 md:px-10 py-7 mb-7">
+                <p className="text-[#3f4175] font-black text-[10px] uppercase tracking-[0.4em] mb-2 flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#FFD166]"></span>
                     Platform Administration
                 </p>
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                     <div>
-                        <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight leading-none mb-2">
+                        <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight leading-none mb-1">
                             User Control
                         </h1>
-                        <p className="text-slate-500 font-bold uppercase tracking-wider text-[11px]">
+                        <p className="text-slate-500 font-bold uppercase tracking-wider text-[10px]">
                             Manage platform member accounts and access roles.
                         </p>
                     </div>
-                    <div className="bg-slate-50 border border-slate-200 rounded px-6 py-3 flex items-center gap-4 shadow-sm shrink-0">
+                    <div className="bg-slate-50 border border-slate-200 rounded px-5 py-2.5 flex items-center gap-4 shadow-sm shrink-0">
                         <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Total Members</span>
-                        <span className="text-2xl font-black text-slate-900">{users.length}</span>
+                        <span className="text-xl font-black text-slate-900">{users.length}</span>
                     </div>
                 </div>
             </div>
