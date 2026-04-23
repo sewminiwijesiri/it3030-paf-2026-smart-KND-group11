@@ -8,7 +8,7 @@ import com.mongodb.client.MongoClients;
 import org.springframework.beans.factory.annotation.Value;
 
 @Configuration
-@EnableMongoRepositories(basePackages = "com.uniflow.system")
+@EnableMongoRepositories(basePackages = {"com.uniflow.system", "com.smartcampus.booking"})
 public class MongoConfiguration extends AbstractMongoClientConfiguration {
 
     @Value("${spring.data.mongodb.uri}")
