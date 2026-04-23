@@ -45,5 +45,10 @@ export const bookingService = {
   cancelBooking: async (id) => {
     const response = await axiosInstance.delete(`/bookings/${id}`);
     return response.data;
+  },
+
+  getQRCode: async (id) => {
+    const response = await axiosInstance.get(`/bookings/${id}/qrcode`);
+    return response.data;
   }
 };

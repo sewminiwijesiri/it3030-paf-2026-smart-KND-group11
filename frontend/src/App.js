@@ -22,6 +22,7 @@ import AccessDenied from './pages/AccessDenied';
 import ProtectedRoute from './components/ProtectedRoute';
 import MyBookings from './pages/MyBookings';
 import AdminBookings from './pages/AdminBookings';
+import VerifyBooking from './pages/VerifyBooking';
 import { Toaster } from 'react-hot-toast';
 
 function App() {
@@ -103,6 +104,9 @@ function App() {
 
           <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
           <Route path="/access-denied" element={<AccessDenied />} />
+          
+          {/* Public Routes */}
+          <Route path="/booking/verify/:bookingId" element={<VerifyBooking />} />
         </Routes>
       </div>
     </Router>
