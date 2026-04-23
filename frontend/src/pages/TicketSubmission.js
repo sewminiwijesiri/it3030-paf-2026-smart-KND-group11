@@ -111,13 +111,13 @@ const TicketSubmission = () => {
                 <main className={`flex-1 ${role === 'USER' ? 'lg:ml-64' : 'lg:ml-72'} h-[calc(100vh-72px)] overflow-y-auto scroll-smooth`}>
                     
                     {/* Header Area styled identically to UserDashboard and Home */}
-                    <div className="bg-white border-b border-slate-200 py-10">
+                    <div className="bg-white border-b border-slate-200 py-6">
                         <div className="max-w-[800px] mx-auto px-6">
-                            <p className="text-[#3f4175] font-black text-xs uppercase tracking-[0.4em] mb-4 drop-shadow-sm flex items-center gap-2">
-                                <span className="w-2 h-2 rounded-full bg-[#FFD166]"></span>
+                            <p className="text-[#3f4175] font-black text-[10px] uppercase tracking-[0.4em] mb-2 drop-shadow-sm flex items-center gap-2">
+                                <span className="w-1.5 h-1.5 rounded-full bg-[#FFD166]"></span>
                                 Incident Portal
                             </p>
-                            <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight leading-none mb-4">
+                            <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight leading-tight mb-1">
                                 Report an Issue
                             </h1>
                             <p className="text-slate-500 font-bold uppercase tracking-wider text-[11px] max-w-xl">

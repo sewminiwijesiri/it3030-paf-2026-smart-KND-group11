@@ -6,6 +6,7 @@ import AdminSidebar from '../components/AdminSidebar';
 import TechnicianSidebar from '../components/TechnicianSidebar';
 import Footer from '../components/Footer';
 import api from '../utils/api';
+import { resolveImageUrl } from '../utils/imageUtils';
 
 const TicketDetails = () => {
     const { id } = useParams();
@@ -199,7 +200,7 @@ const TicketDetails = () => {
                                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                             {ticket.attachments.map((url, i) => (
                                                 <div key={i} className="group relative rounded overflow-hidden border border-slate-200 shadow-sm aspect-video bg-slate-50">
-                                                    <img src={`http://localhost:8081${url}`} alt="Ticket Evidence" 
+                                                    <img src={resolveImageUrl(url)} alt="Ticket Evidence" 
                                                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                                         onError={(e) => { e.target.src = 'https://via.placeholder.com/400x300?text=Asset+Image'; }} />
                                                 </div>

@@ -6,6 +6,7 @@ import AdminSidebar from '../components/AdminSidebar';
 import TechnicianSidebar from '../components/TechnicianSidebar';
 import ResourceFilters from '../components/catalogue/ResourceFilters';
 import Footer from '../components/Footer';
+import { resolveImageUrl } from '../utils/imageUtils';
 
 const UserResourceCatalogue = () => {
     const [resources, setResources] = useState([]);
@@ -66,15 +67,15 @@ const UserResourceCatalogue = () => {
                 <main className={`flex-1 ${role === 'USER' ? 'lg:ml-64' : 'lg:ml-72'} h-[calc(100vh-72px)] overflow-y-auto scroll-smooth`}>
                     
                     {/* Header Area styled like UserDashboard */}
-                    <div className="bg-white border-b border-slate-200 py-10">
+                    <div className="bg-white border-b border-slate-200 py-6">
                         <div className="max-w-[1200px] mx-auto px-6 lg:px-10">
-                            <p className="text-[#3f4175] font-black text-xs uppercase tracking-[0.4em] mb-4 drop-shadow-sm flex items-center gap-2">
-                                <span className="w-2 h-2 rounded-full bg-[#FFD166]"></span>
+                            <p className="text-[#3f4175] font-black text-[10px] uppercase tracking-[0.4em] mb-2 drop-shadow-sm flex items-center gap-2">
+                                <span className="w-1.5 h-1.5 rounded-full bg-[#FFD166]"></span>
                                 Campus Catalogue
                             </p>
                             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                                 <div>
-                                    <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight mb-2">
+                                    <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight leading-tight mb-1">
                                         Resource Catalogue
                                     </h1>
                                     <p className="text-slate-500 font-bold uppercase tracking-wider text-[11px]">Find and book campus facilities & technical assets.</p>
@@ -87,10 +88,10 @@ const UserResourceCatalogue = () => {
                         </div>
                     </div>
 
-                    <div className="max-w-[1200px] mx-auto px-6 lg:px-10 py-10">
+                    <div className="max-w-[1200px] mx-auto px-6 lg:px-10 py-6">
                         
                         {/* Filters Panel */}
-                        <div className="mb-10 animate-fade-in bg-white p-6 rounded border border-slate-200 shadow-sm">
+                        <div className="mb-6 animate-fade-in bg-white p-4 rounded border border-slate-200 shadow-sm">
                             <ResourceFilters filters={filters} setFilters={setFilters} />
                         </div>
 
@@ -119,40 +120,48 @@ const UserResourceCatalogue = () => {
                             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 mb-12">
                                 {resources.map((resource) => (
                                     <div key={resource.id} className="group bg-white rounded border border-slate-200 transition-all duration-300 hover:shadow-xl hover:-translate-y-2 overflow-hidden flex flex-col justify-between">
-                                        <div className="p-8 relative overflow-hidden flex-1">
-                                            {/* Type Badge */}
-                                            <span className="absolute top-6 right-6 bg-slate-50 border border-slate-200 px-3 py-1 rounded text-[9px] font-black text-slate-500 uppercase tracking-widest">
+                                        <div className="relative h-48 w-full bg-slate-100 overflow-hidden">
+                                            {resource.imageUrl ? (
+                                                <img 
+                                                    src={resolveImageUrl(resource.imageUrl)} 
+                                                    alt={resource.name} 
+                                                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+                                                />
+                                            ) : (
+                                                <div className="w-full h-full flex items-center justify-center text-slate-300">
+                                                    <svg className="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m4 0h1m-5 10h1m4 0h1m-5-4h1m4 0h1" />
+                                                    </svg>
+                                                </div>
+                                            )}
+                                            {/* Type Badge Overlay */}
+                                            <span className="absolute top-4 right-4 bg-white/90 backdrop-blur shadow-sm border border-slate-200 px-3 py-1 rounded text-[9px] font-black text-slate-800 uppercase tracking-widest z-10 font-bold">
                                                 {resource.type.replace('_', ' ')}
                                             </span>
-                                            
-                                            {/* Resource Icon/Visual */}
-                                            <div className="w-16 h-16 bg-slate-50 rounded border border-slate-200 flex items-center justify-center text-[#0F172A] mb-8 group-hover:bg-[#FFD166] group-hover:border-[#FFCC29] transition-colors duration-300">
-                                                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m4 0h1m-5 10h1m4 0h1m-5-4h1m4 0h1" />
-                                                </svg>
-                                            </div>
-
-                                            <h3 className="text-xl font-bold text-slate-800 leading-tight mb-3">
-                                                {resource.name}
-                                            </h3>
-                                            <p className="text-[11px] font-bold text-slate-400 flex items-center gap-2 uppercase tracking-wider">
-                                                <svg className="w-4 h-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                                                {resource.location}
-                                            </p>
                                         </div>
 
-                                        <div className="p-8 pt-0 mt-auto">
-                                            <div className="flex items-center justify-between mb-8 p-4 bg-slate-50 border border-slate-100 rounded">
+                                        <div className="p-6 flex-1 flex flex-col">
+                                            <div className="mb-4">
+                                                <h3 className="text-xl font-bold text-slate-800 leading-tight mb-2 min-h-[3rem] line-clamp-2">
+                                                    {resource.name}
+                                                </h3>
+                                                <p className="text-[10px] font-black text-slate-400 flex items-center gap-2 uppercase tracking-widest">
+                                                    <svg className="w-4 h-4 text-[#FFD166]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                                                    {resource.location}
+                                                </p>
+                                            </div>
+
+                                            <div className="flex items-center justify-between mb-6 p-3 bg-slate-50 border border-slate-100 rounded">
                                                 <div className="flex flex-col">
-                                                    <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Capacity</span>
+                                                    <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Capacity</span>
                                                     <span className="text-sm font-black text-slate-800">{resource.capacity || 'N/A'}</span>
                                                 </div>
-                                                <div className={`px-3 py-1 text-[9px] font-black uppercase tracking-widest border ${getStatusStyles(resource.status)}`}>
+                                                <div className={`px-2.5 py-1 text-[8px] font-black uppercase tracking-widest border rounded shadow-sm ${getStatusStyles(resource.status)}`}>
                                                     {resource.status}
                                                 </div>
                                             </div>
 
-                                            <button className="w-full py-4 bg-[#FFD166] text-slate-900 font-bold rounded-full text-[11px] uppercase tracking-widest shadow-lg shadow-[#FFD166]/20 hover:scale-105 hover:bg-[#FFCC29] transition-transform">
+                                            <button className="w-full py-3.5 bg-[#FFD166] text-slate-900 font-black rounded-xl text-[10px] uppercase tracking-[0.2em] shadow-lg shadow-[#FFD166]/20 hover:bg-[#FFCC29] transition-all hover:shadow-[#FFD166]/40 active:scale-95 mt-auto">
                                                 Book This Slot
                                             </button>
                                         </div>

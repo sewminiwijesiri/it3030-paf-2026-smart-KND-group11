@@ -1,4 +1,5 @@
 import React from 'react';
+import { resolveImageUrl } from '../../utils/imageUtils';
 
 const ResourceTable = ({ resources, onEdit, onDelete }) => {
   const getStatusColor = (status) => {
@@ -40,7 +41,7 @@ const ResourceTable = ({ resources, onEdit, onDelete }) => {
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-lg bg-gray-100 flex-shrink-0 flex items-center justify-center overflow-hidden border border-gray-100">
                       {resource.imageUrl ? (
-                        <img src={resource.imageUrl} alt={resource.name} className="w-full h-full object-cover" />
+                        <img src={resolveImageUrl(resource.imageUrl)} alt={resource.name} className="w-full h-full object-cover" />
                       ) : (
                         <span className="text-[10px] text-gray-300 font-bold">N/A</span>
                       )}

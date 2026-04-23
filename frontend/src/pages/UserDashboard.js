@@ -31,10 +31,10 @@ const UserDashboard = () => {
     }, []);
 
     const stats = [
-        { label: 'Active Bookings', value: '03', icon: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z' },
-        { label: 'Completed Actions', value: '12', icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' },
-        { label: 'Pending Requests', value: '01', icon: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z' },
-        { label: 'Platform Rating', value: '4.9', icon: 'M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.518 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.921-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.518-4.674z' },
+        { label: 'Active Bookings', value: '03', icon: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z', color: 'text-indigo-600', bg: 'bg-indigo-50', border: 'border-indigo-100' },
+        { label: 'Completed Actions', value: '12', icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z', color: 'text-emerald-600', bg: 'bg-emerald-50', border: 'border-emerald-100' },
+        { label: 'Pending Requests', value: '01', icon: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z', color: 'text-rose-600', bg: 'bg-rose-50', border: 'border-rose-100' },
+        { label: 'Platform Rating', value: '4.9', icon: 'M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.518 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.921-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.518-4.674z', color: 'text-amber-500', bg: 'bg-amber-50', border: 'border-amber-100' },
     ];
 
     const recentRequests = [
@@ -63,22 +63,22 @@ const UserDashboard = () => {
                 <main className={`flex-1 ${role === 'USER' ? 'lg:ml-64' : 'lg:ml-72'} h-[calc(100vh-72px)] overflow-y-auto scroll-smooth`}>
                     
                     {/* Header Area styled like the Home Hero top-texts but adapted for dashboard */}
-                    <div className="bg-white border-b border-slate-200 py-10">
+                    <div className="bg-white border-b border-slate-200 py-6">
                         <div className="max-w-[1200px] mx-auto px-6 lg:px-10">
-                            <p className="text-[#3f4175] font-black text-xs uppercase tracking-[0.4em] mb-4 drop-shadow-sm flex items-center gap-2">
-                                <span className="w-2 h-2 rounded-full bg-[#FFD166]"></span>
+                            <p className="text-[#3f4175] font-black text-[10px] uppercase tracking-[0.4em] mb-2 drop-shadow-sm flex items-center gap-2">
+                                <span className="w-1.5 h-1.5 rounded-full bg-[#FFD166]"></span>
                                 Dashboard Portal
                             </p>
-                            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-                                <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight">
+                            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                                <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight leading-tight">
                                     Welcome back, <br/>
                                     <span className="text-slate-500">{userData.name}</span>
                                 </h1>
-                                <div className="flex gap-4">
-                                    <button className="bg-[#0F172A] text-white px-8 py-3 rounded-2xl font-black text-[11px] uppercase tracking-widest hover:bg-slate-800 hover:scale-105 transition-all shadow-lg">
+                                <div className="flex gap-3 mt-2 md:mt-0">
+                                    <button className="bg-[#0F172A] text-white px-6 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-800 transition-all shadow-md">
                                         View Map
                                     </button>
-                                    <button className="bg-[#FFD166] text-slate-900 px-8 py-3 rounded-2xl font-black text-[11px] uppercase tracking-widest hover:bg-[#FFCC29] hover:scale-105 transition-all shadow-lg shadow-[#FFD166]/20">
+                                    <button className="bg-[#FFD166] text-slate-900 px-6 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-[#FFCC29] transition-all shadow-md shadow-[#FFD166]/20">
                                         Book Resource
                                     </button>
                                 </div>
@@ -97,10 +97,10 @@ const UserDashboard = () => {
                                 <div className="grid grid-cols-2 md:grid-cols-4 gap-8 divide-x divide-slate-100">
                                     {stats.map((stat, i) => (
                                         <div key={i} className="text-center px-4">
-                                            <div className="w-10 h-10 mx-auto bg-slate-50 rounded-full flex items-center justify-center mb-3">
-                                                <svg className="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={stat.icon} /></svg>
+                                            <div className={`w-10 h-10 mx-auto ${stat.bg} ${stat.border} border rounded-full flex items-center justify-center mb-3`}>
+                                                <svg className={`w-5 h-5 ${stat.color}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={stat.icon} /></svg>
                                             </div>
-                                            <h3 className="text-3xl md:text-4xl font-black text-slate-900 mb-1 tracking-tighter italic">{stat.value}</h3>
+                                            <h3 className={`text-3xl md:text-4xl font-black ${stat.color} mb-1 tracking-tighter italic`}>{stat.value}</h3>
                                             <p className="text-slate-500 font-black text-[9px] uppercase tracking-widest opacity-80">{stat.label}</p>
                                         </div>
                                     ))}
