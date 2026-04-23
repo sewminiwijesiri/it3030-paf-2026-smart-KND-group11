@@ -67,4 +67,9 @@ public class MaintenanceController {
         maintenanceService.deleteRequest(id);
         return ResponseEntity.ok().build();
     }
+    
+    @GetMapping("/history/{resourceName}")
+    public ResponseEntity<List<MaintenanceRequest>> getResourceHistory(@PathVariable String resourceName) {
+        return ResponseEntity.ok(maintenanceService.getHistoryByResource(resourceName));
+    }
 }

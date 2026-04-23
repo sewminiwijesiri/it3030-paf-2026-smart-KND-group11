@@ -40,9 +40,11 @@ public class MaintenanceService {
         if (notes != null) request.setResolutionNotes(notes);
         if (newAttachments != null && !newAttachments.isEmpty()) {
             if (request.getAttachments() == null) {
-                request.setAttachments(newAttachments);
+                request.setAttachments(new java.util.ArrayList<>(newAttachments));
             } else {
-                request.getAttachments().addAll(newAttachments);
+                java.util.List<String> currentAttachments = new java.util.ArrayList<>(request.getAttachments());
+                currentAttachments.addAll(newAttachments);
+                request.setAttachments(currentAttachments);
             }
         }
         request.setUpdatedAt(LocalDateTime.now());
@@ -77,5 +79,9 @@ public class MaintenanceService {
             throw new RuntimeException("Request not found");
         }
         maintenanceRepository.deleteById(id);
+    }
+    
+    public List<MaintenanceRequest> getHistoryByResource(String resourceName) {
+        return maintenanceRepository.findByResourceName(resourceName);
     }
 }

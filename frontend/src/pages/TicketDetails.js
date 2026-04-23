@@ -20,6 +20,8 @@ const TicketDetails = () => {
     const userRole = localStorage.getItem('role');
     const userEmail = localStorage.getItem('userEmail');
 
+    const [selectedImage, setSelectedImage] = useState(null);
+
     useEffect(() => {
         const fetchDetails = async () => {
             try {
@@ -103,26 +105,30 @@ const TicketDetails = () => {
         </div>
     );
 
-    if (!ticket) return (
-        <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6 text-center">
-            <div className="bg-white p-12 rounded border border-slate-200 max-w-xl shadow-sm">
-                <div className="text-6xl mb-6 text-slate-300">🚫</div>
-                <h2 className="text-3xl font-black text-slate-800 tracking-tighter mb-4 uppercase">Incident Missing</h2>
-                <p className="text-slate-500 font-bold mb-8 uppercase tracking-widest text-xs">The requested ticket does not exist.</p>
-                <button onClick={() => navigate(-1)} className="px-8 py-4 bg-[#0F172A] text-white rounded font-black text-[10px] uppercase tracking-[0.2em] hover:bg-slate-800 transition-all shadow-md">
-                    Return to Hub
-                </button>
-            </div>
-        </div>
-    );
-
     return (
         <div className="min-h-screen bg-slate-50 flex flex-col font-sans relative">
+            {/* Image Viewer Modal */}
+            {selectedImage && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#0F172A]/90 backdrop-blur-xl animate-in fade-in duration-300 p-6" onClick={() => setSelectedImage(null)}>
+                    <div className="relative max-w-5xl w-full h-full flex flex-col items-center justify-center gap-6" onClick={e => e.stopPropagation()}>
+                        <div className="absolute top-0 right-0 p-4">
+                            <button onClick={() => setSelectedImage(null)} className="w-12 h-12 bg-white/10 hover:bg-white/20 text-white rounded-full flex items-center justify-center transition-all group">
+                                <svg className="w-6 h-6 group-hover:rotate-90 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" /></svg>
+                            </button>
+                        </div>
+                        <img src={selectedImage} alt="Fullscreen View" className="max-h-[85vh] w-auto object-contain rounded-2xl shadow-2xl animate-in zoom-in-95 duration-300" />
+                        <div className="px-6 py-3 bg-white/10 backdrop-blur-md rounded-full border border-white/20 shadow-xl">
+                            <p className="text-white text-[10px] font-black uppercase tracking-[0.4em]">Full Resolution Asset</p>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             <Navbar />
             <div className="flex flex-1 relative z-10 w-full overflow-hidden">
                 {renderSidebar()}
                 <main className={`flex-1 ${userRole === 'USER' ? 'lg:ml-72' : 'lg:ml-72'} h-[calc(100vh-72px)] overflow-y-auto scroll-smooth`}>
-                    
+
                     {/* Header Area styled like UserDashboard */}
                     <div className="bg-white border-b border-slate-200 py-10">
                         <div className="max-w-[1000px] mx-auto px-6">
@@ -132,10 +138,9 @@ const TicketDetails = () => {
                                         <span className="px-3 py-1 bg-slate-100 text-[#0F172A] text-[10px] font-black uppercase tracking-[0.2em] rounded shadow-sm border border-slate-200">
                                             #{ticket.id.slice(-8).toUpperCase()}
                                         </span>
-                                        <span className={`px-3 py-1 rounded text-[10px] font-black uppercase tracking-[0.2em] shadow-sm border ${
-                                            ticket.status === 'OPEN' ? 'bg-[#FFD166] text-slate-900 border-[#FFCC29]' : 
-                                            ticket.status === 'RESOLVED' ? 'bg-[#3f4175] text-white border-[#3f4175]' : 'bg-[#0F172A] text-white border-[#0F172A]'
-                                        }`}>
+                                        <span className={`px-3 py-1 rounded text-[10px] font-black uppercase tracking-[0.2em] shadow-sm border ${ticket.status === 'OPEN' ? 'bg-[#FFD166] text-slate-900 border-[#FFCC29]' :
+                                                ticket.status === 'RESOLVED' ? 'bg-[#3f4175] text-white border-[#3f4175]' : 'bg-[#0F172A] text-white border-[#0F172A]'
+                                            }`}>
                                             {ticket.status.replace('_', ' ')}
                                         </span>
                                     </div>
@@ -170,15 +175,15 @@ const TicketDetails = () => {
 
                     <div className="max-w-[1000px] mx-auto px-6 py-10">
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                            
+
                             {/* Left: Content */}
                             <div className="lg:col-span-2 space-y-8">
-                                
+
                                 <section className="bg-white p-8 rounded border border-slate-200 shadow-sm relative overflow-hidden">
-                                     <div className="absolute top-0 left-0 w-full h-2 bg-[#FFD166]"></div>
+                                    <div className="absolute top-0 left-0 w-full h-2 bg-[#FFD166]"></div>
                                     <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4">Case Description</h3>
                                     <p className="text-lg font-bold text-slate-800 leading-relaxed">"{ticket.description}"</p>
-                                    
+
                                     {/* Resolution Area */}
                                     {ticket.resolutionNotes && (
                                         <div className="mt-8 pt-8 border-t border-slate-100">
@@ -199,10 +204,19 @@ const TicketDetails = () => {
                                         <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-6">Evidentiary Documentation</h3>
                                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                             {ticket.attachments.map((url, i) => (
-                                                <div key={i} className="group relative rounded overflow-hidden border border-slate-200 shadow-sm aspect-video bg-slate-50">
-                                                    <img src={resolveImageUrl(url)} alt="Ticket Evidence" 
-                                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                                <div
+                                                    key={i}
+                                                    onClick={() => setSelectedImage(resolveImageUrl(url))}
+                                                    className="group relative rounded-xl overflow-hidden border-2 border-slate-100 shadow-sm aspect-video bg-slate-50 cursor-pointer hover:border-[#FFD166] transition-all"
+                                                >
+                                                    <img src={resolveImageUrl(url)} alt="Ticket Evidence"
+                                                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                                                         onError={(e) => { e.target.src = 'https://via.placeholder.com/400x300?text=Asset+Image'; }} />
+                                                    <div className="absolute inset-0 bg-[#0F172A]/0 group-hover:bg-[#0F172A]/20 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100">
+                                                        <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-xl text-[#0F172A]">
+                                                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" /></svg>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             ))}
                                         </div>
@@ -221,7 +235,7 @@ const TicketDetails = () => {
                                                 <div className="bg-slate-50 p-6 rounded border border-slate-200 flex-1 relative">
                                                     <div className="flex justify-between items-center mb-2">
                                                         <span className="text-[10px] font-black text-slate-800 uppercase tracking-widest">{comment.authorEmail}</span>
-                                                        <span className="text-[9px] font-bold text-slate-400">{new Date(comment.createdAt).toLocaleString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                                                        <span className="text-[9px] font-bold text-slate-400">{new Date(comment.createdAt).toLocaleString([], { hour: '2-digit', minute: '2-digit' })}</span>
                                                     </div>
                                                     <p className="text-sm font-bold text-slate-600">{comment.content}</p>
                                                     {comment.authorEmail === userEmail && (
@@ -232,7 +246,7 @@ const TicketDetails = () => {
                                         ))}
                                     </div>
                                     <form onSubmit={submitComment} className="relative pt-6 border-t border-slate-100">
-                                        <textarea 
+                                        <textarea
                                             placeholder="Add a comment to the incident thread..." required
                                             className="w-full px-6 py-5 bg-slate-50 border border-slate-200 rounded focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#0F172A] font-bold text-slate-800 shadow-sm resize-none min-h-[100px] placeholder:text-slate-400"
                                             value={newComment} onChange={(e) => setNewComment(e.target.value)}
@@ -245,7 +259,7 @@ const TicketDetails = () => {
                             {/* Right: Meta Info */}
                             <div className="lg:col-span-1 space-y-8">
                                 <div className="bg-[#0F172A] p-8 rounded border border-slate-800 text-white shadow-lg relative overflow-hidden">
-                                     <div className="absolute top-0 right-0 w-32 h-32 bg-[#FFD166]/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2"></div>
+                                    <div className="absolute top-0 right-0 w-32 h-32 bg-[#FFD166]/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2"></div>
                                     <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-8 relative z-10">Metadata Summary</h4>
                                     <div className="space-y-6 relative z-10">
                                         <div>
@@ -258,9 +272,8 @@ const TicketDetails = () => {
                                         </div>
                                         <div>
                                             <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">Priority Classification</p>
-                                            <p className={`font-black text-xs uppercase tracking-widest ${
-                                                ticket.priority === 'URGENT' ? 'text-rose-400' : 'text-slate-200'
-                                            }`}>{ticket.priority}</p>
+                                            <p className={`font-black text-xs uppercase tracking-widest ${ticket.priority === 'URGENT' ? 'text-rose-400' : 'text-slate-200'
+                                                }`}>{ticket.priority}</p>
                                         </div>
                                         <div className="pt-6 border-t border-slate-800">
                                             <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">Internal System</p>

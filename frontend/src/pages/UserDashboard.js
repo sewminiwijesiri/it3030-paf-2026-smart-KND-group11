@@ -28,13 +28,13 @@ const UserDashboard = () => {
                 // Fetch User Tickets for stats and recent activity
                 const ticketsResponse = await api.get('/api/maintenance/my');
                 const tickets = ticketsResponse.data;
-                
+
                 setStats({
                     active: tickets.filter(t => t.status === 'OPEN' || t.status === 'IN_PROGRESS').length,
                     completed: tickets.filter(t => t.status === 'RESOLVED').length,
                     pending: tickets.filter(t => t.status === 'PENDING').length
                 });
-                
+
                 setRecentTickets(tickets.slice(0, 5));
             } catch (err) {
                 console.error('Failed to fetch user dashboard data', err);
@@ -64,56 +64,56 @@ const UserDashboard = () => {
     return (
         <div className="min-h-screen bg-slate-50 flex flex-col font-sans relative overflow-hidden transition-colors duration-300">
             {/* Soft Background Accents - Matching Home Page Hero */}
-            <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#3f4175]/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
+            <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#1E293B]/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
             <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[#FFD166]/5 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/2 pointer-events-none"></div>
-            
+
             <Navbar />
-            
+
             <div className="flex flex-1 relative z-10 w-full overflow-hidden">
                 <Sidebar />
 
-<main className={`flex-1 ${role === 'USER' ? 'lg:ml-64' : 'lg:ml-72'} h-[calc(100vh-72px)] overflow-y-auto scroll-smooth`}>
+                <main className={`flex-1 ${role === 'USER' ? 'lg:ml-64' : 'lg:ml-72'} h-[calc(100vh-72px)] overflow-y-auto scroll-smooth`}>
 
-  {/* Header */}
-  <div className="bg-white border-b border-slate-200 py-6">
-    <div className="max-w-[1200px] mx-auto px-6 lg:px-10">
+                    {/* Header */}
+                    <div className="bg-white border-b border-slate-200 py-6">
+                        <div className="max-w-[1200px] mx-auto px-6 lg:px-10">
 
-      <p className="text-[#3f4175] font-black text-[10px] uppercase tracking-[0.4em] mb-2 flex items-center gap-2">
-        <span className="w-1.5 h-1.5 rounded-full bg-[#FFD166]"></span>
-        Dashboard Portal
-      </p>
+                            <p className="text-[#1E293B] font-black text-[10px] uppercase tracking-[0.4em] mb-2 flex items-center gap-2">
+                                <span className="w-1.5 h-1.5 rounded-full bg-[#FFD166]"></span>
+                                Dashboard Portal
+                            </p>
 
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-        
-        <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight leading-tight">
-          Welcome, <br />
-          <span className="text-slate-500">
-            {userData.name?.split(' ')[0]}
-          </span>
-        </h1>
+                            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
 
-        <div className="flex gap-3 mt-2 md:mt-0">
-          <button className="bg-[#0F172A] text-white px-6 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-800 transition-all shadow-md">
-            View Map
-          </button>
+                                <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight leading-tight">
+                                    Welcome, <br />
+                                    <span className="text-slate-500">
+                                        {userData.name?.split(' ')[0]}
+                                    </span>
+                                </h1>
 
-          <button className="bg-[#FFD166] text-slate-900 px-6 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-[#FFCC29] transition-all shadow-md shadow-[#FFD166]/20">
-            Book Resource
-          </button>
-        </div>
+                                <div className="flex gap-3 mt-2 md:mt-0">
+                                    <button className="bg-[#0F172A] text-white px-6 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-800 transition-all shadow-md">
+                                        View Map
+                                    </button>
 
-      </div>
-    </div>
-  </div>
-                    
+                                    <button className="bg-[#FFD166] text-slate-900 px-6 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-[#FFCC29] transition-all shadow-md shadow-[#FFD166]/20">
+                                        Book Resource
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
 
                     <div className="max-w-[1200px] mx-auto px-6 lg:px-10 py-10 space-y-12">
-                        
+
                         {/* 1. STATISTICS BAR (Matched to Home.js Stats Bar) */}
                         <section className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden relative">
                             {/* Decorative Accent */}
                             <div className="absolute top-0 right-0 w-64 h-64 bg-[#FFCC29]/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
-                            
+
                             <div className="p-8">
                                 <div className="grid grid-cols-2 md:grid-cols-4 gap-8 divide-x divide-slate-100">
                                     {statsConfig.map((stat, i) => (
@@ -130,7 +130,7 @@ const UserDashboard = () => {
                         </section>
 
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 items-start">
-                            
+
                             {/* Live Incident Tracker - Table style matched to modern lists */}
                             <div className="lg:col-span-2 bg-white rounded-[40px] border border-slate-200 shadow-sm overflow-hidden p-10">
                                 <div className="flex justify-between items-center mb-12 px-2">
@@ -142,7 +142,7 @@ const UserDashboard = () => {
                                         View All
                                     </Link>
                                 </div>
-                                
+
                                 <div className="space-y-4">
                                     {loading ? (
                                         <div className="h-64 flex items-center justify-center text-slate-400 font-black text-xs uppercase tracking-widest">
@@ -152,20 +152,19 @@ const UserDashboard = () => {
                                         recentTickets.map((ticket) => (
                                             <Link to={`/tickets/${ticket.id}`} key={ticket.id} className="flex items-center justify-between p-6 hover:bg-slate-50 border border-transparent hover:border-slate-100 rounded-[24px] transition-all group">
                                                 <div className="flex items-center gap-6">
-                                                    <div className="w-12 h-12 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center group-hover:bg-white group-hover:border-[#3f4175] transition-all">
-                                                        <span className="text-[#3f4175] font-black italic text-xs">ID</span>
+                                                    <div className="w-12 h-12 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center group-hover:bg-white group-hover:border-[#1E293B] transition-all">
+                                                        <span className="text-[#1E293B] font-black italic text-xs">ID</span>
                                                     </div>
                                                     <div>
                                                         <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">#{ticket.id.slice(-6).toUpperCase()}</p>
-                                                        <h4 className="font-bold text-slate-800 tracking-tight group-hover:text-[#3f4175] transition-colors">{ticket.resourceName}</h4>
+                                                        <h4 className="font-bold text-slate-800 tracking-tight group-hover:text-[#1E293B] transition-colors">{ticket.resourceName}</h4>
                                                     </div>
                                                 </div>
                                                 <div className="flex items-center gap-8">
-                                                    <span className={`px-5 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest border transition-all ${
-                                                        ticket.status === 'OPEN' ? 'bg-rose-50 text-rose-600 border-rose-100' :
-                                                        ticket.status === 'IN_PROGRESS' ? 'bg-amber-50 text-amber-600 border-amber-100' :
-                                                        'bg-emerald-50 text-emerald-600 border-emerald-100'
-                                                    }`}>
+                                                    <span className={`px-5 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest border transition-all ${ticket.status === 'OPEN' ? 'bg-rose-50 text-rose-600 border-rose-100' :
+                                                            ticket.status === 'IN_PROGRESS' ? 'bg-amber-50 text-amber-600 border-amber-100' :
+                                                                'bg-emerald-50 text-emerald-600 border-emerald-100'
+                                                        }`}>
                                                         {ticket.status.replace('_', ' ')}
                                                     </span>
                                                     <div className="w-8 h-8 rounded-full flex items-center justify-center text-slate-300 group-hover:text-slate-900 transition-colors">
@@ -184,9 +183,9 @@ const UserDashboard = () => {
 
                             {/* Sidebar Actions & Identity - Matching Home Page Footer/Nav */}
                             <div className="space-y-10">
-                                
+
                                 {/* Identity Card */}
-                                <div className="bg-[#3f4175] rounded-[40px] p-10 text-white relative overflow-hidden shadow-2xl">
+                                <div className="bg-[#1E293B] rounded-[40px] p-10 text-white relative overflow-hidden shadow-2xl">
                                     <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2"></div>
                                     <div className="relative z-10">
                                         <div className="flex items-center gap-4 mb-10">

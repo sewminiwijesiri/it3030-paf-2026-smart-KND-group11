@@ -8,4 +8,5 @@ public interface MaintenanceRepository extends MongoRepository<MaintenanceReques
     List<MaintenanceRequest> findByTechnicianEmail(String technicianEmail);
     List<MaintenanceRequest> findByRequesterEmail(String requesterEmail);
     List<MaintenanceRequest> findByStatus(MaintenanceRequest.MaintenanceStatus status);
+    List<MaintenanceRequest> findByResourceName(String resourceName);
 }

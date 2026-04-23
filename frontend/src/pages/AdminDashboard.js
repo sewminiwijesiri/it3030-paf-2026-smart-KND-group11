@@ -72,7 +72,7 @@ const AdminDashboard = () => {
                             <h3 className="text-md font-black text-slate-800 tracking-tight">Recent Maintenance Activity</h3>
                             <Link to="/admin/maintenance" className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] hover:text-[#3f4175] transition-colors">View All</Link>
                         </div>
-                        
+
                         <div className="space-y-6">
                             {loading ? (
                                 <div className="h-64 flex flex-col items-center justify-center gap-3">
@@ -86,11 +86,10 @@ const AdminDashboard = () => {
                                             <span className="text-[10px] font-bold text-slate-400 tracking-widest uppercase">INC-{ticket.id.slice(-6).toUpperCase()}</span>
                                             <p className="font-bold text-slate-800 tracking-tight text-md">{ticket.resourceName}</p>
                                         </div>
-                                        <span className={`px-4 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest border ${
-                                            ticket.status === 'OPEN' ? 'bg-rose-50 text-rose-600 border-rose-100' :
-                                            ticket.status === 'RESOLVED' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' :
-                                            'bg-slate-100 text-slate-500 border-slate-200'
-                                        }`}>
+                                        <span className={`px-4 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest border ${ticket.status === 'OPEN' ? 'bg-rose-50 text-rose-600 border-rose-100' :
+                                                ticket.status === 'RESOLVED' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' :
+                                                    'bg-slate-100 text-slate-500 border-slate-200'
+                                            }`}>
                                             {ticket.status === 'RESOLVED' ? 'RESOLVED' : 'IN PROGRESS'}
                                         </span>
                                     </div>

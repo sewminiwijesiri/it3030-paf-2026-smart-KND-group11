@@ -18,9 +18,10 @@ const TicketSubmission = () => {
     });
     const [resources, setResources] = useState([]);
     const [selectedFiles, setSelectedFiles] = useState([]);
+    const [errors, setErrors] = useState({});
+    const [touched, setTouched] = useState({});
     const [loading, setLoading] = useState(false);
     const [fetching, setFetching] = useState(true);
-    const [error, setError] = useState('');
     const [success, setSuccess] = useState(false);
 
     const categories = ['IT Support', 'Electrical', 'Plumbing', 'Furniture', 'Facility Structure', 'Other'];
@@ -40,14 +41,38 @@ const TicketSubmission = () => {
         fetchResources();
     }, []);
 
+    const validate = () => {
+        const newErrors = {};
+        if (!formData.resourceId) newErrors.resourceId = 'Resource selection required.';
+        if (!formData.description) newErrors.description = 'Incident details are required.';
+        else if (formData.description.length < 10) newErrors.description = 'Must be at least 10 characters.';
+
+        if (formData.preferredContact && formData.preferredContact.length < 3) {
+            newErrors.preferredContact = 'Invalid contact format.';
+        }
+
+        if (selectedFiles.length > 3) newErrors.files = 'Max 3 images allowed.';
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
     const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+        setTouched({ ...touched, [name]: true });
+
+        if (errors[name]) {
+            setErrors({ ...errors, [name]: null });
+        }
     };
 
     const handleResourceSelect = (e) => {
         const res = resources.find(r => r.id === e.target.value);
+        setTouched({ ...touched, resourceId: true });
         if (res) {
             setFormData({ ...formData, resourceId: res.id, resourceName: res.name });
+            if (errors.resourceId) setErrors({ ...errors, resourceId: null });
         } else {
             setFormData({ ...formData, resourceId: '', resourceName: '' });
         }
@@ -56,17 +81,18 @@ const TicketSubmission = () => {
     const handleFileChange = (e) => {
         const files = Array.from(e.target.files);
         if (files.length > 3) {
-            setError('Maximum 3 images allowed for evidence.');
+            setErrors({ ...errors, files: 'Maximum 3 images allowed for evidence.' });
             return;
         }
         setSelectedFiles(files);
+        setErrors({ ...errors, files: null });
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!formData.resourceId) { setError('Please select a campus resource.'); return; }
+        if (!validate()) return;
+
         setLoading(true);
-        setError('');
         try {
             const attachmentUrls = [];
             for (const file of selectedFiles) {
@@ -83,7 +109,7 @@ const TicketSubmission = () => {
             setTimeout(() => navigate('/my-tickets'), 2000);
         } catch (err) {
             const errorMsg = err.response?.data?.message || err.message || 'Verification Error';
-            setError(`Submission Failed: ${errorMsg}.`);
+            setErrors({ submit: `Submission Failed: ${errorMsg}.` });
             console.error(err);
         } finally {
             setLoading(false);
@@ -101,186 +127,226 @@ const TicketSubmission = () => {
     };
 
     return (
-        <div className="min-h-screen bg-slate-50 flex flex-col font-sans relative overflow-hidden">
-            {/* Signature Background Decorations (Matched to Dashboard) */}
-            <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-indigo-500/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
-            <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[#FFD166]/5 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/2 pointer-events-none"></div>
+        <div className="min-h-screen bg-[#F8FAFC] flex flex-col font-sans relative overflow-hidden">
+            {/* Immersive Background Decorations - Synced with Dashboard */}
+            <div className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] bg-[#3f4175]/5 rounded-full blur-[120px] pointer-events-none"></div>
+            <div className="absolute bottom-[-10%] left-[-5%] w-[500px] h-[500px] bg-[#FFD166]/5 rounded-full blur-[100px] pointer-events-none"></div>
 
             <Navbar />
 
             <div className="flex flex-1 relative z-10 w-full overflow-hidden">
                 {renderSidebar()}
-<main className={`flex-1 ${role === 'USER' ? 'lg:ml-64' : 'lg:ml-72'} h-[calc(100vh-72px)] overflow-y-auto scroll-smooth`}>
+                <main className={`flex-1 ${role === 'USER' ? 'lg:ml-64' : 'lg:ml-72'} h-[calc(100vh-72px)] overflow-y-auto scroll-smooth pb-10`}>
 
-  {/* Header */}
-  <div className="bg-white border-b border-slate-200 py-6">
-    <div className="max-w-[800px] mx-auto px-6">
-      <p className="text-[#3f4175] font-black text-[10px] uppercase tracking-[0.4em] mb-2 drop-shadow-sm flex items-center gap-2">
-        <span className="w-1.5 h-1.5 rounded-full bg-[#FFD166]"></span>
-        Incident Portal
-      </p>
+                    {/* Header Section - Synced with Dashboard Style */}
+                    <div className="bg-white border-b border-slate-200 py-6 mb-8">
+                        <div className="max-w-[1200px] mx-auto px-6 lg:px-10">
+                            <p className="text-[#0F172A] font-black text-[10px] uppercase tracking-[0.4em] mb-2 flex items-center gap-2">
+                                <span className="w-1.5 h-1.5 rounded-full bg-[#FFD166]"></span>
+                                Incident Portal
+                            </p>
 
-      <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight leading-tight mb-1">
-        Report Fault
-      </h1>
+                            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                                <h1 className="text-3xl md:text-4xl font-black text-[#0F172A] tracking-tight leading-tight">
+                                    Report <span className="text-slate-400">Fault</span>
+                                </h1>
 
-      <p className="text-slate-500 font-bold uppercase tracking-wider text-[11px] max-w-xl">
-        Submit details about the resource malfunction or facility damage to request maintenance.
-      </p>
-    </div>
-  </div>
+                                <div className="flex gap-3 mt-2 md:mt-0">
+                                    <div className="px-5 py-2 bg-slate-50 border border-slate-100 rounded-xl text-[9px] font-black uppercase tracking-widest text-slate-500">
+                                        Terminal Active
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                    <div className="max-w-[900px] mx-auto px-8 py-12">
-                        <div className="bg-white rounded-[40px] border border-slate-100 shadow-xl shadow-slate-200/50 p-10 md:p-16 relative overflow-hidden group">
-                            {/* Dashboard Accent Elements */}
-                            <div className="absolute top-0 right-0 w-64 h-64 bg-slate-50 rounded-bl-[120px] transition-all group-hover:bg-slate-100/50 pointer-events-none"></div>
-                            <div className="absolute top-0 left-0 w-2 h-full bg-[#0F172A]"></div>
+                    <div className="max-w-[1200px] mx-auto px-6 lg:px-10">
+                        <div className="bg-white/90 backdrop-blur-xl rounded-[48px] border border-white shadow-2xl shadow-[#3f4175]/5 p-10 md:p-16 animate-up" style={{ animationDelay: '0.1s' }}>
 
                             {success ? (
-                                <div className="text-center py-20 animate-up">
-                                    <div className="relative w-32 h-32 mx-auto mb-10">
-                                        <div className="absolute inset-0 bg-emerald-100 rounded-[32px] animate-ping opacity-20"></div>
-                                        <div className="relative w-full h-full bg-white border-2 border-emerald-400 text-emerald-400 rounded-[32px] flex items-center justify-center text-5xl font-black shadow-lg shadow-emerald-500/10">
-                                            ✓
-                                        </div>
+                                <div className="py-24 flex flex-col items-center text-center animate-up">
+                                    <div className="w-24 h-24 bg-[#0F172A] rounded-[32px] flex items-center justify-center text-white shadow-xl shadow-[#0F172A]/20 mb-10 animate-bounce">
+                                        <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
                                     </div>
-                                    <h2 className="text-3xl font-black text-slate-900 mb-4 uppercase tracking-tighter">Request Transmitted</h2>
-                                    <p className="text-slate-400 font-bold uppercase tracking-[0.3em] text-[11px] max-w-xs mx-auto leading-relaxed border-y border-slate-100 py-3">
-                                        Syncing with maintenance queue... Terminal ready.
-                                    </p>
+                                    <h2 className="text-4xl font-black text-[#0F172A] mb-3 tracking-tight">Request Transmitted</h2>
+                                    <p className="text-slate-400 font-bold uppercase tracking-[0.4em] text-[10px]">Syncing with maintenance matrix...</p>
                                 </div>
                             ) : (
-                                <form onSubmit={handleSubmit} className="space-y-12 relative z-10">
-                                    {error && (
-                                        <div className="p-6 bg-white border border-rose-100 border-l-4 border-l-rose-500 text-rose-600 rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-sm">
-                                            {error}
+                                <form onSubmit={handleSubmit} className="space-y-12">
+                                    {errors.submit && (
+                                        <div className="p-6 bg-rose-50 border border-rose-100 text-rose-600 rounded-[32px] text-[10px] font-black uppercase tracking-widest flex items-center gap-5 animate-shake">
+                                            <div className="w-10 h-10 rounded-2xl bg-rose-500 text-white flex items-center justify-center shrink-0 shadow-lg shadow-rose-500/20">
+                                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                                            </div>
+                                            {errors.submit}
                                         </div>
                                     )}
 
-                                    {/* Row 1: Resource & Category */}
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                                        <div className="space-y-4">
-                                            <div className="flex items-center gap-2 ml-1">
-                                                <div className="w-1 h-1 bg-[#FFD166] rounded-full"></div>
-                                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.25em]">Resource Vector</label>
-                                            </div>
-                                            <select
-                                                onChange={handleResourceSelect} required
-                                                className="w-full px-6 py-5 bg-slate-50 border border-slate-100 rounded-[20px] focus:bg-white focus:border-[#3f4175] focus:outline-none focus:ring-4 focus:ring-[#3f4175]/5 transition-all font-black text-slate-800 text-sm shadow-sm cursor-pointer appearance-none uppercase"
-                                            >
-                                                <option value="">Scan for resource...</option>
-                                                {!fetching && resources.map(res => <option key={res.id} value={res.id}>{res.name}</option>)}
-                                            </select>
-                                        </div>
+                                    <div className={`grid grid-cols-1 lg:grid-cols-3 gap-0 border rounded-[40px] overflow-hidden shadow-2xl bg-white transition-all duration-300 ${Object.keys(errors).length > 0 ? 'border-[#0F172A]/20 ring-4 ring-[#0F172A]/5' : 'border-slate-200'}`}>
 
-                                        <div className="space-y-4">
-                                            <div className="flex items-center gap-2 ml-1">
-                                                <div className="w-1 h-1 bg-[#3f4175] rounded-full"></div>
-                                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.25em]">Incident Class</label>
-                                            </div>
-                                            <select
-                                                name="category" onChange={handleChange}
-                                                className="w-full px-6 py-5 bg-slate-50 border border-slate-100 rounded-[20px] focus:bg-white focus:border-[#3f4175] focus:outline-none focus:ring-4 focus:ring-[#3f4175]/5 transition-all font-black text-slate-800 text-sm shadow-sm cursor-pointer appearance-none uppercase"
-                                            >
-                                                {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    {/* Priority Segmented Control (Matched to Dashboard Badges) */}
-                                    <div className="space-y-6">
-                                        <div className="flex items-center gap-2 ml-1">
-                                            <div className="w-1 h-1 bg-slate-900 rounded-full"></div>
-                                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.25em]">Severity Calibration</label>
-                                        </div>
-                                        <div className="bg-slate-50 p-2 rounded-[24px] grid grid-cols-2 lg:grid-cols-4 gap-2 border border-slate-100">
-                                            {[
-                                                { id: 'LOW', color: 'emerald' },
-                                                { id: 'MEDIUM', color: 'blue' },
-                                                { id: 'HIGH', color: 'amber' },
-                                                { id: 'URGENT', color: 'rose' }
-                                            ].map((p) => (
-                                                <button
-                                                    key={p.id} type="button"
-                                                    onClick={() => setFormData({ ...formData, priority: p.id })}
-                                                    className={`py-4 px-4 rounded-[18px] font-black text-[10px] uppercase tracking-widest transition-all duration-300 ${formData.priority === p.id
-                                                            ? `bg-white text-${p.color}-600 shadow-lg border border-${p.color}-100 scale-[1.02]`
-                                                            : 'text-slate-400 hover:text-slate-600 hover:bg-white/50'
-                                                        }`}
-                                                >
-                                                    {p.id}
-                                                </button>
-                                            ))}
-                                        </div>
-                                    </div>
-
-                                    {/* Description */}
-                                    <div className="space-y-4">
-                                        <div className="flex items-center gap-2 ml-1">
-                                            <div className="w-1 h-1 bg-slate-900 rounded-full"></div>
-                                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.25em]">Incident Parameters</label>
-                                        </div>
-                                        <textarea
-                                            name="description" required rows="5"
-                                            onChange={handleChange}
-                                            className="w-full px-8 py-6 bg-slate-50 border border-slate-100 rounded-[24px] focus:bg-white focus:border-[#3f4175] focus:outline-none focus:ring-4 focus:ring-[#3f4175]/5 transition-all font-bold text-slate-800 text-md resize-none shadow-sm placeholder:text-slate-300 placeholder:font-black placeholder:uppercase tracking-tight"
-                                            placeholder="Enter malfunction details..."
-                                        ></textarea>
-                                    </div>
-
-                                    {/* Contact & Attachments */}
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                                        <div className="space-y-4">
-                                            <div className="flex items-center gap-2 ml-1">
-                                                <div className="w-1 h-1 bg-[#3f4175] rounded-full"></div>
-                                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.25em]">Link Interface</label>
-                                            </div>
-                                            <input
-                                                type="text" name="preferredContact" onChange={handleChange}
-                                                className="w-full px-6 py-5 bg-slate-50 border border-slate-100 rounded-[20px] focus:bg-white focus:border-[#3f4175] focus:outline-none focus:ring-4 focus:ring-[#3f4175]/5 transition-all font-black text-slate-800 text-sm shadow-sm placeholder:text-slate-300 placeholder:uppercase"
-                                                placeholder="Email / Ext"
-                                            />
-                                        </div>
-
-                                        <div className="space-y-4">
-                                            <div className="flex items-center gap-2 ml-1">
-                                                <div className="w-1 h-1 bg-emerald-400 rounded-full"></div>
-                                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.25em]">Telemetry Upload</label>
-                                            </div>
-                                            <div className="relative group/file">
-                                                <input
-                                                    type="file" multiple accept="image/*"
-                                                    onChange={handleFileChange}
-                                                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20"
-                                                />
-                                                <div className="w-full px-6 py-5 bg-slate-50 border-2 border-dashed border-slate-200 rounded-[20px] group-hover/file:border-[#3f4175] group-hover/file:bg-slate-100 transition-all flex items-center justify-between">
-                                                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                                                        {selectedFiles.length > 0 ? `${selectedFiles.length} IMAGES READY` : 'ADD EVIDENCE'}
-                                                    </span>
-                                                    <div className="w-8 h-8 bg-[#3f4175] rounded-xl flex items-center justify-center text-white shadow-lg">
-                                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1M16 8l-4-4m0 0L8 8m4-4v12" /></svg>
+                                        {/* Column 1: Identity & Class - Navy Theme */}
+                                        <div className="space-y-10 p-10 border-r border-slate-100 bg-slate-50/50">
+                                            <div className={`space-y-3 transition-all ${errors.resourceId ? 'animate-shake' : ''}`}>
+                                                <div className="flex justify-between items-center ml-1">
+                                                    <label className={`text-xs font-black uppercase tracking-[0.2em] ${errors.resourceId ? 'text-rose-500' : 'text-slate-500'}`}>Resource Vector</label>
+                                                    {errors.resourceId ? (
+                                                        <span className="text-[10px] font-bold text-rose-500 uppercase">{errors.resourceId}</span>
+                                                    ) : touched.resourceId && formData.resourceId ? (
+                                                        <svg className="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
+                                                    ) : null}
+                                                </div>
+                                                <div className="relative group">
+                                                    <select
+                                                        onChange={handleResourceSelect} required
+                                                        className={`w-full pl-12 pr-6 py-5 bg-white border-2 rounded-2xl focus:bg-white focus:outline-none transition-all font-bold text-[#0F172A] text-base appearance-none group-hover:border-[#0F172A]/20 cursor-pointer shadow-sm ${errors.resourceId ? 'border-rose-400' : touched.resourceId && formData.resourceId ? 'border-emerald-400' : 'border-slate-100 focus:border-[#0F172A]'
+                                                            }`}
+                                                    >
+                                                        <option value="">Scan for resource...</option>
+                                                        {!fetching && resources.map(res => <option key={res.id} value={res.id}>{res.name}</option>)}
+                                                    </select>
+                                                    <div className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors ${errors.resourceId ? 'text-rose-400' : touched.resourceId && formData.resourceId ? 'text-emerald-400' : 'text-[#0F172A]/40 group-focus-within:text-[#0F172A]'}`}>
+                                                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /></svg>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
 
-                                    <div className="pt-10">
-                                        <button
-                                            type="submit" disabled={loading}
-                                            className="group w-full relative h-20 bg-[#0F172A] hover:bg-[#FFD166] rounded-[24px] overflow-hidden transition-all shadow-xl shadow-[#0F172A]/20 disabled:opacity-50 active:scale-[0.98]"
-                                        >
-                                            <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                            <span className="relative z-10 text-white group-hover:text-slate-900 font-black text-[11px] uppercase tracking-[0.4em] transition-colors">
-                                                {loading ? 'Initializing Sync...' : 'Dispatch Request'}
-                                            </span>
-                                        </button>
-                                        <div className="flex justify-center items-center gap-4 mt-8 opacity-40">
-                                            <div className="h-px w-8 bg-slate-300"></div>
-                                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">
-                                                v2.4.0 Authorized
-                                            </p>
-                                            <div className="h-px w-8 bg-slate-300"></div>
+                                            <div className="space-y-3">
+                                                <label className="text-xs font-black text-slate-500 uppercase tracking-[0.2em] ml-1">Incident Class</label>
+                                                <div className="relative group">
+                                                    <select
+                                                        name="category" onChange={handleChange}
+                                                        className="w-full pl-12 pr-6 py-5 bg-white border-2 border-slate-100 rounded-2xl focus:bg-white focus:border-[#0F172A] focus:outline-none transition-all font-bold text-[#0F172A] text-base appearance-none group-hover:border-[#0F172A]/20 cursor-pointer shadow-sm"
+                                                    >
+                                                        {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+                                                    </select>
+                                                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#0F172A]/40 group-focus-within:text-[#0F172A] transition-colors">
+                                                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2" /></svg>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="space-y-5">
+                                                <label className="text-xs font-black text-slate-500 uppercase tracking-[0.2em] ml-1">Severity Calibration</label>
+                                                <div className="grid grid-cols-2 gap-4">
+                                                    {[
+                                                        { id: 'LOW', color: 'slate' },
+                                                        { id: 'MEDIUM', color: 'slate' },
+                                                        { id: 'HIGH', color: 'amber' },
+                                                        { id: 'URGENT', color: 'rose' }
+                                                    ].map((p) => (
+                                                        <button
+                                                            key={p.id} type="button"
+                                                            onClick={() => {
+                                                                setFormData({ ...formData, priority: p.id });
+                                                                setTouched({ ...touched, priority: true });
+                                                            }}
+                                                            className={`py-4 px-3 rounded-2xl border-2 transition-all font-black text-[10px] uppercase tracking-[0.15em] ${formData.priority === p.id
+                                                                    ? p.id === 'HIGH' || p.id === 'URGENT'
+                                                                        ? `border-${p.color}-500 bg-${p.color}-50 text-${p.color}-600 shadow-md`
+                                                                        : 'border-[#0F172A] bg-[#0F172A] text-white shadow-md'
+                                                                    : 'border-white bg-white text-slate-400 hover:border-[#0F172A]/10 shadow-sm'
+                                                                }`}
+                                                        >
+                                                            {p.id}
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Column 2: Parameters - White Theme with Navy Accents */}
+                                        <div className="space-y-5 h-full flex flex-col p-10 bg-white">
+                                            <div className={`space-y-3 flex-1 flex flex-col ${errors.description ? 'animate-shake' : ''}`}>
+                                                <div className="flex justify-between items-center ml-1">
+                                                    <label className={`text-xs font-black uppercase tracking-[0.2em] ${errors.description ? 'text-rose-500' : 'text-[#0F172A]'}`}>Incident Parameters</label>
+                                                    {errors.description ? (
+                                                        <span className="text-[10px] font-bold text-rose-500 uppercase">{errors.description}</span>
+                                                    ) : touched.description && formData.description.length >= 10 ? (
+                                                        <svg className="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
+                                                    ) : null}
+                                                </div>
+                                                <textarea
+                                                    name="description" required
+                                                    onChange={handleChange}
+                                                    className={`flex-1 w-full px-8 py-8 bg-slate-50 border-2 rounded-[32px] focus:bg-white focus:outline-none transition-all font-bold text-[#0F172A] text-base resize-none placeholder:text-slate-300 min-h-[400px] shadow-inner ${errors.description ? 'border-rose-400' : touched.description && formData.description.length >= 10 ? 'border-emerald-400' : 'border-slate-100 focus:border-[#0F172A]'
+                                                        }`}
+                                                    placeholder="Provide a detailed breakdown of the malfunction..."
+                                                ></textarea>
+                                            </div>
+                                        </div>
+
+                                        {/* Column 3: Contact & Evidence - Gray Theme with Yellow Button */}
+                                        <div className="space-y-10 p-10 border-l border-slate-100 bg-slate-50/50">
+                                            <div className={`space-y-3 ${errors.preferredContact ? 'animate-shake' : ''}`}>
+                                                <div className="flex justify-between items-center ml-1">
+                                                    <label className={`text-xs font-black uppercase tracking-[0.2em] ${errors.preferredContact ? 'text-rose-500' : 'text-slate-500'}`}>Contact Vector</label>
+                                                    {errors.preferredContact ? (
+                                                        <span className="text-[10px] font-bold text-rose-500 uppercase">{errors.preferredContact}</span>
+                                                    ) : touched.preferredContact && formData.preferredContact.length >= 3 ? (
+                                                        <svg className="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
+                                                    ) : null}
+                                                </div>
+                                                <div className="relative group">
+                                                    <input
+                                                        type="text" name="preferredContact" onChange={handleChange}
+                                                        className={`w-full pl-12 pr-6 py-5 bg-white border-2 rounded-2xl focus:bg-white focus:outline-none transition-all font-bold text-[#0F172A] text-base placeholder:text-slate-300 shadow-sm ${errors.preferredContact ? 'border-rose-400' : touched.preferredContact && formData.preferredContact.length >= 3 ? 'border-emerald-400' : 'border-slate-100 focus:border-[#0F172A]'
+                                                            }`}
+                                                        placeholder="Email or Ext"
+                                                    />
+                                                    <div className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors ${errors.preferredContact ? 'text-rose-400' : touched.preferredContact && formData.preferredContact.length >= 3 ? 'text-emerald-400' : 'text-[#0F172A]/40 group-focus-within:text-[#0F172A]'}`}>
+                                                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className={`space-y-3 ${errors.files ? 'animate-shake' : ''}`}>
+                                                <div className="flex justify-between items-center ml-1">
+                                                    <label className={`text-xs font-black uppercase tracking-[0.2em] ${errors.files ? 'text-rose-500' : 'text-slate-500'}`}>Telemetry Upload</label>
+                                                    {errors.files ? (
+                                                        <span className="text-[10px] font-bold text-rose-500 uppercase">{errors.files}</span>
+                                                    ) : touched.files && selectedFiles.length > 0 ? (
+                                                        <svg className="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
+                                                    ) : null}
+                                                </div>
+                                                <div className="relative group h-40">
+                                                    <input
+                                                        type="file" multiple accept="image/*"
+                                                        onChange={(e) => {
+                                                            handleFileChange(e);
+                                                            setTouched({ ...touched, files: true });
+                                                        }}
+                                                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20"
+                                                    />
+                                                    <div className={`w-full h-full border-2 border-dashed rounded-[32px] group-hover:bg-[#FFD166]/10 transition-all flex flex-col items-center justify-center gap-3 shadow-sm ${errors.files ? 'border-rose-300 bg-rose-50' : selectedFiles.length > 0 ? 'border-emerald-400 bg-emerald-50/20' : 'border-slate-200 bg-white'
+                                                        }`}>
+                                                        <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${errors.files ? 'bg-rose-500 text-white' : selectedFiles.length > 0 ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : 'bg-slate-50 text-[#0F172A]/40'}`}>
+                                                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1M16 8l-4-4m0 0L8 8m4-4v12" /></svg>
+                                                        </div>
+                                                        <span className={`text-[10px] font-black uppercase tracking-[0.2em] ${errors.files ? 'text-rose-600' : selectedFiles.length > 0 ? 'text-emerald-600' : 'text-slate-400'}`}>
+                                                            {selectedFiles.length > 0 ? `${selectedFiles.length} IMAGES READY` : 'Add evidence'}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="pt-6">
+                                                <button
+                                                    type="submit" disabled={loading}
+                                                    className={`w-full py-4 rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] transition-all duration-300 flex items-center justify-center gap-3 disabled:opacity-50 group shadow-xl ${Object.keys(errors).length > 0
+                                                            ? 'bg-[#0F172A] text-white shadow-[#0F172A]/20'
+                                                            : 'bg-[#FFD166] hover:bg-[#FFCC29] text-[#0F172A] shadow-[#FFD166]/20'
+                                                        }`}
+                                                >
+                                                    {loading ? (
+                                                        <span className="animate-pulse">Transmitting...</span>
+                                                    ) : (
+                                                        <>
+                                                            {Object.keys(errors).length > 0 ? 'Fix Errors' : 'Dispatch Request'}
+                                                            <svg className={`w-4 h-4 transition-transform ${Object.keys(errors).length > 0 ? 'animate-pulse' : 'group-hover:translate-x-2'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                                                        </>
+                                                    )}
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </form>
@@ -288,9 +354,11 @@ const TicketSubmission = () => {
                         </div>
                     </div>
                 </main>
+
             </div>
         </div>
     );
 };
 
 export default TicketSubmission;
+

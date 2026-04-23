@@ -21,18 +21,20 @@ import java.util.Map;
 public class FileController {
 
     private final FileStorageService fileStorageService;
+    private final com.uniflow.system.service.CloudinaryService cloudinaryService;
 
-    public FileController(FileStorageService fileStorageService) {
+    public FileController(FileStorageService fileStorageService, com.uniflow.system.service.CloudinaryService cloudinaryService) {
         this.fileStorageService = fileStorageService;
+        this.cloudinaryService = cloudinaryService;
     }
 
     @PostMapping("/upload")
     public ResponseEntity<Map<String, String>> uploadFile(@RequestParam("file") MultipartFile file) {
-        String fileName = fileStorageService.storeFile(file);
+        // Upload to Cloudinary
+        String fileUrl = cloudinaryService.uploadFile(file);
         
         Map<String, String> response = new HashMap<>();
-        response.put("fileName", fileName);
-        response.put("fileUrl", "/api/files/download/" + fileName);
+        response.put("fileUrl", fileUrl);
         
         return ResponseEntity.ok(response);
     }
