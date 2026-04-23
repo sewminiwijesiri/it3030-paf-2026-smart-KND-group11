@@ -34,9 +34,28 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
+    // Handle Booking Conflict
+    @ExceptionHandler(com.smartcampus.booking.exception.BookingConflictException.class)
+    public ResponseEntity<Map<String, String>> handleBookingConflictException(com.smartcampus.booking.exception.BookingConflictException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("error", "Conflict");
+        error.put("message", ex.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
+
+    // Handle Illegal Arguments
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Map<String, String>> handleIllegalArgumentException(IllegalArgumentException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("error", "Bad Request");
+        error.put("message", ex.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
     // Handle generic exceptions
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, String>> handleGenericException(Exception ex) {
+        ex.printStackTrace(); // Log the actual exception
         Map<String, String> error = new HashMap<>();
         error.put("error", "Internal Server Error");
         error.put("message", "An unexpected error occurred: " + ex.getMessage());

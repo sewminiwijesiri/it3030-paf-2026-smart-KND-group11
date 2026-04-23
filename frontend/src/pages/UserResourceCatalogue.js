@@ -5,6 +5,8 @@ import Sidebar from '../components/Sidebar';
 import AdminSidebar from '../components/AdminSidebar';
 import TechnicianSidebar from '../components/TechnicianSidebar';
 import ResourceFilters from '../components/catalogue/ResourceFilters';
+import BookingFormModal from '../components/BookingFormModal';
+import { toast } from 'react-hot-toast';
 import Footer from '../components/Footer';
 import { resolveImageUrl } from '../utils/imageUtils';
 
@@ -18,6 +20,19 @@ const UserResourceCatalogue = () => {
         location: '',
         status: 'AVAILABLE'
     });
+
+    const [selectedResource, setSelectedResource] = useState(null);
+    const [showModal, setShowModal] = useState(false);
+
+    const handleBookClick = (resource) => {
+        setSelectedResource(resource);
+        setShowModal(true);
+    };
+
+    const handleBookingSuccess = (resourceName) => {
+        toast.success(`${resourceName} booking request submitted!`);
+        fetchResources(); // Refresh to update status if needed
+    };
 
     const fetchResources = useCallback(async () => {
         setLoading(true);
@@ -64,7 +79,7 @@ const UserResourceCatalogue = () => {
             <div className="flex flex-1 relative z-10 w-full overflow-hidden">
                 {renderSidebar()}
 
-                <main className={`flex-1 ${role === 'USER' ? 'lg:ml-64' : 'lg:ml-72'} h-[calc(100vh-72px)] overflow-y-auto scroll-smooth`}>
+                <main className="flex-1 lg:ml-72 h-[calc(100vh-72px)] overflow-y-auto scroll-smooth">
                     
                     {/* Header Area styled like UserDashboard */}
                     <div className="bg-white border-b border-slate-200 py-6">
@@ -161,9 +176,12 @@ const UserResourceCatalogue = () => {
                                                 </div>
                                             </div>
 
-                                            <button className="w-full py-3.5 bg-[#FFD166] text-slate-900 font-black rounded-xl text-[10px] uppercase tracking-[0.2em] shadow-lg shadow-[#FFD166]/20 hover:bg-[#FFCC29] transition-all hover:shadow-[#FFD166]/40 active:scale-95 mt-auto">
-                                                Book This Slot
-                                            </button>
+<button 
+  onClick={() => handleBookClick(resource)}
+  className="w-full py-4 bg-[#FFD166] text-slate-900 font-bold rounded-full text-[11px] uppercase tracking-widest shadow-lg shadow-[#FFD166]/20 hover:scale-105 hover:bg-[#FFCC29] transition-transform active:scale-95 mt-auto"
+>
+  Book This Slot
+</button>
                                         </div>
                                     </div>
                                 ))}
@@ -173,6 +191,14 @@ const UserResourceCatalogue = () => {
                     <Footer />
                 </main>
             </div>
+
+            {showModal && selectedResource && (
+                <BookingFormModal
+                    resource={selectedResource}
+                    onClose={() => setShowModal(false)}
+                    onSuccess={handleBookingSuccess}
+                />
+            )}
         </div>
     );
 };
