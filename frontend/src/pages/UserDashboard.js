@@ -46,6 +46,19 @@ const UserDashboard = () => {
         fetchDashboardData();
     }, []);
 
+    const stats = [
+        { label: 'Active Bookings', value: '03', icon: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z', color: 'text-indigo-600', bg: 'bg-indigo-50', border: 'border-indigo-100' },
+        { label: 'Completed Actions', value: '12', icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z', color: 'text-emerald-600', bg: 'bg-emerald-50', border: 'border-emerald-100' },
+        { label: 'Pending Requests', value: '01', icon: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z', color: 'text-rose-600', bg: 'bg-rose-50', border: 'border-rose-100' },
+        { label: 'Platform Rating', value: '4.9', icon: 'M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.518 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.921-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.518-4.674z', color: 'text-amber-500', bg: 'bg-amber-50', border: 'border-amber-100' },
+    ];
+
+    const recentRequests = [
+        { id: '#REQ-829', title: 'Lab B2 Projector Setup', type: 'Facility', status: 'In Progress', date: '2 hours ago' },
+        { id: '#REQ-812', title: 'Asset Rental: DSLR Camera', type: 'Asset', status: 'Completed', date: 'Yesterday' },
+        { id: '#REQ-799', title: 'Maintenance: VR Station 01', type: 'Technical', status: 'Pending', date: 'Oct 14' },
+    ];
+
     const role = localStorage.getItem('role') || 'USER';
 
     return (
@@ -59,49 +72,57 @@ const UserDashboard = () => {
             <div className="flex flex-1 relative z-10 w-full overflow-hidden">
                 <Sidebar />
 
-                <main className="flex-1 lg:ml-72 h-[calc(100vh-72px)] overflow-y-auto scroll-smooth">
-                    <div className="p-6 md:p-10 lg:p-16 max-w-7xl mx-auto">
-                        
-                        {/* Page Header - Clean & Bold like Home Page */}
-                        <div className="mb-16 animate-up">
-                            <div className="flex items-center gap-3 mb-6">
-                                <span className="w-1.5 h-1.5 rounded-full bg-[#FFD166]"></span>
-                                <span className="text-[10px] font-black text-[#3f4175] uppercase tracking-[0.4em]">Student Terminal</span>
-                            </div>
-                            <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
-                                <div>
-                                    <h1 className="text-5xl md:text-6xl font-black text-slate-900 tracking-tighter leading-none mb-4">
-                                        Welcome, <span className="text-[#3f4175]">{userData.name.split(' ')[0]}</span>
-                                    </h1>
-                                    <p className="text-slate-400 font-bold text-[11px] uppercase tracking-widest max-w-lg">
-                                        Access and manage your campus resources, maintenance requests, and academic infrastructure from one secure hub.
-                                    </p>
-                                </div>
-                                <div className="bg-white border border-slate-200 px-8 py-5 rounded-[24px] shadow-sm flex items-center gap-6">
-                                    <div className="text-right">
-                                        <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Node Status</p>
-                                        <p className="text-xs font-black text-slate-800 uppercase tracking-widest">Operational</p>
-                                    </div>
-                                    <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center border border-emerald-100">
-                                        <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+<main className={`flex-1 ${role === 'USER' ? 'lg:ml-64' : 'lg:ml-72'} h-[calc(100vh-72px)] overflow-y-auto scroll-smooth`}>
 
-                        {/* Statistics Grid - Card style matched to Home Page resources */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-                            {[
-                                { label: 'Pending Response', val: stats.active, color: '#3f4175', sub: 'Action Required', icon: 'M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
-                                { label: 'Verified Resolves', val: stats.completed, color: '#22C55E', sub: 'Registry Updated', icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' },
-                                { label: 'In Queue', val: stats.pending, color: '#FFD166', sub: 'Awaiting Triage', icon: 'M12 8v4l3 3' }
-                            ].map((stat, i) => (
-                                <div key={i} className="bg-white p-10 rounded-[32px] border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 group">
-                                    <div className="flex justify-between items-start mb-10">
-                                        <div className="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 group-hover:bg-[#FFD166] group-hover:text-slate-900 group-hover:border-transparent transition-all">
-                                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d={stat.icon} />
-                                            </svg>
+  {/* Header */}
+  <div className="bg-white border-b border-slate-200 py-6">
+    <div className="max-w-[1200px] mx-auto px-6 lg:px-10">
+
+      <p className="text-[#3f4175] font-black text-[10px] uppercase tracking-[0.4em] mb-2 flex items-center gap-2">
+        <span className="w-1.5 h-1.5 rounded-full bg-[#FFD166]"></span>
+        Dashboard Portal
+      </p>
+
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        
+        <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight leading-tight">
+          Welcome, <br />
+          <span className="text-slate-500">
+            {userData.name?.split(' ')[0]}
+          </span>
+        </h1>
+
+        <div className="flex gap-3 mt-2 md:mt-0">
+          <button className="bg-[#0F172A] text-white px-6 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-800 transition-all shadow-md">
+            View Map
+          </button>
+
+          <button className="bg-[#FFD166] text-slate-900 px-6 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-[#FFCC29] transition-all shadow-md shadow-[#FFD166]/20">
+            Book Resource
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+                    
+
+                    <div className="max-w-[1200px] mx-auto px-6 lg:px-10 py-10 space-y-12">
+                        
+                        {/* 1. STATISTICS BAR (Matched to Home.js Stats Bar) */}
+                        <section className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden relative">
+                            {/* Decorative Accent */}
+                            <div className="absolute top-0 right-0 w-64 h-64 bg-[#FFCC29]/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
+                            
+                            <div className="p-8">
+                                <div className="grid grid-cols-2 md:grid-cols-4 gap-8 divide-x divide-slate-100">
+                                    {stats.map((stat, i) => (
+                                        <div key={i} className="text-center px-4">
+                                            <div className={`w-10 h-10 mx-auto ${stat.bg} ${stat.border} border rounded-full flex items-center justify-center mb-3`}>
+                                                <svg className={`w-5 h-5 ${stat.color}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={stat.icon} /></svg>
+                                            </div>
+                                            <h3 className={`text-3xl md:text-4xl font-black ${stat.color} mb-1 tracking-tighter italic`}>{stat.value}</h3>
+                                            <p className="text-slate-500 font-black text-[9px] uppercase tracking-widest opacity-80">{stat.label}</p>
                                         </div>
                                         <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest italic group-hover:text-slate-400">Stat • 0{i+1}</span>
                                     </div>

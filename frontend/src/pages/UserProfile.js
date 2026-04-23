@@ -120,44 +120,49 @@ const UserProfile = () => {
             <div className="flex flex-1 relative z-10 w-full overflow-hidden">
                 {renderSidebar()}
 
-                <main className="flex-1 lg:ml-72 h-[calc(100vh-72px)] overflow-y-auto scroll-smooth">
+<main className={`flex-1 ${userData.role === 'USER' ? 'lg:ml-64' : 'lg:ml-72'} h-[calc(100vh-72px)] overflow-y-auto scroll-smooth`}>
 
-                    {/* Previous Header Style */}
-                    <div className="bg-white border-b border-slate-200 py-10">
+  {/* Header Area styled like Dashboard */}
+  <div className="bg-white border-b border-slate-200 py-6">
                         <div className="max-w-[1000px] mx-auto px-6">
-                            <p className="text-[#3f4175] font-black text-xs uppercase tracking-[0.4em] mb-4 drop-shadow-sm flex items-center gap-2">
-                                <span className="w-2 h-2 rounded-full bg-[#FFD166]"></span>
+                            <p className="text-[#3f4175] font-black text-[10px] uppercase tracking-[0.4em] mb-2 drop-shadow-sm flex items-center gap-2">
+                                <span className="w-1.5 h-1.5 rounded-full bg-[#FFD166]"></span>
                                 Account Management
                             </p>
                             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                                 <div>
-                                    <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight leading-none mb-2">
+                                    <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight leading-tight mb-1">
                                         Account Settings
                                     </h1>
                                     <p className="text-slate-500 font-bold uppercase tracking-wider text-[11px] max-w-sm">
                                         Manage your personal information and security preferences.
                                     </p>
                                 </div>
-                                <div className="flex items-center gap-4">
-                                    {isEditing && (
-                                        <button 
-                                            onClick={() => { setIsEditing(false); setNameInput(userData.name); }}
-                                            className="px-6 py-3 rounded-full font-black text-[11px] uppercase tracking-widest text-slate-400 hover:text-slate-600 transition-colors"
-                                        >
-                                            Cancel
-                                        </button>
-                                    )}
-                                    <button
-                                        onClick={isEditing ? handleProfileUpdate : () => setIsEditing(true)}
-                                        disabled={updateLoading}
-                                        className={`shrink-0 px-8 py-3 rounded-full font-black text-[11px] uppercase tracking-widest transition-all shadow-lg ${isEditing
-                                                ? 'bg-[#0F172A] text-white hover:bg-slate-800'
-                                                : 'bg-[#FFD166] text-slate-900 shadow-[#FFD166]/20 hover:scale-[1.02] hover:bg-[#FFCC29]'
-                                            } disabled:opacity-50`}
-                                    >
-                                        {updateLoading ? 'Saving...' : isEditing ? 'Save Changes' : 'Edit Profile'}
-                                    </button>
-                                </div>
+<div className="flex items-center gap-4">
+  {isEditing && (
+    <button 
+      onClick={() => { 
+        setIsEditing(false); 
+        setNameInput(userData.name); 
+      }}
+      className="px-6 py-3 rounded-full font-black text-[11px] uppercase tracking-widest text-slate-400 hover:text-slate-600 transition-colors"
+    >
+      Cancel
+    </button>
+  )}
+
+  <button
+    onClick={isEditing ? handleProfileUpdate : () => setIsEditing(true)}
+    disabled={updateLoading}
+    className={`shrink-0 px-8 py-3 rounded-full font-black text-[11px] uppercase tracking-widest transition-all shadow-lg ${
+      isEditing
+        ? 'bg-[#0F172A] text-white hover:bg-slate-800'
+        : 'bg-[#FFD166] text-slate-900 shadow-[#FFD166]/20 hover:scale-[1.02] hover:bg-[#FFCC29]'
+    } disabled:opacity-50`}
+  >
+    {updateLoading ? 'Saving...' : isEditing ? 'Save Changes' : 'Edit Profile'}
+  </button>
+</div>
                             </div>
                             
                             {updateMessage.text && (
@@ -170,7 +175,7 @@ const UserProfile = () => {
                         </div>
                     </div>
 
-                    <div className="max-w-[1000px] mx-auto px-6 py-10">
+                    <div className="max-w-[1000px] mx-auto px-6 py-6">
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
                             {/* Left Column: Profile Card & Info */}

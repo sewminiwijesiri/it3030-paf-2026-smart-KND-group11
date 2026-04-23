@@ -110,39 +110,25 @@ const TicketSubmission = () => {
 
             <div className="flex flex-1 relative z-10 w-full overflow-hidden">
                 {renderSidebar()}
+<main className={`flex-1 ${role === 'USER' ? 'lg:ml-64' : 'lg:ml-72'} h-[calc(100vh-72px)] overflow-y-auto scroll-smooth`}>
 
-                <main className="flex-1 lg:ml-72 h-[calc(100vh-72px)] overflow-y-auto scroll-smooth">
+  {/* Header */}
+  <div className="bg-white border-b border-slate-200 py-6">
+    <div className="max-w-[800px] mx-auto px-6">
+      <p className="text-[#3f4175] font-black text-[10px] uppercase tracking-[0.4em] mb-2 drop-shadow-sm flex items-center gap-2">
+        <span className="w-1.5 h-1.5 rounded-full bg-[#FFD166]"></span>
+        Incident Portal
+      </p>
 
-                    {/* Branded Tactical Header */}
-                    <div className="bg-white/80 backdrop-blur-md border-b border-slate-200 py-12 relative overflow-hidden">
-                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#FFD166] via-[#3f4175] to-[#0F172A]"></div>
-                        <div className="max-w-[900px] mx-auto px-8 relative z-10">
-                            <div className="flex items-center gap-3 mb-6">
-                                <span className="w-1.5 h-1.5 rounded-full bg-[#FFD166]"></span>
-                                <span className="text-[10px] font-black text-[#3f4175] uppercase tracking-[0.4em]">Personal Terminal</span>
-                                <span className="text-slate-300 mx-2">/</span>
-                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em]">Incident Dispatch</span>
-                            </div>
+      <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight leading-tight mb-1">
+        Report Fault
+      </h1>
 
-                            <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
-                                <div className="space-y-3">
-                                    <h1 className="text-5xl md:text-6xl font-black text-slate-900 tracking-tighter leading-none uppercase">
-                                        Report Fault
-                                    </h1>
-                                    <p className="text-slate-500 font-bold uppercase tracking-wider text-[11px] max-w-xl ml-1 border-l-2 border-[#FFD166] pl-4">
-                                        System Node: Active • Accessing maintenance dispatch grid.
-                                    </p>
-                                </div>
-                                <div className="hidden md:flex items-center gap-4 bg-white border border-slate-100 px-6 py-3 rounded-2xl shadow-sm">
-                                    <div className="flex flex-col items-end">
-                                        <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Node Status</span>
-                                        <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">Operational</span>
-                                    </div>
-                                    <div className="w-1.5 h-8 bg-emerald-100 rounded-full overflow-hidden">
-                                        <div className="w-full h-1/2 bg-emerald-400"></div>
-                                    </div>
-                                </div>
-                            </div>
+      <p className="text-slate-500 font-bold uppercase tracking-wider text-[11px] max-w-xl">
+        Submit details about the resource malfunction or facility damage to request maintenance.
+      </p>
+    </div>
+  </div>
                         </div>
                     </div>
 

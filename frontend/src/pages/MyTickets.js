@@ -67,50 +67,45 @@ const MyTickets = () => {
                 <Sidebar />
                 <main className="flex-1 lg:ml-72 h-[calc(100vh-72px)] overflow-y-auto scroll-smooth">
                     
-                    {/* Tactical Header */}
-                    <div className="bg-white/80 backdrop-blur-md border-b border-slate-200 py-12 relative overflow-hidden">
-                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#3f4175] via-[#FFD166] to-[#0F172A]"></div>
-                        <div className="max-w-[1100px] mx-auto px-8 relative z-10">
-                            <div className="flex items-center gap-3 mb-6">
-                                <span className="w-2 h-2 rounded-full bg-[#FFD166]"></span>
-                                <span className="text-[10px] font-black text-[#3f4175] uppercase tracking-[0.4em]">Personal Terminal</span>
-                                <span className="text-slate-300 mx-2">/</span>
-                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em]">Incident Ledger</span>
-                            </div>
-                            
-                            <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-10">
-                                <div className="space-y-3">
-                                    <h1 className="text-5xl md:text-6xl font-black text-slate-900 tracking-tighter leading-none uppercase">
-                                        My Requests
+{/* Header */}
+<div className="bg-white border-b border-slate-200 py-6">
+  <div className="max-w-[1000px] mx-auto px-6">
+    <p className="text-[#3f4175] font-black text-[10px] uppercase tracking-[0.4em] mb-2 drop-shadow-sm flex items-center gap-2">
+      <span className="w-1.5 h-1.5 rounded-full bg-[#FFD166]"></span>
+      Support Dashboard
+    </p>
+
+    <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+      <div>
+        <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight leading-tight mb-1">
+          My Requests
+        </h1>
+      </div>
+    </div>
+  </div>
+</div>
                                     </h1>
                                     <p className="text-slate-500 font-bold uppercase tracking-wider text-[11px] max-w-md ml-1">
                                         Monitoring <span className="text-slate-900">{tickets.length}</span> active data packets in the maintenance queue.
                                     </p>
                                 </div>
-                                
-                                <div className="flex flex-col sm:flex-row items-center gap-4">
-                                    {/* Premium Filter Switch */}
-                                    <div className="bg-slate-100 p-1.5 rounded-2xl flex items-center gap-1">
-                                        {['ALL', 'ACTIVE', 'RESOLVED'].map((opt) => (
-                                            <button 
-                                                key={opt}
-                                                onClick={() => setFilter(opt)}
-                                                className={`px-6 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${
-                                                    filter === opt 
-                                                    ? 'bg-white text-slate-900 shadow-sm' 
-                                                    : 'text-slate-400 hover:text-slate-600'
-                                                }`}
-                                            >
-                                                {opt}
-                                            </button>
-                                        ))}
-                                    </div>
-                                    
-                                    <Link to="/report-incident" className="w-full sm:w-auto bg-[#0F172A] text-white px-10 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-800 transition-all shadow-xl shadow-[#0F172A]/20 flex items-center justify-center gap-2">
-                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M12 4v16m8-8H4" /></svg>
-                                        Initialize Request
-                                    </Link>
-                                </div>
+{/* Header */}
+<div className="bg-white border-b border-slate-200 py-6">
+  <div className="max-w-[1000px] mx-auto px-6">
+    <p className="text-[#3f4175] font-black text-[10px] uppercase tracking-[0.4em] mb-2 drop-shadow-sm flex items-center gap-2">
+      <span className="w-1.5 h-1.5 rounded-full bg-[#FFD166]"></span>
+      Support Dashboard
+    </p>
+
+    <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+      <div>
+        <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight leading-tight mb-1">
+          My Requests
+        </h1>
+      </div>
+    </div>
+  </div>
+</div>
                             </div>
                         </div>
                     </div>

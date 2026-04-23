@@ -7,15 +7,15 @@ const ResourceFilters = ({ filters, setFilters }) => {
   };
 
   return (
-    <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 mb-6 grid grid-cols-1 md:grid-cols-4 gap-4">
+    <div className="bg-white grid grid-cols-1 md:grid-cols-4 gap-4">
       {/* Type Filter */}
       <div>
-        <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">Type</label>
+        <label className="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1.5">Type</label>
         <select
           name="type"
           value={filters.type}
           onChange={handleChange}
-          className="w-full bg-gray-50 border border-gray-200 rounded-lg py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-sm font-bold text-slate-800 transition-all focus:bg-white focus:border-[#0F172A] focus:outline-none"
         >
           <option value="">All Types</option>
           <option value="LECTURE_HALL">Lecture Hall</option>
@@ -29,38 +29,38 @@ const ResourceFilters = ({ filters, setFilters }) => {
 
       {/* Min Capacity Filter */}
       <div>
-        <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">Min Capacity</label>
+        <label className="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1.5">Min Capacity</label>
         <input
           type="number"
           name="minCapacity"
           value={filters.minCapacity}
           onChange={handleChange}
           placeholder="e.g. 50"
-          className="w-full bg-gray-50 border border-gray-200 rounded-lg py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-sm font-bold text-slate-800 transition-all focus:bg-white focus:border-[#0F172A] focus:outline-none"
         />
       </div>
 
       {/* Location Filter */}
       <div>
-        <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">Location</label>
+        <label className="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1.5">Location</label>
         <input
           type="text"
           name="location"
           value={filters.location}
           onChange={handleChange}
           placeholder="Search location..."
-          className="w-full bg-gray-50 border border-gray-200 rounded-lg py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-sm font-bold text-slate-800 transition-all focus:bg-white focus:border-[#0F172A] focus:outline-none"
         />
       </div>
 
       {/* Status Filter */}
       <div>
-        <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">Status</label>
+        <label className="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1.5">Status</label>
         <select
           name="status"
           value={filters.status}
           onChange={handleChange}
-          className="w-full bg-gray-50 border border-gray-200 rounded-lg py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-sm font-bold text-slate-800 transition-all focus:bg-white focus:border-[#0F172A] focus:outline-none"
         >
           <option value="">All Statuses</option>
           <option value="AVAILABLE">Available</option>
