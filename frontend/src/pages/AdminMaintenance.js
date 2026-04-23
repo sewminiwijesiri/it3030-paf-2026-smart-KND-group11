@@ -54,15 +54,15 @@ const AdminMaintenance = () => {
     return (
         <AdminLayout>
             {/* Page Header */}
-            <div className="bg-white border-b border-slate-200 -mx-6 md:-mx-10 -mt-6 md:-mt-10 px-6 md:px-10 py-10 mb-10">
-                <p className="text-[#3f4175] font-black text-xs uppercase tracking-[0.4em] mb-4 flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-[#FFD166]"></span>
+            <div className="bg-white border-b border-slate-200 -mx-6 md:-mx-10 -mt-6 md:-mt-10 px-6 md:px-10 py-7 mb-7">
+                <p className="text-[#3f4175] font-black text-[10px] uppercase tracking-[0.4em] mb-2 flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#FFD166]"></span>
                     Maintenance Hub
                 </p>
-                <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight leading-none mb-2">
+                <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight leading-none mb-1">
                     Incident Control Center
                 </h1>
-                <p className="text-slate-500 font-bold uppercase tracking-wider text-[11px]">
+                <p className="text-slate-500 font-bold uppercase tracking-wider text-[10px]">
                     Asset Integrity & Service Management
                 </p>
             </div>
