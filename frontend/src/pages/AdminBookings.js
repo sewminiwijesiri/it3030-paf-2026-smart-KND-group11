@@ -4,6 +4,7 @@ import BookingFilters from '../components/Booking/BookingFilters';
 import BookingStatusBadge from '../components/Booking/BookingStatusBadge';
 import { BOOKING_STATUS } from '../utils/bookingConstants';
 import { CheckCircle, XCircle } from 'lucide-react';
+import AdminLayout from '../components/AdminLayout';
 
 const AdminBookings = () => {
   const { bookings, loading, error, fetchAllBookings, updateStatus } = useBookings();
@@ -34,10 +35,24 @@ const AdminBookings = () => {
   };
 
   return (
-    <div className="container mx-auto p-6 max-w-7xl">
-      <h1 className="text-2xl font-bold text-gray-800 mb-6">Manage All Bookings</h1>
+    <AdminLayout>
+      <div className="max-w-7xl mx-auto animate-up">
+        {/* Page Header */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-6">
+          <div className="space-y-2">
+            <span className="inline-block px-4 py-1 bg-[#3f4175] text-white text-[9px] font-black uppercase tracking-[0.2em] rounded-full shadow-sm">
+              System Administrator
+            </span>
+            <h1 className="text-4xl font-black text-slate-900 tracking-tight leading-none">Manage Bookings</h1>
+          </div>
+          <div className="flex items-center gap-2 bg-white border border-slate-200 px-5 py-3 rounded-xl shadow-sm">
+            <span className="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></span>
+            <span className="text-[9px] font-black text-slate-600 uppercase tracking-[0.2em]">Total Bookings: {bookings.length}</span>
+          </div>
+        </div>
 
-      <BookingFilters currentFilters={filters} onFilterChange={setFilters} />
+        <div className="bg-white rounded-[28px] border border-slate-100 shadow-sm p-6 md:p-8 relative">
+          <BookingFilters currentFilters={filters} onFilterChange={setFilters} />
 
       {loading && <p className="text-gray-500">Loading bookings...</p>}
       
@@ -48,45 +63,45 @@ const AdminBookings = () => {
       )}
 
       {!loading && !error && bookings.length === 0 && (
-        <div className="bg-white border border-gray-200 rounded-lg p-8 text-center text-gray-500">
-          No bookings match the given criteria.
+        <div className="bg-slate-50 border border-slate-200 rounded-2xl p-12 text-center mt-6">
+          <p className="text-slate-500 font-bold tracking-tight">No bookings match the given criteria.</p>
         </div>
       )}
 
       {!loading && !error && bookings.length > 0 && (
-        <div className="bg-white shadow rounded-lg overflow-x-auto">
+        <div className="mt-6 border border-slate-200 rounded-2xl overflow-x-auto">
           <table className="w-full whitespace-nowrap">
             <thead>
-              <tr className="bg-gray-50 border-b border-gray-200 text-left text-sm font-semibold text-gray-700">
-                <th className="px-6 py-4 border-b">ID / User</th>
-                <th className="px-6 py-4 border-b">Resource ID</th>
-                <th className="px-6 py-4 border-b">Date / Time</th>
-                <th className="px-6 py-4 border-b">Purpose</th>
-                <th className="px-6 py-4 border-b">Attendees</th>
-                <th className="px-6 py-4 border-b">Status</th>
-                <th className="px-6 py-4 border-b text-right">Actions</th>
+              <tr className="bg-slate-50 border-b border-slate-200 text-left text-[10px] font-black text-slate-500 uppercase tracking-widest">
+                <th className="px-6 py-4">ID / User</th>
+                <th className="px-6 py-4">Resource ID</th>
+                <th className="px-6 py-4">Date / Time</th>
+                <th className="px-6 py-4">Purpose</th>
+                <th className="px-6 py-4">Attendees</th>
+                <th className="px-6 py-4">Status</th>
+                <th className="px-6 py-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200">
+            <tbody className="divide-y divide-slate-100">
               {bookings.map((booking) => (
-                <tr key={booking.id} className="hover:bg-gray-50">
+                <tr key={booking.id} className="hover:bg-slate-50 transition-colors group">
                   <td className="px-6 py-4">
-                    <div className="font-medium text-gray-900">#{booking.id}</div>
-                    <div className="text-sm text-gray-500">User: {booking.userId}</div>
+                    <div className="font-bold text-slate-800 tracking-tight">#{booking.id}</div>
+                    <div className="text-xs font-medium text-slate-500">User: {booking.userId}</div>
                   </td>
-                  <td className="px-6 py-4">{booking.resourceId}</td>
+                  <td className="px-6 py-4 font-bold text-slate-700">{booking.resourceId}</td>
                   <td className="px-6 py-4">
-                    <div>{booking.bookingDate}</div>
-                    <div className="text-sm text-gray-500">
+                    <div className="font-bold text-slate-700">{booking.bookingDate}</div>
+                    <div className="text-xs font-medium text-slate-500 flex items-center gap-1">
                       {booking.startTime.substring(0,5)} - {booking.endTime.substring(0,5)}
                     </div>
                   </td>
                   <td className="px-6 py-4">
-                    <span className="truncate max-w-[200px] block" title={booking.purpose}>
+                    <span className="truncate max-w-[200px] block text-sm font-medium text-slate-600" title={booking.purpose}>
                       {booking.purpose}
                     </span>
                   </td>
-                  <td className="px-6 py-4">{booking.expectedAttendees}</td>
+                  <td className="px-6 py-4 font-bold text-slate-700">{booking.expectedAttendees}</td>
                   <td className="px-6 py-4">
                     <BookingStatusBadge status={booking.status} />
                   </td>
@@ -95,15 +110,15 @@ const AdminBookings = () => {
                       <div className="flex justify-end gap-2">
                         <button
                           onClick={() => handleApprove(booking.id)}
-                          className="flex items-center gap-1 text-green-600 hover:text-green-800 bg-green-50 px-3 py-1 rounded"
+                          className="flex items-center gap-1 text-emerald-600 hover:text-emerald-700 bg-emerald-50 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-colors"
                         >
-                          <CheckCircle className="w-4 h-4" /> Approve
+                          <CheckCircle className="w-3 h-3" /> Approve
                         </button>
                         <button
                           onClick={() => setRejectingBooking(booking)}
-                          className="flex items-center gap-1 text-red-600 hover:text-red-800 bg-red-50 px-3 py-1 rounded"
+                          className="flex items-center gap-1 text-rose-600 hover:text-rose-700 bg-rose-50 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-colors"
                         >
-                          <XCircle className="w-4 h-4" /> Reject
+                          <XCircle className="w-3 h-3" /> Reject
                         </button>
                       </div>
                     )}
@@ -151,7 +166,9 @@ const AdminBookings = () => {
           </div>
         </div>
       )}
-    </div>
+        </div>
+      </div>
+    </AdminLayout>
   );
 };
 

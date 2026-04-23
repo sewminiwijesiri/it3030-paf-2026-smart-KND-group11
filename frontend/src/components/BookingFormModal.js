@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Calendar, Clock, AlignLeft, Users } from 'lucide-react';
 import axios from 'axios';
 
@@ -12,8 +12,34 @@ const BookingFormModal = ({ resource, onClose, onSuccess }) => {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [busySlots, setBusySlots] = useState([]);
 
-  const today = new Date().toISOString().split('T')[0];
+  useEffect(() => {
+    if (formData.bookingDate && resource?.id) {
+      const fetchBusySlots = async () => {
+        try {
+          const token = localStorage.getItem('token');
+          const response = await axios.get(`http://localhost:8081/api/resources/${resource.id}/busy-slots?date=${formData.bookingDate}`, {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          setBusySlots(response.data);
+        } catch (err) {
+          console.error('Failed to fetch busy slots', err);
+        }
+      };
+      fetchBusySlots();
+    }
+  }, [formData.bookingDate, resource?.id]);
+
+  const now = new Date();
+  const localYear = now.getFullYear();
+  const localMonth = String(now.getMonth() + 1).padStart(2, '0');
+  const localDay = String(now.getDate()).padStart(2, '0');
+  const todayLocal = `${localYear}-${localMonth}-${localDay}`;
+  
+  const currentHours = String(now.getHours()).padStart(2, '0');
+  const currentMinutes = String(now.getMinutes()).padStart(2, '0');
+  const currentTime = `${currentHours}:${currentMinutes}`;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -23,8 +49,33 @@ const BookingFormModal = ({ resource, onClose, onSuccess }) => {
   const attendeesCount = parseInt(formData.expectedAttendees, 10) || 1;
   const maxCapacity = resource.capacity ? parseInt(resource.capacity, 10) : Infinity;
   const isCapacityExceeded = attendeesCount > maxCapacity;
+  
+  let startTimeError = '';
+  if (formData.bookingDate === todayLocal && formData.startTime) {
+    if (formData.startTime < currentTime) {
+      startTimeError = 'Start time cannot be in the past.';
+    }
+  }
+
+  let endTimeError = '';
+  if (formData.startTime && formData.endTime && formData.startTime >= formData.endTime) {
+    endTimeError = 'End time must be after start time.';
+  }
+
+  let conflictError = '';
+  if (formData.startTime && formData.endTime && !startTimeError && !endTimeError) {
+    const hasOverlap = busySlots.some(slot => {
+      const existingStart = slot.startTime.substring(0, 5);
+      const existingEnd = slot.endTime.substring(0, 5);
+      return existingStart < formData.endTime && existingEnd > formData.startTime;
+    });
+    if (hasOverlap) {
+      conflictError = 'Selected time overlaps with an existing booking.';
+    }
+  }
+
   const isFormIncomplete = !formData.bookingDate || !formData.startTime || !formData.endTime || !formData.purpose || !formData.expectedAttendees;
-  const isSubmitDisabled = loading || isCapacityExceeded || isFormIncomplete;
+  const isSubmitDisabled = loading || isCapacityExceeded || isFormIncomplete || startTimeError !== '' || endTimeError !== '' || conflictError !== '';
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -109,6 +160,12 @@ const BookingFormModal = ({ resource, onClose, onSuccess }) => {
             </div>
           )}
 
+          {conflictError && (
+            <div className="mb-6 p-4 bg-amber-50 border border-amber-200 text-amber-700 rounded-xl text-sm font-bold flex items-center gap-2">
+              ⚠️ {conflictError}
+            </div>
+          )}
+
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-1.5">
               <label className="text-xs font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
@@ -118,7 +175,7 @@ const BookingFormModal = ({ resource, onClose, onSuccess }) => {
                 type="date"
                 name="bookingDate"
                 required
-                min={today}
+                min={todayLocal}
                 value={formData.bookingDate}
                 onChange={handleChange}
                 className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
@@ -126,7 +183,7 @@ const BookingFormModal = ({ resource, onClose, onSuccess }) => {
             </div>
 
             <div className="grid grid-cols-2 gap-5">
-              <div className="space-y-1.5">
+              <div className="space-y-1.5 relative">
                 <label className="text-xs font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
                   <Clock className="w-3.5 h-3.5" /> Start Time
                 </label>
@@ -136,10 +193,17 @@ const BookingFormModal = ({ resource, onClose, onSuccess }) => {
                   required
                   value={formData.startTime}
                   onChange={handleChange}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                  className={`w-full bg-slate-50 border rounded-xl px-4 py-3 text-sm font-bold focus:outline-none focus:ring-2 transition-all ${
+                    startTimeError ? 'border-rose-300 text-rose-600 focus:ring-rose-500' : 'border-slate-200 text-slate-700 focus:ring-indigo-500 focus:border-transparent'
+                  }`}
                 />
+                {startTimeError && (
+                  <p className="text-[10px] font-bold text-rose-500 mt-1 flex items-center gap-1">
+                    ⚠️ {startTimeError}
+                  </p>
+                )}
               </div>
-              <div className="space-y-1.5">
+              <div className="space-y-1.5 relative">
                 <label className="text-xs font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
                   <Clock className="w-3.5 h-3.5" /> End Time
                 </label>
@@ -149,8 +213,15 @@ const BookingFormModal = ({ resource, onClose, onSuccess }) => {
                   required
                   value={formData.endTime}
                   onChange={handleChange}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                  className={`w-full bg-slate-50 border rounded-xl px-4 py-3 text-sm font-bold focus:outline-none focus:ring-2 transition-all ${
+                    endTimeError ? 'border-rose-300 text-rose-600 focus:ring-rose-500' : 'border-slate-200 text-slate-700 focus:ring-indigo-500 focus:border-transparent'
+                  }`}
                 />
+                {endTimeError && (
+                  <p className="text-[10px] font-bold text-rose-500 mt-1 flex items-center gap-1">
+                    ⚠️ {endTimeError}
+                  </p>
+                )}
               </div>
             </div>
 

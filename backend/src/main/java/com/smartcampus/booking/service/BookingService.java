@@ -68,6 +68,12 @@ public class BookingService {
         Booking booking = bookingRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Booking not found with id: " + id));
 
+        if (statusUpdate.getStatus() == BookingStatus.APPROVED || statusUpdate.getStatus() == BookingStatus.PENDING) {
+            if (bookingRepository.existsOverlap(booking.getResourceId(), booking.getBookingDate(), booking.getStartTime(), booking.getEndTime(), id)) {
+                throw new BookingConflictException("The selected resource is already booked for the given time slot.");
+            }
+        }
+
         booking.setStatus(statusUpdate.getStatus());
         booking.setReason(statusUpdate.getReason());
 
@@ -89,8 +95,7 @@ public class BookingService {
     }
 
     public boolean hasConflict(String resourceId, LocalDate date, java.time.LocalTime startTime, java.time.LocalTime endTime) {
-        List<Booking> conflicts = bookingRepository.findConflictingBookings(resourceId, date, startTime, endTime);
-        return !conflicts.isEmpty();
+        return bookingRepository.existsOverlap(resourceId, date, startTime, endTime, null);
     }
 
     private BookingResponseDTO mapToDTO(Booking booking) {

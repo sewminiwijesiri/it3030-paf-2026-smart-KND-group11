@@ -4,6 +4,9 @@ import com.uniflow.system.catalogue.model.Resource;
 import com.uniflow.system.catalogue.model.ResourceStatus;
 import com.uniflow.system.catalogue.model.ResourceType;
 import com.uniflow.system.catalogue.service.ResourceService;
+import com.smartcampus.booking.repository.BookingRepository;
+import com.smartcampus.booking.entity.Booking;
+import com.smartcampus.booking.enums.BookingStatus;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,11 +25,13 @@ public class ResourceController {
 
     private final ResourceService resourceService;
     private final CloudinaryService cloudinaryService;
+    private final BookingRepository bookingRepository;
 
     // Constructor Injection
-    public ResourceController(ResourceService resourceService, CloudinaryService cloudinaryService) {
+    public ResourceController(ResourceService resourceService, CloudinaryService cloudinaryService, BookingRepository bookingRepository) {
         this.resourceService = resourceService;
         this.cloudinaryService = cloudinaryService;
+        this.bookingRepository = bookingRepository;
     }
 
     // CREATE a new resource
@@ -98,5 +103,25 @@ public class ResourceController {
     public ResponseEntity<Void> deleteResource(@PathVariable String id) {
         resourceService.deleteResource(id);
         return ResponseEntity.noContent().build();
+    }
+
+    // GET busy slots for a resource on a specific date
+    @GetMapping("/{id}/busy-slots")
+    @PreAuthorize("hasAnyRole('ADMIN', 'TECHNICIAN', 'USER')")
+    public ResponseEntity<List<java.util.Map<String, String>>> getBusySlots(
+            @PathVariable("id") String resourceId,
+            @RequestParam @org.springframework.format.annotation.DateTimeFormat(iso = org.springframework.format.annotation.DateTimeFormat.ISO.DATE) java.time.LocalDate date) {
+        
+        List<Booking> bookings = bookingRepository.findByResourceIdAndBookingDateAndStatusIn(
+                resourceId, date, List.of(BookingStatus.APPROVED.name(), BookingStatus.PENDING.name()));
+        
+        List<java.util.Map<String, String>> busySlots = bookings.stream().map(b -> {
+            java.util.Map<String, String> map = new java.util.HashMap<>();
+            map.put("startTime", b.getStartTime().toString());
+            map.put("endTime", b.getEndTime().toString());
+            return map;
+        }).toList();
+        
+        return ResponseEntity.ok(busySlots);
     }
 }
