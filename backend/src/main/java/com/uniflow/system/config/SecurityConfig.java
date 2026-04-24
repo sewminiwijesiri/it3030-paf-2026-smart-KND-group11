@@ -68,7 +68,8 @@ public class SecurityConfig {
     public UrlBasedCorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(List.of("http://localhost:3000")); // Allow frontend
+        // Allow localhost and local network IPs for mobile testing
+        config.setAllowedOriginPatterns(List.of("http://localhost:3000", "http://192.168.*.*:3000", "http://10.*.*.*:3000", "http://172.*.*.*:3000"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         

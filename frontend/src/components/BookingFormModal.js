@@ -13,6 +13,68 @@ const BookingFormModal = ({ resource, onClose, onSuccess }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [busySlots, setBusySlots] = useState([]);
+  const [availabilityDetails, setAvailabilityDetails] = useState(null);
+  const [availabilityLoading, setAvailabilityLoading] = useState(false);
+  const [availabilityError, setAvailabilityError] = useState('');
+
+  useEffect(() => {
+    const fetchAvailabilityDetails = async () => {
+      if (resource?.id) {
+        setAvailabilityLoading(true);
+        try {
+          const response = await axios.get(`http://localhost:8081/api/resources/${resource.id}/availability-details`, {
+            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+          });
+          setAvailabilityDetails(response.data);
+        } catch (err) {
+          console.error('Failed to load availability details', err);
+        } finally {
+          setAvailabilityLoading(false);
+        }
+      }
+    };
+    fetchAvailabilityDetails();
+  }, [resource?.id]);
+
+  useEffect(() => {
+    if (availabilityDetails && formData.bookingDate && formData.startTime && formData.endTime) {
+      let isError = false;
+      const { availableDays, availableStartTime, availableEndTime } = availabilityDetails;
+      
+      if (availableDays && availableDays.length > 0) {
+        const [year, month, day] = formData.bookingDate.split('-');
+        const localDateObj = new Date(year, month - 1, day);
+        const dayNames = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
+        const dayOfWeek = dayNames[localDateObj.getDay()];
+        
+        const isDayAvailable = availableDays.some(d => d.toUpperCase() === dayOfWeek);
+        if (!isDayAvailable) {
+           isError = true;
+        }
+      }
+      
+      if (availableStartTime && availableEndTime) {
+        const reqStart = formData.startTime.length === 5 ? `${formData.startTime}:00` : formData.startTime;
+        const reqEnd = formData.endTime.length === 5 ? `${formData.endTime}:00` : formData.endTime;
+        
+        if (reqStart < availableStartTime || reqEnd > availableEndTime) {
+           isError = true;
+        }
+      }
+      
+      if (isError) {
+        const formatTime = (t) => t.substring(0, 5);
+        const daysLabel = (availableDays && availableDays.length > 0) ? availableDays.map(d => d.charAt(0).toUpperCase() + d.slice(1).toLowerCase()).join(', ') : 'all days';
+        const startLabel = availableStartTime ? formatTime(availableStartTime) : 'any time';
+        const endLabel = availableEndTime ? formatTime(availableEndTime) : 'any time';
+        setAvailabilityError(`This resource is only available on ${daysLabel} from ${startLabel} to ${endLabel}`);
+      } else {
+        setAvailabilityError('');
+      }
+    } else {
+      setAvailabilityError('');
+    }
+  }, [availabilityDetails, formData.bookingDate, formData.startTime, formData.endTime]);
 
   useEffect(() => {
     if (formData.bookingDate && resource?.id) {
@@ -75,7 +137,7 @@ const BookingFormModal = ({ resource, onClose, onSuccess }) => {
   }
 
   const isFormIncomplete = !formData.bookingDate || !formData.startTime || !formData.endTime || !formData.purpose || !formData.expectedAttendees;
-  const isSubmitDisabled = loading || isCapacityExceeded || isFormIncomplete || startTimeError !== '' || endTimeError !== '' || conflictError !== '';
+  const isSubmitDisabled = loading || availabilityLoading || isCapacityExceeded || isFormIncomplete || startTimeError !== '' || endTimeError !== '' || conflictError !== '' || availabilityError !== '';
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -166,6 +228,12 @@ const BookingFormModal = ({ resource, onClose, onSuccess }) => {
             </div>
           )}
 
+          {availabilityError && (
+            <div className="mb-6 p-4 bg-rose-50 border border-rose-200 text-rose-600 rounded-xl text-sm font-bold flex items-center gap-2">
+              ⚠️ {availabilityError}
+            </div>
+          )}
+
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-1.5">
               <label className="text-xs font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
@@ -224,6 +292,13 @@ const BookingFormModal = ({ resource, onClose, onSuccess }) => {
                 )}
               </div>
             </div>
+
+            {availabilityDetails && (availabilityDetails.availableDays?.length > 0 || availabilityDetails.availableStartTime) && (
+              <div className="text-xs font-bold text-indigo-500 mt-2">
+                Available on: {(availabilityDetails.availableDays?.length > 0) ? availabilityDetails.availableDays.map(d => d.charAt(0).toUpperCase() + d.slice(1).toLowerCase()).join(', ') : 'All days'} 
+                {availabilityDetails.availableStartTime && ` (${availabilityDetails.availableStartTime.substring(0,5)} - ${availabilityDetails.availableEndTime.substring(0,5)})`}
+              </div>
+            )}
 
             <div className="space-y-1.5">
               <label className="text-xs font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">

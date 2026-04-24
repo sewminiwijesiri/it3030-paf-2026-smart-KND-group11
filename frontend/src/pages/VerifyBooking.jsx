@@ -14,7 +14,14 @@ const VerifyBooking = () => {
   useEffect(() => {
     const fetchBookingDetails = async () => {
       try {
-        const baseUrl = process.env.REACT_APP_API_URL || 'http://localhost:8081/api';
+        const hostname = window.location.hostname;
+        // If accessed via an IP address (like from a phone), use that IP for the backend API too.
+        // Otherwise fallback to process.env or localhost.
+        let baseUrl = process.env.REACT_APP_API_URL || 'http://localhost:8081/api';
+        if (hostname !== 'localhost' && hostname !== '127.0.0.1') {
+            baseUrl = `http://${hostname}:8081/api`;
+        }
+        
         const response = await axios.get(`${baseUrl}/public/booking/${bookingId}`);
         setBooking(response.data);
         setError(null);

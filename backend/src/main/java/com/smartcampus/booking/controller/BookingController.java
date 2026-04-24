@@ -12,6 +12,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -25,9 +26,8 @@ public class BookingController {
     private final BookingService bookingService;
     private final QRCodeService qrCodeService;
 
-    // Simulate extracting userId from context
     private String getCurrentUserId() {
-        return "1"; // Dummy user ID for demonstration
+        return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 
     @PostMapping
@@ -77,8 +77,8 @@ public class BookingController {
 
     @GetMapping("/{id}/qrcode")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public ResponseEntity<?> getQRCode(@PathVariable String id) {
-        String base64QRCode = qrCodeService.generateQRCodeBase64(id);
+    public ResponseEntity<?> getQRCode(@PathVariable String id, @RequestParam(required = false) String origin) {
+        String base64QRCode = qrCodeService.generateQRCodeBase64(id, origin);
         return ResponseEntity.ok(java.util.Map.of("qrCode", base64QRCode));
     }
 }

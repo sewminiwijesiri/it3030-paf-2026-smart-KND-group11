@@ -26,9 +26,9 @@ public class PublicBookingController {
         Map<String, Object> details = new HashMap<>();
         details.put("id", booking.getId());
         details.put("resourceName", booking.getResourceName() != null ? booking.getResourceName() : booking.getResourceId());
-        details.put("bookingDate", booking.getBookingDate());
-        details.put("startTime", booking.getStartTime());
-        details.put("endTime", booking.getEndTime());
+        details.put("bookingDate", booking.getBookingDate() != null ? booking.getBookingDate().toString() : null);
+        details.put("startTime", booking.getStartTime() != null ? booking.getStartTime().toString() : null);
+        details.put("endTime", booking.getEndTime() != null ? booking.getEndTime().toString() : null);
         details.put("purpose", booking.getPurpose());
         details.put("expectedAttendees", booking.getExpectedAttendees());
         details.put("status", booking.getStatus());
