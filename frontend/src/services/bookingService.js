@@ -48,7 +48,8 @@ export const bookingService = {
   },
 
   getQRCode: async (id) => {
-    const response = await axiosInstance.get(`/bookings/${id}/qrcode`);
+    const origin = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000';
+    const response = await axiosInstance.get(`/bookings/${id}/qrcode?origin=${encodeURIComponent(origin)}`);
     return response.data;
   }
 };

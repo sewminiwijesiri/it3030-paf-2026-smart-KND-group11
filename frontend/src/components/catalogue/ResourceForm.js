@@ -38,7 +38,14 @@ const ResourceForm = ({ resource, onSubmit, onCancel }) => {
         file: null
       });
 
-      if (resource.availabilityWindows) {
+      if (resource.availableDays && resource.availableDays.length > 0) {
+        const reverseMap = { 'MONDAY': 'Mon', 'TUESDAY': 'Tue', 'WEDNESDAY': 'Wed', 'THURSDAY': 'Thu', 'FRIDAY': 'Fri', 'SATURDAY': 'Sat', 'SUNDAY': 'Sun' };
+        const days = resource.availableDays.map(d => reverseMap[d]).filter(Boolean);
+        const startTime = resource.availableStartTime ? resource.availableStartTime.substring(0, 5) : '08:00';
+        const endTime = resource.availableEndTime ? resource.availableEndTime.substring(0, 5) : '17:00';
+        
+        setAvailabilityWindows([{ days, startTime, endTime }]);
+      } else if (resource.availabilityWindows) {
         const parsed = resource.availabilityWindows.map(window => {
           const parts = window.split(' ');
           if (parts.length < 2) return null;
@@ -111,9 +118,34 @@ const ResourceForm = ({ resource, onSubmit, onCancel }) => {
     }
 
     const formattedWindows = availabilityWindows.map(w => `${w.days.join(',')} ${w.startTime}-${w.endTime}`);
+    
+    const availableDaysMap = {
+        'Mon': 'MONDAY',
+        'Tue': 'TUESDAY',
+        'Wed': 'WEDNESDAY',
+        'Thu': 'THURSDAY',
+        'Fri': 'FRIDAY',
+        'Sat': 'SATURDAY',
+        'Sun': 'SUNDAY'
+    };
+    
+    let availableDays = [];
+    let availableStartTime = null;
+    let availableEndTime = null;
+    
+    if (availabilityWindows.length > 0) {
+        const primaryWindow = availabilityWindows[0];
+        availableDays = primaryWindow.days.map(d => availableDaysMap[d]).filter(Boolean);
+        availableStartTime = primaryWindow.startTime.length === 5 ? `${primaryWindow.startTime}:00` : primaryWindow.startTime;
+        availableEndTime = primaryWindow.endTime.length === 5 ? `${primaryWindow.endTime}:00` : primaryWindow.endTime;
+    }
+
     onSubmit({
       ...formData,
-      availabilityWindows: formattedWindows
+      availabilityWindows: formattedWindows,
+      availableDays,
+      availableStartTime,
+      availableEndTime
     });
   };
 

@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Base64;
 
 @Service
@@ -26,7 +28,7 @@ public class QRCodeService {
     @Value("${frontend.url:http://localhost:3000}")
     private String frontendUrl;
 
-    public String generateQRCodeBase64(String bookingId) {
+    public String generateQRCodeBase64(String bookingId, String origin) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Booking not found with id: " + bookingId));
 
@@ -34,7 +36,19 @@ public class QRCodeService {
             throw new IllegalStateException("QR Code can only be generated for APPROVED bookings.");
         }
 
-        String verificationUrl = frontendUrl + "/booking/verify/" + bookingId;
+        String baseUrl = (origin != null && !origin.trim().isEmpty()) ? origin : frontendUrl;
+        
+        // If the URL contains localhost, try to replace it with the actual machine IP for mobile scanning
+        if (baseUrl.contains("localhost")) {
+            try {
+                String ip = InetAddress.getLocalHost().getHostAddress();
+                baseUrl = baseUrl.replace("localhost", ip);
+            } catch (UnknownHostException e) {
+                // Ignore and stick to localhost
+            }
+        }
+        
+        String verificationUrl = baseUrl + "/booking/verify/" + bookingId;
 
         try {
             QRCodeWriter qrCodeWriter = new QRCodeWriter();

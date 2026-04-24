@@ -16,6 +16,58 @@ const BookingFormModal = ({ isOpen, onClose, onSubmit }) => {
     purpose: '',
     expectedAttendees: 1,
   });
+  const [error, setError] = useState('');
+  const [availabilityInfo, setAvailabilityInfo] = useState(null);
+  const [availabilityLoading, setAvailabilityLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchAvailability = async () => {
+      if (formData.resourceId && formData.bookingDate) {
+        setAvailabilityLoading(true);
+        try {
+          const dateStr = format(formData.bookingDate, 'yyyy-MM-dd');
+          const response = await axios.get(`http://localhost:8081/api/resources/${formData.resourceId}/availability?date=${dateStr}`, {
+            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+          });
+          setAvailabilityInfo(response.data);
+        } catch (err) {
+          console.error('Failed to load availability', err);
+          setAvailabilityInfo(null);
+        } finally {
+          setAvailabilityLoading(false);
+        }
+      } else {
+        setAvailabilityInfo(null);
+      }
+    };
+    if (isOpen) {
+      fetchAvailability();
+    }
+  }, [formData.resourceId, formData.bookingDate, isOpen]);
+
+  useEffect(() => {
+    if (availabilityInfo) {
+      if (!availabilityInfo.isAvailable) {
+        setError(availabilityInfo.reason || 'Resource not available on this day.');
+      } else if (availabilityInfo.availableStartTime && availabilityInfo.availableEndTime && formData.startTime && formData.endTime) {
+        const reqStart = formData.startTime.length === 5 ? `${formData.startTime}:00` : formData.startTime;
+        const reqEnd = formData.endTime.length === 5 ? `${formData.endTime}:00` : formData.endTime;
+        const availStart = availabilityInfo.availableStartTime;
+        const availEnd = availabilityInfo.availableEndTime;
+
+        if (reqStart < availStart || reqEnd > availEnd) {
+          const formatTime = (t) => t.substring(0, 5);
+          setError(`Resource only available from ${formatTime(availStart)} to ${formatTime(availEnd)} on selected days`);
+        } else {
+          setError('');
+        }
+      } else {
+        setError('');
+      }
+    } else {
+      setError('');
+    }
+  }, [availabilityInfo, formData.startTime, formData.endTime]);
 
   useEffect(() => {
     const fetchResources = async () => {
@@ -42,6 +94,8 @@ const BookingFormModal = ({ isOpen, onClose, onSubmit }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (error) return;
+
     const formattedData = {
       ...formData,
       bookingDate: format(formData.bookingDate, 'yyyy-MM-dd'),
@@ -149,6 +203,18 @@ const BookingFormModal = ({ isOpen, onClose, onSubmit }) => {
               className="w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
+          {availabilityInfo && availabilityInfo.isAvailable && availabilityInfo.availableStartTime && (
+            <div className="col-span-2 text-xs text-gray-500 italic mt-1">
+              Available: {availabilityInfo.availableStartTime.substring(0,5)} - {availabilityInfo.availableEndTime.substring(0,5)} on {availabilityInfo.availableDays}
+            </div>
+          )}
+
+          {error && (
+            <div className="text-red-500 text-sm font-medium p-3 bg-red-50 border border-red-200 rounded-md flex items-center gap-2">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              {error}
+            </div>
+          )}
 
           <div className="pt-4 flex justify-end gap-3">
             <button
@@ -160,9 +226,10 @@ const BookingFormModal = ({ isOpen, onClose, onSubmit }) => {
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-medium"
+              disabled={!!error || availabilityLoading}
+              className={`px-4 py-2 text-white rounded-md font-medium ${!!error || availabilityLoading ? 'bg-blue-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'}`}
             >
-              Submit Booking
+              {availabilityLoading ? 'Checking...' : 'Submit Booking'}
             </button>
           </div>
         </form>

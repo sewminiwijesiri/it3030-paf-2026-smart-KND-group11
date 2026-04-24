@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import java.time.LocalTime;
 import java.util.List;
 
 @Document(collection = "resources")
@@ -28,6 +29,10 @@ public class Resource {
     private String location;
 
     private List<String> availabilityWindows;
+    
+    private List<String> availableDays;
+    private LocalTime availableStartTime;
+    private LocalTime availableEndTime;
     
     private String imageUrl;
 
@@ -119,5 +124,29 @@ public class Resource {
 
     public void setStatus(ResourceStatus status) {
         this.status = status;
+    }
+
+    public List<String> getAvailableDays() {
+        return availableDays;
+    }
+
+    public void setAvailableDays(List<String> availableDays) {
+        this.availableDays = availableDays;
+    }
+
+    public LocalTime getAvailableStartTime() {
+        return availableStartTime;
+    }
+
+    public void setAvailableStartTime(LocalTime availableStartTime) {
+        this.availableStartTime = availableStartTime;
+    }
+
+    public LocalTime getAvailableEndTime() {
+        return availableEndTime;
+    }
+
+    public void setAvailableEndTime(LocalTime availableEndTime) {
+        this.availableEndTime = availableEndTime;
     }
 }

@@ -124,4 +124,52 @@ public class ResourceController {
         
         return ResponseEntity.ok(busySlots);
     }
+
+    // CHECK availability for a resource on a specific date
+    @GetMapping("/{id}/availability")
+    @PreAuthorize("hasAnyRole('ADMIN', 'TECHNICIAN', 'USER')")
+    public ResponseEntity<java.util.Map<String, Object>> checkAvailability(
+            @PathVariable("id") String resourceId,
+            @RequestParam @org.springframework.format.annotation.DateTimeFormat(iso = org.springframework.format.annotation.DateTimeFormat.ISO.DATE) java.time.LocalDate date) {
+        
+        Resource resource = resourceService.getResourceById(resourceId);
+        java.util.Map<String, Object> response = new java.util.HashMap<>();
+        
+        if (resource.getAvailableDays() == null || resource.getAvailableDays().isEmpty()) {
+            response.put("isAvailable", true);
+            response.put("availableStartTime", resource.getAvailableStartTime() != null ? resource.getAvailableStartTime().toString() : null);
+            response.put("availableEndTime", resource.getAvailableEndTime() != null ? resource.getAvailableEndTime().toString() : null);
+            return ResponseEntity.ok(response);
+        }
+        
+        String dayOfWeek = date.getDayOfWeek().name();
+        boolean dayAvailable = resource.getAvailableDays().stream()
+                .anyMatch(day -> day.equalsIgnoreCase(dayOfWeek) || day.regionMatches(true, 0, dayOfWeek, 0, 3));
+                
+        if (!dayAvailable) {
+            response.put("isAvailable", false);
+            response.put("reason", "Resource not available on " + dayOfWeek + ". Available days: " + String.join(", ", resource.getAvailableDays()));
+        } else {
+            response.put("isAvailable", true);
+            response.put("availableStartTime", resource.getAvailableStartTime() != null ? resource.getAvailableStartTime().toString() : null);
+            response.put("availableEndTime", resource.getAvailableEndTime() != null ? resource.getAvailableEndTime().toString() : null);
+            response.put("availableDays", String.join(", ", resource.getAvailableDays()));
+        }
+        
+        return ResponseEntity.ok(response);
+    }
+
+    // GET availability details for a resource
+    @GetMapping("/{id}/availability-details")
+    @PreAuthorize("hasAnyRole('ADMIN', 'TECHNICIAN', 'USER')")
+    public ResponseEntity<java.util.Map<String, Object>> getAvailabilityDetails(@PathVariable("id") String resourceId) {
+        Resource resource = resourceService.getResourceById(resourceId);
+        java.util.Map<String, Object> response = new java.util.HashMap<>();
+        
+        response.put("availableDays", resource.getAvailableDays());
+        response.put("availableStartTime", resource.getAvailableStartTime() != null ? resource.getAvailableStartTime().toString() : null);
+        response.put("availableEndTime", resource.getAvailableEndTime() != null ? resource.getAvailableEndTime().toString() : null);
+        
+        return ResponseEntity.ok(response);
+    }
 }
