@@ -5,6 +5,7 @@ import com.smartcampus.booking.dto.BookingResponseDTO;
 import com.smartcampus.booking.dto.BookingStatusUpdateDTO;
 import com.smartcampus.booking.enums.BookingStatus;
 import com.smartcampus.booking.service.BookingService;
+import com.smartcampus.booking.service.QRCodeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -22,6 +23,7 @@ import java.util.List;
 public class BookingController {
 
     private final BookingService bookingService;
+    private final QRCodeService qrCodeService;
 
     // Simulate extracting userId from context
     private String getCurrentUserId() {
@@ -71,5 +73,12 @@ public class BookingController {
         String userId = getCurrentUserId();
         bookingService.cancelBooking(id, userId);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}/qrcode")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public ResponseEntity<?> getQRCode(@PathVariable String id) {
+        String base64QRCode = qrCodeService.generateQRCodeBase64(id);
+        return ResponseEntity.ok(java.util.Map.of("qrCode", base64QRCode));
     }
 }

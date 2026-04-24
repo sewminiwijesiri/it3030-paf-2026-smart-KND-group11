@@ -44,6 +44,7 @@ public class SecurityConfig {
             )
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/auth/**", "/login/**", "/oauth2/**").permitAll() // Public
+                .requestMatchers("/api/public/**").permitAll() // Public Booking Verification
                 .requestMatchers("/admin/**").hasRole("ADMIN") // Admin only
                 .requestMatchers("/api/technician/**").hasRole("TECHNICIAN") // Technician only
                 .requestMatchers("/user/**").hasRole("USER") // User only

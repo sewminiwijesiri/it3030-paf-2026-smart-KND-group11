@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useBookings } from '../hooks/useBookings';
+import { bookingService } from '../services/bookingService';
 import BookingStatusBadge from '../components/Booking/BookingStatusBadge';
 import { BOOKING_STATUS } from '../utils/bookingConstants';
-import { Trash2, PlusCircle, AlertCircle, Calendar, Clock, MapPin, Users, Filter } from 'lucide-react';
+import { Trash2, PlusCircle, AlertCircle, Calendar, Clock, MapPin, Users, Filter, QrCode, X } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import AdminSidebar from '../components/AdminSidebar';
@@ -11,6 +12,9 @@ import TechnicianSidebar from '../components/TechnicianSidebar';
 const MyBookings = () => {
   const { bookings, loading, error, fetchMyBookings, cancelBooking, createBooking } = useBookings();
   const [filterStatus, setFilterStatus] = useState('');
+  const [qrModalOpen, setQrModalOpen] = useState(false);
+  const [currentQrCode, setCurrentQrCode] = useState(null);
+  const [qrLoading, setQrLoading] = useState(false);
 
   useEffect(() => {
     fetchMyBookings();
@@ -19,6 +23,19 @@ const MyBookings = () => {
   const handleCancelClick = async (id) => {
     if (window.confirm('Are you sure you want to cancel this booking?')) {
       await cancelBooking(id);
+    }
+  };
+
+  const handleGenerateQR = async (bookingId) => {
+    try {
+      setQrLoading(true);
+      setQrModalOpen(true);
+      const data = await bookingService.getQRCode(bookingId);
+      setCurrentQrCode(data.qrCode);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setQrLoading(false);
     }
   };
 
@@ -161,14 +178,22 @@ const MyBookings = () => {
                     </div>
 
                     {/* Actions */}
-                    <div className="w-full md:w-auto flex md:flex-col justify-end gap-3 shrink-0 pt-4 md:pt-0 border-t md:border-t-0 md:border-l border-slate-100 md:pl-6">
+                    <div className="w-full md:w-auto flex flex-col justify-end gap-3 shrink-0 pt-4 md:pt-0 border-t md:border-t-0 md:border-l border-slate-100 md:pl-6">
                       {booking.status === BOOKING_STATUS.APPROVED && (
-                        <button
-                          onClick={() => handleCancelClick(booking.id)}
-                          className="w-full md:w-auto px-4 py-3 bg-white border border-rose-200 text-rose-600 hover:bg-rose-50 hover:text-rose-700 rounded-xl text-[11px] font-black uppercase tracking-wider transition-colors flex items-center justify-center gap-2"
-                        >
-                          <Trash2 className="w-4 h-4" /> Cancel Booking
-                        </button>
+                        <>
+                          <button
+                            onClick={() => handleGenerateQR(booking.id)}
+                            className="w-full md:w-auto px-4 py-3 bg-indigo-50 border border-indigo-100 text-indigo-600 hover:bg-indigo-100 hover:text-indigo-700 rounded-xl text-[11px] font-black uppercase tracking-wider transition-colors flex items-center justify-center gap-2"
+                          >
+                            <QrCode className="w-4 h-4" /> QR Code
+                          </button>
+                          <button
+                            onClick={() => handleCancelClick(booking.id)}
+                            className="w-full md:w-auto px-4 py-3 bg-white border border-rose-200 text-rose-600 hover:bg-rose-50 hover:text-rose-700 rounded-xl text-[11px] font-black uppercase tracking-wider transition-colors flex items-center justify-center gap-2"
+                          >
+                            <Trash2 className="w-4 h-4" /> Cancel
+                          </button>
+                        </>
                       )}
                       {booking.status !== BOOKING_STATUS.APPROVED && (
                          <div className="w-full md:w-auto px-4 py-3 text-slate-300 text-[10px] font-black uppercase tracking-widest text-center flex items-center justify-center">
@@ -185,6 +210,37 @@ const MyBookings = () => {
           </div>
         </main>
       </div>
+
+      {/* QR Code Modal */}
+      {qrModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm animate-fade-in">
+          <div className="bg-white rounded-[2rem] p-8 max-w-sm w-full shadow-2xl relative">
+            <button 
+              onClick={() => { setQrModalOpen(false); setCurrentQrCode(null); }}
+              className="absolute top-6 right-6 text-slate-400 hover:text-slate-600 transition-colors"
+            >
+              <X className="w-6 h-6" />
+            </button>
+            <div className="text-center">
+              <h3 className="text-xl font-black text-slate-800 mb-2">Booking QR Code</h3>
+              <p className="text-sm font-medium text-slate-500 mb-6">Scan to verify this booking details.</p>
+              
+              <div className="bg-slate-50 p-6 rounded-3xl border border-slate-100 flex items-center justify-center min-h-[250px]">
+                {qrLoading ? (
+                  <div className="animate-spin rounded-full h-10 w-10 border-b-4 border-indigo-600"></div>
+                ) : currentQrCode ? (
+                  <img src={`data:image/png;base64,${currentQrCode}`} alt="Booking QR Code" className="w-48 h-48 rounded-xl shadow-sm" />
+                ) : (
+                  <div className="text-rose-500 text-sm font-bold flex items-center gap-2">
+                    <AlertCircle className="w-5 h-5"/> Failed to load QR Code
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };
