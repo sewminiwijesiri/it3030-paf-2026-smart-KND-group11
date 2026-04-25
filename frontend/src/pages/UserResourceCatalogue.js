@@ -9,6 +9,7 @@ import BookingFormModal from '../components/BookingFormModal';
 import { toast } from 'react-hot-toast';
 import Footer from '../components/Footer';
 import { resolveImageUrl } from '../utils/imageUtils';
+import { Search, MapPin, Users, Info, Calendar, Sparkles, Filter } from 'lucide-react';
 
 const UserResourceCatalogue = () => {
     const [resources, setResources] = useState([]);
@@ -56,8 +57,8 @@ const UserResourceCatalogue = () => {
 
     const getStatusStyles = (status) => {
         switch (status) {
-            case 'AVAILABLE': return 'bg-[#3f4175] text-white shadow-md border-transparent';
-            case 'BUSY': return 'bg-[#FFD166] text-slate-900 border-[#FFCC29] shadow-sm';
+            case 'AVAILABLE': return 'bg-emerald-500 text-white border-emerald-400';
+            case 'BUSY': return 'bg-rose-500 text-white border-rose-400';
             default: return 'bg-slate-200 text-slate-700 border-slate-300';
         }
     };
@@ -73,7 +74,7 @@ const UserResourceCatalogue = () => {
     };
 
     return (
-        <div className="min-h-screen bg-slate-50 flex flex-col font-sans relative">
+        <div className="min-h-screen bg-slate-50 flex flex-col selection:bg-[#FFD166] selection:text-slate-900">
             <Navbar />
             
             <div className="flex flex-1 pt-[72px] relative z-10 w-full overflow-hidden">
@@ -81,107 +82,127 @@ const UserResourceCatalogue = () => {
 
                 <main className="flex-1 lg:ml-64 h-[calc(100vh-72px)] overflow-y-auto scroll-smooth">
                     
-                    {/* Header Area styled like UserDashboard */}
-                    <div className="bg-white border-b border-slate-200 py-6">
-                        <div className="max-w-[1200px] mx-auto px-6 lg:px-10">
-                            <p className="text-[#3f4175] font-black text-[10px] uppercase tracking-[0.4em] mb-2 drop-shadow-sm flex items-center gap-2">
-                                <span className="w-1.5 h-1.5 rounded-full bg-[#FFD166]"></span>
-                                Campus Catalogue
-                            </p>
-                            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                    {/* Header Area */}
+                    <div className="bg-white border-b border-slate-200/60 py-10">
+                        <div className="max-w-[1200px] mx-auto px-6 lg:px-12">
+                            <div className="inline-flex items-center gap-2 bg-[#5B5FEF]/5 px-3 py-1 rounded-full mb-4">
+                                <Sparkles className="w-3 h-3 text-[#5B5FEF]" />
+                                <p className="text-[#5B5FEF] font-black text-[9px] uppercase tracking-[0.3em]">
+                                    Live Inventory
+                                </p>
+                            </div>
+                            
+                            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
                                 <div>
-                                    <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight leading-tight mb-1">
+                                    <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tighter leading-none mb-3">
                                         Resource Catalogue
                                     </h1>
-                                    <p className="text-slate-500 font-bold uppercase tracking-wider text-[11px]">Find and book campus facilities & technical assets.</p>
+                                    <p className="text-slate-400 font-medium text-sm">Discover and secure high-end campus facilities and specialized equipment.</p>
                                 </div>
-                                <div className="bg-slate-50 p-2 border border-slate-200 rounded shrink-0 shadow-sm flex items-center gap-4 px-4">
-                                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest pl-2">Total Items Found:</span>
-                                    <span className="bg-[#0F172A] text-white px-3 py-1 text-xs font-black">{resources.length}</span>
+                                <div className="flex items-center gap-4">
+                                    <div className="bg-slate-900 text-white p-6 rounded-[24px] shadow-2xl flex items-center gap-6 min-w-[200px]">
+                                        <div className="flex flex-col">
+                                            <span className="text-[10px] font-black text-white/40 uppercase tracking-widest mb-1">Total Assets</span>
+                                            <span className="text-3xl font-black">{resources.length}</span>
+                                        </div>
+                                        <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center">
+                                            <Filter className="w-5 h-5 text-[#FFD166]" />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div className="max-w-[1200px] mx-auto px-6 lg:px-10 py-6">
+                    <div className="max-w-[1200px] mx-auto px-6 lg:px-12 py-10">
                         
-                        {/* Filters Panel */}
-                        <div className="mb-6 animate-fade-in bg-white p-4 rounded border border-slate-200 shadow-sm">
+                        {/* Premium Filters Panel */}
+                        <div className="mb-12 animate-fade-in bg-white p-8 rounded-[32px] shadow-[0_20px_50px_-20px_rgba(0,0,0,0.05)] border border-slate-100">
+                            <div className="flex items-center gap-3 mb-6">
+                                <div className="w-1.5 h-6 bg-[#FFD166] rounded-full"></div>
+                                <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest">Filter Inventory</h3>
+                            </div>
                             <ResourceFilters filters={filters} setFilters={setFilters} />
                         </div>
 
-                        {/* Error State */}
-                        {error && (
-                            <div className="bg-white border-l-4 border-rose-500 text-rose-600 p-6 shadow-sm mb-10 font-bold">
-                                {error}
-                            </div>
-                        )}
-
                         {/* Catalogue Grid */}
                         {loading ? (
-                            <div className="flex flex-col items-center justify-center h-64 space-y-4">
-                                <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-[#0F172A]"></div>
-                                <p className="text-slate-500 font-black uppercase tracking-[0.2em] text-[10px]">Syncing Catalogue...</p>
+                            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10">
+                                {[1, 2, 3, 4, 5, 6].map(n => (
+                                    <div key={n} className="h-[500px] bg-slate-200/50 animate-pulse rounded-[40px]"></div>
+                                ))}
                             </div>
                         ) : resources.length === 0 ? (
-                            <div className="bg-white p-20 rounded border border-slate-200 text-center shadow-sm">
-                                <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6 border border-slate-200 text-[#FFD166]">
-                                    <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                            <div className="bg-white py-32 rounded-[48px] text-center shadow-xl border border-slate-100 px-10">
+                                <div className="w-24 h-24 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-8 border border-slate-100 text-slate-200">
+                                    <Search className="w-10 h-10" />
                                 </div>
-                                <h3 className="text-xl font-black text-slate-800 mb-2 uppercase tracking-wide">No Resources Found</h3>
-                                <p className="text-slate-400 text-sm font-semibold">Try adjusting your filters to see more results.</p>
+                                <h3 className="text-2xl font-black text-slate-800 mb-3 uppercase tracking-wide">No Assets Found</h3>
+                                <p className="text-slate-400 text-sm font-bold uppercase tracking-widest max-w-sm mx-auto opacity-70">
+                                    Our apologies, but no resources currently match your selected filters.
+                                </p>
                             </div>
                         ) : (
-                            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 mb-12">
-                                {resources.map((resource) => (
-                                    <div key={resource.id} className="group bg-white rounded border border-slate-200 transition-all duration-300 hover:shadow-xl hover:-translate-y-2 overflow-hidden flex flex-col justify-between">
-                                        <div className="relative h-48 w-full bg-slate-100 overflow-hidden">
-                                            {resource.imageUrl ? (
-                                                <img 
-                                                    src={resolveImageUrl(resource.imageUrl)} 
-                                                    alt={resource.name} 
-                                                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
-                                                />
-                                            ) : (
-                                                <div className="w-full h-full flex items-center justify-center text-slate-300">
-                                                    <svg className="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m4 0h1m-5 10h1m4 0h1m-5-4h1m4 0h1" />
-                                                    </svg>
+                            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10 mb-20">
+                                {resources.map((resource, i) => (
+                                    <div key={resource.id} className="group bg-white rounded-[40px] overflow-hidden shadow-[0_20px_50px_-20px_rgba(0,0,0,0.08)] hover:shadow-[0_40px_80px_-30px_rgba(0,0,0,0.12)] hover:-translate-y-4 transition-all duration-700 border border-slate-100 flex flex-col">
+                                        <div className="relative h-64 w-full bg-slate-100 overflow-hidden">
+                                            <img 
+                                                src={resolveImageUrl(resource.imageUrl)} 
+                                                alt={resource.name} 
+                                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[1.5s]" 
+                                            />
+                                            <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                                            
+                                            <div className="absolute top-6 right-6">
+                                                <span className={`px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest shadow-2xl backdrop-blur-xl border ${getStatusStyles(resource.status)}`}>
+                                                    {resource.status}
+                                                </span>
+                                            </div>
+
+                                            <div className="absolute bottom-6 left-6 flex items-center gap-2 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
+                                                <div className="bg-[#FFD166] text-slate-900 p-2 rounded-lg">
+                                                    <Info className="w-3 h-3" />
                                                 </div>
-                                            )}
-                                            {/* Type Badge Overlay */}
-                                            <span className="absolute top-4 right-4 bg-white/90 backdrop-blur shadow-sm border border-slate-200 px-3 py-1 rounded text-[9px] font-black text-slate-800 uppercase tracking-widest z-10 font-bold">
-                                                {resource.type.replace('_', ' ')}
-                                            </span>
+                                                <span className="text-white text-[10px] font-black uppercase tracking-widest">Active Status</span>
+                                            </div>
                                         </div>
 
-                                        <div className="p-6 flex-1 flex flex-col">
-                                            <div className="mb-4">
-                                                <h3 className="text-xl font-bold text-slate-800 leading-tight mb-2 min-h-[3rem] line-clamp-2">
+                                        <div className="p-10 flex-1 flex flex-col">
+                                            <div className="mb-6">
+                                                <div className="inline-block bg-slate-50 px-3 py-1 rounded-lg mb-4">
+                                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">{resource.type.replace('_', ' ')}</p>
+                                                </div>
+                                                <h3 className="text-2xl font-black text-slate-900 mb-3 leading-tight group-hover:text-[#5B5FEF] transition-colors line-clamp-2">
                                                     {resource.name}
                                                 </h3>
-                                                <p className="text-[10px] font-black text-slate-400 flex items-center gap-2 uppercase tracking-widest">
-                                                    <svg className="w-4 h-4 text-[#FFD166]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                                                    {resource.location}
-                                                </p>
-                                            </div>
-
-                                            <div className="flex items-center justify-between mb-6 p-3 bg-slate-50 border border-slate-100 rounded">
-                                                <div className="flex flex-col">
-                                                    <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Capacity</span>
-                                                    <span className="text-sm font-black text-slate-800">{resource.capacity || 'N/A'}</span>
-                                                </div>
-                                                <div className={`px-2.5 py-1 text-[8px] font-black uppercase tracking-widest border rounded shadow-sm ${getStatusStyles(resource.status)}`}>
-                                                    {resource.status}
+                                                <div className="flex items-center gap-2 text-slate-400">
+                                                    <MapPin className="w-4 h-4 text-[#FFD166]" />
+                                                    <span className="text-[11px] font-bold uppercase tracking-widest">{resource.location}</span>
                                                 </div>
                                             </div>
 
-<button 
-  onClick={() => handleBookClick(resource)}
-  className="w-full py-4 bg-[#FFD166] text-slate-900 font-bold rounded-full text-[11px] uppercase tracking-widest shadow-lg shadow-[#FFD166]/20 hover:scale-105 hover:bg-[#FFCC29] transition-transform active:scale-95 mt-auto"
->
-  Book This Slot
-</button>
+                                            <div className="grid grid-cols-2 gap-4 mb-8">
+                                                <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                                                    <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest block mb-1">Capacity</span>
+                                                    <div className="flex items-center gap-2">
+                                                        <Users className="w-3 h-3 text-[#5B5FEF]" />
+                                                        <span className="text-xs font-black text-slate-800">{resource.capacity || '—'}</span>
+                                                    </div>
+                                                </div>
+                                                <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                                                    <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest block mb-1">Accessibility</span>
+                                                    <span className="text-xs font-black text-slate-800 uppercase">Standard</span>
+                                                </div>
+                                            </div>
+
+                                            <button 
+                                                onClick={() => handleBookClick(resource)}
+                                                className="w-full py-5 bg-slate-900 text-white font-black rounded-2xl text-[11px] uppercase tracking-[0.2em] shadow-xl shadow-slate-900/10 hover:bg-[#FFD166] hover:text-slate-900 hover:scale-[1.02] transition-all active:scale-95 flex items-center justify-center gap-3 mt-auto group/btn"
+                                            >
+                                                <Calendar className="w-4 h-4 group-hover/btn:rotate-12 transition-transform" /> 
+                                                Secure Slot
+                                            </button>
                                         </div>
                                     </div>
                                 ))}

@@ -53,7 +53,7 @@ public class ResourceController {
 
     // GET all resources OR Filtered resources
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'TECHNICIAN', 'USER')")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<List<Resource>> getAllResources(
             @RequestParam(required = false) ResourceType type,
             @RequestParam(required = false) Integer minCapacity,
@@ -74,7 +74,7 @@ public class ResourceController {
 
     // GET resource by ID
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'TECHNICIAN', 'USER')")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<Resource> getResourceById(@PathVariable String id) {
         Resource resource = resourceService.getResourceById(id);
         return ResponseEntity.ok(resource);
