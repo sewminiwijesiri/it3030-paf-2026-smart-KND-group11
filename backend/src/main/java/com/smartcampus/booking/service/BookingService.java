@@ -183,6 +183,12 @@ public class BookingService {
     private BookingResponseDTO mapToDTO(Booking booking) {
         BookingResponseDTO dto = new BookingResponseDTO();
         BeanUtils.copyProperties(booking, dto);
+        
+        // Fetch resource name
+        resourceRepository.findById(booking.getResourceId()).ifPresent(res -> {
+            dto.setResourceName(res.getName());
+        });
+        
         return dto;
     }
 }

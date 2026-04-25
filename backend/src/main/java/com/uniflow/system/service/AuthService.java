@@ -2,6 +2,7 @@ package com.uniflow.system.service;
 
 import com.uniflow.system.model.User;
 import com.uniflow.system.repository.UserRepository;
+import com.smartcampus.notification.service.NotificationService;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
 
@@ -9,13 +10,29 @@ import java.util.Optional;
 public class AuthService {
 
     private final UserRepository userRepository;
+    private final NotificationService notificationService;
 
-    public AuthService(UserRepository userRepository) {
+    public AuthService(UserRepository userRepository, NotificationService notificationService) {
         this.userRepository = userRepository;
+        this.notificationService = notificationService;
     }
 
     public User register(User user) {
-        return userRepository.save(user);
+        User savedUser = userRepository.save(user);
+        
+        // Notify Admins
+        try {
+            notificationService.sendAdminNotification(
+                "New User Registered",
+                "A new member has joined: " + user.getName() + " (" + user.getEmail() + ")",
+                "USER_REGISTRATION",
+                "/admin/users"
+            );
+        } catch (Exception e) {
+            System.err.println("Failed to send registration notification: " + e.getMessage());
+        }
+        
+        return savedUser;
     }
 
     public Optional<User> login(String email, String password) {

@@ -56,7 +56,7 @@ const Register = () => {
                 {/* Premium Dark Overlay */}
                 <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-[2px]"></div>
                 
-                <div className="bg-white rounded-[32px] w-full max-w-[380px] p-6 z-[1] shadow-2xl relative border border-white/20">
+                <div className="bg-white rounded-[24px] w-full max-w-[340px] p-6 z-[1] shadow-2xl relative border border-white/20">
                     <div className="text-center mb-4">
                         <img src={logoIcon} alt="UniFlow Logo" className="w-[40px] h-auto mx-auto mb-2" />
                         <h2 className="text-lg font-black mb-0.5 tracking-tight text-slate-900">Join UniFlow</h2>
