@@ -55,7 +55,7 @@ const Login = () => {
         <div className="min-h-screen flex flex-col bg-slate-900">
             <Navbar />
             <main 
-                className="flex-1 flex items-center justify-center p-5 relative overflow-hidden bg-cover bg-center min-h-[90vh]"
+                className="flex-1 flex items-center justify-center p-5 pt-[72px] relative overflow-hidden bg-cover bg-center min-h-[90vh]"
                 style={{ backgroundImage: `url(${heroBg})` }}
             >
                 {/* Premium Dark Overlay */}

@@ -98,9 +98,9 @@ const MyTickets = () => {
 
             <Navbar />
 
-            <div className="flex flex-1 relative z-10 w-full overflow-hidden">
+            <div className="flex flex-1 pt-[72px] relative z-10 w-full overflow-hidden">
                 <Sidebar />
-                <main className="flex-1 lg:ml-72 h-[calc(100vh-72px)] overflow-y-auto scroll-smooth">
+                <main className="flex-1 lg:ml-64 h-[calc(100vh-72px)] overflow-y-auto scroll-smooth">
 
                     {/* Glass Header */}
                     <div className="bg-white/70 backdrop-blur-md border-b border-slate-200/60 sticky top-0 z-30">

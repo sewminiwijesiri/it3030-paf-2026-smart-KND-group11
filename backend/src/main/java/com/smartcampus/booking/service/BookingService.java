@@ -100,6 +100,32 @@ public class BookingService {
         booking.setReason(statusUpdate.getReason());
 
         Booking updatedBooking = bookingRepository.save(booking);
+
+        // Send real-time notification to user
+        String status = updatedBooking.getStatus().toString();
+        String message = "Your booking for resource ID " + updatedBooking.getResourceId() + " has been " + status.toLowerCase();
+        if (updatedBooking.getReason() != null && !updatedBooking.getReason().isEmpty()) {
+            message += ". Reason: " + updatedBooking.getReason();
+        }
+
+        System.out.println("Sending notification to user: " + updatedBooking.getUserId() + " with status: " + status);
+        
+        notificationService.sendUserNotification(
+            updatedBooking.getUserId(),
+            "Booking Status Updated",
+            message,
+            "BOOKING_STATUS_UPDATED",
+            "/my-bookings"
+        );
+
+        // Also notify admins (for verification and tracking)
+        notificationService.sendAdminNotification(
+            "Booking Updated",
+            "Booking #" + updatedBooking.getId() + " has been " + status.toLowerCase() + " for user " + updatedBooking.getUserId(),
+            "BOOKING_UPDATED",
+            "/admin-bookings"
+        );
+
         return mapToDTO(updatedBooking);
     }
 
@@ -113,7 +139,15 @@ public class BookingService {
         }
         
         booking.setStatus(BookingStatus.CANCELLED);
-        bookingRepository.save(booking);
+        Booking savedBooking = bookingRepository.save(booking);
+
+        // Send real-time notification to admin
+        notificationService.sendAdminNotification(
+            "Booking Cancelled",
+            "Booking #" + id + " for resource ID " + savedBooking.getResourceId() + " has been cancelled by user " + userId,
+            "BOOKING_CANCELLED",
+            "/admin-bookings"
+        );
     }
 
     public boolean hasConflict(String resourceId, LocalDate date, java.time.LocalTime startTime, java.time.LocalTime endTime) {

@@ -23,6 +23,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import MyBookings from './pages/MyBookings';
 import AdminBookings from './pages/AdminBookings';
 import VerifyBooking from './pages/VerifyBooking';
+import Notifications from './pages/Notifications';
 import { Toaster } from 'react-hot-toast';
 import NotificationListener from './components/NotificationListener';
 import { NotificationProvider } from './context/NotificationContext';
@@ -106,6 +107,10 @@ function App() {
             element={<ProtectedRoute allowedRoles={['ADMIN']}><AdminTest /></ProtectedRoute>}
           />
 
+          <Route
+            path="/notifications"
+            element={<ProtectedRoute allowedRoles={['USER', 'ADMIN', 'TECHNICIAN']}><Notifications /></ProtectedRoute>}
+          />
           <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
           <Route path="/access-denied" element={<AccessDenied />} />
           

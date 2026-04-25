@@ -22,8 +22,8 @@ const Navbar = () => {
   };
 
   return (
-    <div className={isHome ? "absolute top-0 left-0 right-0 z-[1000] bg-transparent pt-2" : "sticky top-0 z-[1000] bg-[#0F172A] border-b border-white/5 shadow-md"}>
-      <nav className="container mx-auto px-4 md:px-8 flex justify-between items-center py-4">
+    <div className={`fixed top-0 left-0 right-0 h-[72px] z-[1000] transition-all duration-500 ${isHome ? "bg-slate-900/80 backdrop-blur-md shadow-2xl border-b border-white/5" : "bg-[#0F172A]/90 backdrop-blur-xl border-b border-white/5 shadow-md"}`}>
+      <nav className="container mx-auto px-4 md:px-8 h-full flex justify-between items-center">
         {/* Left: Logo */}
         <div className="flex items-center flex-shrink-0">
           <Link to="/" className="flex items-center gap-3 no-underline group">

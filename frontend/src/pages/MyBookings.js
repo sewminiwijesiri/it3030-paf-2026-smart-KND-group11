@@ -57,10 +57,10 @@ const MyBookings = () => {
     <div className="min-h-screen bg-[#f8fafc] flex flex-col font-sans relative overflow-hidden">
       <Navbar />
       
-      <div className="flex flex-1">
+      <div className="flex flex-1 pt-[72px]">
         {renderSidebar()}
 
-        <main className={`flex-1 ${role === 'USER' ? 'lg:ml-64' : 'lg:ml-72'} p-6 md:p-8 transition-all duration-300`}>
+        <main className={`flex-1 lg:ml-64 p-6 md:p-8 transition-all duration-300`}>
           <div className="max-w-5xl mx-auto">
             
             {/* Header Section */}

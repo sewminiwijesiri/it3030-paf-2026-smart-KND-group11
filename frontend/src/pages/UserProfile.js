@@ -117,10 +117,10 @@ const UserProfile = () => {
         <div className="min-h-screen bg-slate-50 flex flex-col font-sans relative">
             <Navbar />
 
-            <div className="flex flex-1 relative z-10 w-full overflow-hidden">
+            <div className="flex flex-1 pt-[72px] relative z-10 w-full overflow-hidden">
                 {renderSidebar()}
 
-<main className={`flex-1 ${userData.role === 'USER' ? 'lg:ml-64' : 'lg:ml-72'} h-[calc(100vh-72px)] overflow-y-auto scroll-smooth`}>
+<main className={`flex-1 lg:ml-64 h-[calc(100vh-72px)] overflow-y-auto scroll-smooth`}>
 
   {/* Header Area styled like Dashboard */}
   <div className="bg-white border-b border-slate-200 py-6">
