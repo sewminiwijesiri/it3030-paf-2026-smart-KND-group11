@@ -16,6 +16,7 @@ import TicketSubmission from './pages/TicketSubmission';
 import MyTickets from './pages/MyTickets';
 import TicketDetails from './pages/TicketDetails';
 import AdminMaintenance from './pages/AdminMaintenance';
+import AdminLogs from './pages/AdminLogs';
 import AdminTest from './pages/AdminTest';
 import OAuth2RedirectHandler from './pages/OAuth2RedirectHandler';
 import AccessDenied from './pages/AccessDenied';
@@ -56,6 +57,10 @@ function App() {
           <Route
             path="/admin/maintenance"
             element={<ProtectedRoute allowedRoles={['ADMIN']}><AdminMaintenance /></ProtectedRoute>}
+          />
+          <Route
+            path="/admin/logs"
+            element={<ProtectedRoute allowedRoles={['ADMIN']}><AdminLogs /></ProtectedRoute>}
           />
           <Route
             path="/user-dashboard"
