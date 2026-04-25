@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { Link } from 'react-router-dom';
-import { ArrowRight, CheckCircle, Zap, Users, MapPin, Calendar, Layout } from 'lucide-react';
+import { ArrowRight, CheckCircle, Zap } from 'lucide-react';
 import heroBg from '../assets/hero-bg.png';
 import showcaseImg from '../assets/campus-showcase.png';
 import api from '../utils/api';
@@ -25,6 +25,8 @@ const Home = () => {
         fetchResources();
     }, []);
 
+    // Local assets for primary sections
+    const aboutImg = showcaseImg;
     const fallbackImgs = [
         "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=600",
         "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=600",
@@ -32,69 +34,58 @@ const Home = () => {
     ];
 
     return (
-        <div className="min-h-screen bg-slate-50 selection:bg-[#FFD166] selection:text-slate-900">
+        <div className="min-h-screen bg-white">
             <Navbar />
             
             <main>
-                {/* Immersive Hero Section */}
+                {/* Hero Section (Unchanged) */}
                 <section 
                     id="hero"
-                    className="relative min-h-[95vh] flex items-center justify-center bg-cover bg-center overflow-hidden"
+                    className="relative min-h-screen flex items-center justify-center bg-cover bg-center overflow-hidden"
                     style={{ backgroundImage: `url(${heroBg})` }}
                 >
-                    <div className="absolute inset-0 bg-gradient-to-b from-slate-900/80 via-slate-900/60 to-slate-900/90 backdrop-blur-[3px]"></div>
+                    <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-[2px]"></div>
                     
-                    {/* Animated Glow Elements */}
-                    <div className="absolute top-1/4 -left-20 w-96 h-96 bg-[#FFD166]/20 rounded-full blur-[120px] animate-pulse"></div>
-                    <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-[#5B5FEF]/20 rounded-full blur-[120px] animate-pulse transition-all delay-1000"></div>
-
-                    <div className="container mx-auto px-6 relative z-10 text-center">
-                        <div className="max-w-[1000px] mx-auto">
-                            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-xl border border-white/20 px-4 py-2 rounded-full mb-8 animate-fade-in">
-                                <span className="w-2 h-2 bg-[#FFD166] rounded-full animate-ping"></span>
-                                <p className="text-white font-black text-[10px] uppercase tracking-[0.3em]">
-                                    Unified Campus Infrastructure v2.0
-                                </p>
-                            </div>
-                            
-                            <h1 className="text-6xl md:text-9xl font-black text-white mb-8 leading-[0.9] tracking-tighter drop-shadow-2xl">
-                                REIMAGINE <br/> 
-                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FFD166] via-white to-white/70">
-                                    EFFICIENCY.
+                    <div className="container mx-auto px-4 md:px-8 relative z-10 text-center">
+                        <div className="animate-up max-w-[850px] mx-auto">
+                            <p className="text-[#FFD166] font-black text-xs uppercase tracking-[0.4em] mb-6 drop-shadow-md">
+                                Next-Generation Campus Management
+                            </p>
+                            <h1 className="text-5xl md:text-8xl font-black text-white mb-8 leading-[1.05] tracking-tighter">
+                                Master Your Future <br/> 
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-white/60">
+                                    With UniFlow
                                 </span>
                             </h1>
-                            
-                            <p className="text-slate-300 text-lg md:text-xl font-medium max-w-[650px] mx-auto mb-12 leading-relaxed opacity-90">
-                                The centralized ecosystem for booking, maintenance, and asset intelligence. Streamline your academic journey with UniFlow's precision management.
-                            </p>
-
-                            <div className="flex flex-col sm:flex-row gap-6 justify-center mt-4">
-                                <Link to="/register" className="group bg-[#FFD166] text-slate-900 px-12 py-5 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-white hover:shadow-[0_0_50px_-12px_rgba(255,209,102,0.6)] transition-all flex items-center justify-center gap-3">
-                                    Get Started <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                            <div className="flex flex-col sm:flex-row gap-5 justify-center mt-12">
+                                <Link to="/register" className="bg-[#FFD166] text-slate-900 px-10 py-5 rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-white hover:scale-105 transition-all shadow-2xl shadow-[#FFD166]/20">
+                                    Start Learning
                                 </Link>
-                                <a href="#catalogue" className="bg-white/5 backdrop-blur-md border border-white/20 text-white px-12 py-5 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-white/10 transition-all">
-                                    View Catalogue
-                                </a>
+                                <button className="bg-white/10 backdrop-blur-md border border-white/20 text-white px-10 py-5 rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-white/20 transition-all">
+                                    Learn More
+                                </button>
                             </div>
                         </div>
                     </div>
 
-                    {/* Features Quick-Access Bar */}
-                    <div className="absolute bottom-12 left-0 right-0 z-20">
-                        <div className="container mx-auto px-6">
-                            <div className="bg-slate-900/40 backdrop-blur-3xl border border-white/10 rounded-[32px] p-8 md:p-12 shadow-3xl flex flex-col md:flex-row gap-12 justify-between">
+                    {/* Dark Feature Bar Overlay */}
+                    <div id="features" className="absolute bottom-0 left-0 right-0 bg-[#0F172A] py-12 z-20 border-t border-white/5">
+                        <div className="container mx-auto px-4 md:px-8">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
                                 {[
-                                    { title: 'Smart Booking', icon: Layout, desc: 'Real-time availability with instant conflict resolution.' },
-                                    { title: 'Maintenance 24/7', icon: Zap, desc: 'Integrated ticketing for seamless campus upkeep.' },
-                                    { title: 'Asset Intelligence', icon: CheckCircle, desc: 'Detailed usage analytics and role-based controls.' },
+                                    { title: 'SMART BOOKING', icon: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z', desc: 'Reserved seating and equipment at your fingertips.' },
+                                    { title: 'MAINTENANCE HUB', icon: 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z', desc: 'Instant reporting and resolution of campus issues.' },
+                                    { title: 'ROLE CONTROL', icon: 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z', desc: 'Secure, role-based access for students and staff.' },
                                 ].map((feature, i) => (
-                                    <div key={i} className="flex gap-6 group flex-1">
-                                        <div className="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center shrink-0 border border-white/10 group-hover:bg-[#FFD166] group-hover:border-transparent transition-all duration-500 shadow-inner">
-                                            <feature.icon className="w-6 h-6 text-[#FFD166] group-hover:text-slate-900" />
+                                    <div key={i} className="flex gap-6 group">
+                                        <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center shrink-0 border border-white/10 group-hover:bg-[#FFD166] group-hover:border-transparent transition-all">
+                                            <svg className="w-6 h-6 text-[#FFD166] group-hover:text-slate-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={feature.icon} />
+                                            </svg>
                                         </div>
                                         <div>
-                                            <h3 className="text-white font-black text-sm uppercase tracking-widest mb-2">{feature.title}</h3>
-                                            <p className="text-slate-400 text-xs font-medium leading-relaxed opacity-70 tracking-tight">{feature.desc}</p>
+                                            <h3 className="text-white font-black text-xs uppercase tracking-widest mb-1">{feature.title}</h3>
+                                            <p className="text-slate-400 text-[11px] font-medium leading-relaxed uppercase opacity-70 tracking-tight">{feature.desc}</p>
                                         </div>
                                     </div>
                                 ))}
@@ -103,147 +94,128 @@ const Home = () => {
                     </div>
                 </section>
 
-                {/* Modern About Section */}
-                <section id="about-us" className="py-32 bg-white relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-1/2 h-full bg-slate-50/50 skew-x-[-12deg] translate-x-1/4"></div>
-                    <div className="container mx-auto px-6 relative z-10">
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-                            <div className="max-w-[550px]">
-                                <div className="w-12 h-1 bg-[#FFD166] mb-8"></div>
-                                <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-8 tracking-tighter leading-tight">
-                                    Pioneering Digital <br/> Campus Operations
+                {/* About Section (Unchanged) */}
+                <section id="about-us" className="py-24 bg-white">
+                    <div className="container mx-auto px-4 md:px-8">
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 md:gap-24 items-center">
+                            <div className="animate-up max-w-[550px]">
+                                <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-8 tracking-tight">
+                                    UniFlow Platform
                                 </h2>
-                                <p className="text-lg text-slate-500 mb-6 leading-relaxed font-medium">
-                                    UniFlow isn't just a management tool—it's the backbone of a smarter academic environment. We bridge the gap between complex infrastructure and user convenience.
+                                <p className="text-[15px] text-slate-400 mb-6 leading-relaxed">
+                                    For years, UniFlow has empowered campuses with digital transformation, managing more than 1,700 resources and saving thousands of hours in administrative effort across higher education institutions.
                                 </p>
-                                <div className="space-y-4 mb-10">
-                                    {['Institutional-grade security', 'Cloud-sync technology', 'Automated reporting'].map((item, i) => (
-                                        <div key={i} className="flex items-center gap-3">
-                                            <div className="w-5 h-5 rounded-full bg-[#5B5FEF]/10 flex items-center justify-center">
-                                                <CheckCircle className="w-3 h-3 text-[#5B5FEF]" />
-                                            </div>
-                                            <span className="text-slate-700 font-bold text-sm tracking-tight">{item}</span>
-                                        </div>
-                                    ))}
-                                </div>
-                                <div className="pt-6">
-                                    <p className="text-4xl font-serif italic text-slate-400 opacity-60">The UniFlow Vision</p>
+                                <p className="text-[15px] text-slate-400 mb-10 leading-relaxed">
+                                    We are home to an intricate network of students, technicians, and expert faculty representing an interconnected community. We are proud of our seamless operational ethos, and the way our platform supports academic achievement every single day.
+                                </p>
+                                <div className="pt-2">
+                                    <span 
+                                        className="text-4xl text-slate-800" 
+                                        style={{ fontFamily: '"Brush Script MT", "Lucida Handwriting", cursive' }}
+                                    >
+                                        The UniFlow Team
+                                    </span>
                                 </div>
                             </div>
-                            <div className="relative group">
-                                <div className="absolute -inset-4 bg-gradient-to-tr from-[#FFD166]/20 to-transparent rounded-[40px] -z-10 group-hover:scale-105 transition-transform duration-700"></div>
+                            <div className="relative">
                                 <img 
-                                    src={showcaseImg} 
+                                    src={aboutImg} 
                                     alt="Academic Excellence" 
-                                    className="w-full h-[600px] object-cover rounded-[32px] shadow-2xl border-4 border-white grayscale-[0.2] group-hover:grayscale-0 transition-all duration-700" 
+                                    className="relative z-10 w-full object-cover shadow-md h-[400px] md:h-[500px]" 
                                 />
-                                <div className="absolute bottom-8 left-8 right-8 bg-slate-900/90 backdrop-blur-xl p-8 rounded-3xl border border-white/10 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
-                                    <p className="text-white font-bold text-sm leading-relaxed italic">
-                                        "Transforming raw campus logistics into streamlined academic experiences for over 15,000 users worldwide."
-                                    </p>
-                                </div>
                             </div>
                         </div>
                     </div>
                 </section>
 
-                {/* High-Impact Statistics */}
-                <section className="bg-slate-900 py-32 relative overflow-hidden">
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(91,95,239,0.1),transparent)]"></div>
-                    <div className="container mx-auto px-6 relative z-10">
-                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-12">
+                {/* Statistics Bar (Unchanged) */}
+                <section className="bg-[#FFCC29] py-20 relative overflow-hidden">
+                    <div className="container mx-auto px-4 md:px-8 relative z-10">
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
                             {[
-                                { val: '1.7K+', label: 'Managed Assets', color: '#FFD166' },
-                                { val: '24/7', label: 'Availability', color: '#5B5FEF' },
-                                { val: '98%', label: 'Uptime Score', color: '#10B981' },
-                                { val: '0.5s', label: 'Response Time', color: '#F43F5E' },
+                                { val: '5500', label: 'People Active' },
+                                { val: '280+', label: 'Managed Assets' },
+                                { val: '12+', label: 'Years Experience' },
+                                { val: '100%', label: 'Efficiency Goal' },
                             ].map((stat, i) => (
-                                <div key={i} className="text-center group">
-                                    <h3 className="text-5xl md:text-7xl font-black mb-4 tracking-tighter" style={{ color: stat.color }}>{stat.val}</h3>
-                                    <div className="w-8 h-1 mx-auto mb-4 bg-white/10 group-hover:w-16 transition-all duration-500"></div>
-                                    <p className="text-slate-400 font-black text-xs uppercase tracking-[0.3em] opacity-60">{stat.label}</p>
+                                <div key={i} className="text-center">
+                                    <h3 className="text-4xl md:text-6xl font-black text-slate-900 mb-2 tracking-tighter italic">{stat.val}</h3>
+                                    <p className="text-slate-800 font-black text-[10px] uppercase tracking-widest opacity-70">{stat.label}</p>
                                 </div>
                             ))}
                         </div>
                     </div>
                 </section>
 
-                {/* Premium Resource Catalogue Highlights */}
-                <section id="catalogue" className="py-32 bg-slate-50">
-                    <div className="container mx-auto px-6">
-                        <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
-                            <div className="max-w-[600px]">
-                                <p className="text-[#5B5FEF] font-black text-xs uppercase tracking-[0.4em] mb-4">The Collection</p>
-                                <h2 className="text-5xl md:text-6xl font-black text-slate-900 tracking-tighter">Explore Premier Resources</h2>
-                            </div>
-                            <Link to="/book" className="group flex items-center gap-3 text-slate-900 font-black text-sm uppercase tracking-widest hover:text-[#5B5FEF] transition-colors">
-                                View Full Directory <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
-                            </Link>
+                {/* 4. RESOURCE HIGHLIGHTS - Dynamic Cards */}
+                <section id="catalogue" className="py-24 bg-white border-t border-slate-50">
+                    <div className="container mx-auto px-4 md:px-8">
+                        <div className="text-center mb-16">
+                            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">Explore Campus Resources</h2>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                             {loading ? (
                                 [1, 2, 3].map(n => (
-                                    <div key={n} className="h-[550px] bg-slate-200/50 animate-pulse rounded-[40px]"></div>
+                                    <div key={n} className="h-[450px] bg-slate-50 animate-pulse rounded-2xl"></div>
                                 ))
                             ) : (
                                 resources.map((res, i) => (
-                                    <div key={res.id} className="group bg-white rounded-[40px] overflow-hidden shadow-[0_20px_50px_-20px_rgba(0,0,0,0.1)] hover:shadow-[0_40px_80px_-30px_rgba(0,0,0,0.15)] hover:-translate-y-4 transition-all duration-700 border border-slate-100 flex flex-col h-full">
-                                        <div className="relative h-[300px] overflow-hidden">
+                                    <div key={res.id} className="bg-white rounded-[40px] overflow-hidden group shadow-2xl shadow-slate-900/5 hover:shadow-slate-900/15 transition-all duration-500 border border-slate-100 hover:-translate-y-2">
+                                        <div className="h-72 relative overflow-hidden">
                                             <img 
-                                                src={res.imageUrl || fallbackImgs[i % 3]} 
+                                                src={res.imageUrl || "https://images.unsplash.com/photo-1497366216548-37526070297c"} 
                                                 alt={res.name} 
-                                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[1.5s]" 
+                                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" 
                                             />
-                                            <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                                            {/* Gradient Overlay */}
+                                            <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                                             
-                                            <div className="absolute top-6 left-6">
-                                                <div className="bg-white/90 backdrop-blur-md px-4 py-2 rounded-2xl border border-white/20 shadow-xl">
-                                                    <p className="text-slate-900 font-black text-[10px] uppercase tracking-widest flex items-center gap-2">
-                                                        <Users className="w-3 h-3 text-[#5B5FEF]" /> {res.capacity} Seats
-                                                    </p>
-                                                </div>
-                                            </div>
-
                                             <div className="absolute top-6 right-6">
-                                                <span className={`px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest shadow-2xl backdrop-blur-xl border ${
-                                                    res.status === 'AVAILABLE' 
-                                                        ? 'bg-emerald-500 text-white border-emerald-400' 
-                                                        : 'bg-rose-500 text-white border-rose-400'
-                                                }`}>
-                                                    {res.status}
+                                                <span className="bg-slate-900 text-[#FFD166] px-5 py-2.5 rounded-full text-[9px] font-black uppercase tracking-[0.2em] shadow-2xl backdrop-blur-sm border border-white/10">
+                                                    {res.type.replace('_', ' ')}
                                                 </span>
                                             </div>
-
-                                            <div className="absolute bottom-6 left-6 right-6 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
-                                                <p className="text-white/90 text-xs font-bold uppercase tracking-widest flex items-center gap-2">
-                                                    <MapPin className="w-4 h-4 text-[#FFD166]" /> {res.location}
-                                                </p>
-                                            </div>
                                         </div>
-
-                                        <div className="p-10 flex-1 flex flex-col">
-                                            <div className="mb-auto">
-                                                <div className="inline-block bg-slate-50 px-3 py-1 rounded-lg mb-4">
-                                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">{res.type.replace('_', ' ')}</p>
-                                                </div>
-                                                <h3 className="text-2xl font-black text-slate-900 mb-2 leading-tight group-hover:text-[#5B5FEF] transition-colors">{res.name}</h3>
+                                        <div className="p-10">
+                                            <div className="mb-4">
+                                                <p className="text-[10px] font-black text-[#5B5FEF] uppercase tracking-[0.2em]">Campus Asset</p>
                                             </div>
                                             
-                                            <div className="pt-8 mt-8 border-t border-slate-50 flex justify-between items-center">
-                                                <div className="flex flex-col">
-                                                    <span className="text-[9px] font-black text-slate-300 uppercase tracking-widest mb-1">Status</span>
-                                                    <span className="text-[11px] font-black text-slate-900 uppercase tracking-widest">Active Ready</span>
+                                            <h3 className="text-2xl font-black text-slate-900 mb-2 tracking-tight leading-tight group-hover:text-[#5B5FEF] transition-colors">{res.name}</h3>
+                                            
+                                            <div className="flex items-center gap-2 mb-6">
+                                                <div className="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-[10px]">📍</div>
+                                                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-widest">{res.location}</span>
+                                            </div>
+
+                                            <div className="flex items-center justify-between pt-6 border-t border-slate-100">
+                                                <div className="space-y-1">
+                                                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Availability</p>
+                                                    <div className="flex items-center gap-2">
+                                                        <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                                                        <span className="text-[11px] font-black text-slate-900 uppercase tracking-widest">{res.capacity} Seats</span>
+                                                    </div>
                                                 </div>
+
                                                 <button 
                                                     onClick={() => {
                                                         const token = localStorage.getItem('token');
-                                                        const dest = '/book';
-                                                        window.location.href = token ? dest : `/login?redirect=${dest}`;
+                                                        if (token) {
+                                                            window.location.href = '/book';
+                                                        } else {
+                                                            window.location.href = '/login?redirect=/book';
+                                                        }
                                                     }}
-                                                    className="bg-slate-900 text-white w-14 h-14 rounded-2xl flex items-center justify-center hover:bg-[#FFD166] hover:text-slate-900 transition-all hover:scale-110 shadow-xl shadow-slate-900/10 active:scale-95"
+                                                    className="group/btn relative overflow-hidden bg-slate-900 text-white px-7 py-3.5 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-xl shadow-slate-900/20"
                                                 >
-                                                    <Calendar className="w-5 h-5" />
+                                                    <span className="relative z-10 flex items-center gap-2">
+                                                        Book Now
+                                                        <svg className="w-3 h-3 group-hover/btn:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                                        </svg>
+                                                    </span>
+                                                    <div className="absolute inset-0 bg-gradient-to-r from-[#FFD166] to-[#FFD166] translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300"></div>
                                                 </button>
                                             </div>
                                         </div>
@@ -253,9 +225,8 @@ const Home = () => {
                         </div>
                         
                         {!loading && resources.length === 0 && (
-                            <div className="text-center py-24 bg-white rounded-[60px] border-4 border-dashed border-slate-100">
-                                <Layout className="w-16 h-16 text-slate-100 mx-auto mb-6" />
-                                <p className="text-slate-400 font-black uppercase tracking-[0.3em]">No registry entries available</p>
+                            <div className="text-center py-20 bg-slate-50 rounded-[32px] border-2 border-dashed border-slate-200">
+                                <p className="text-slate-400 font-bold uppercase tracking-[0.2em]">No active resources found in the registry.</p>
                             </div>
                         )}
                     </div>
