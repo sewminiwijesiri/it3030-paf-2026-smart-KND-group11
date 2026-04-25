@@ -24,12 +24,16 @@ import MyBookings from './pages/MyBookings';
 import AdminBookings from './pages/AdminBookings';
 import VerifyBooking from './pages/VerifyBooking';
 import { Toaster } from 'react-hot-toast';
+import NotificationListener from './components/NotificationListener';
+import { NotificationProvider } from './context/NotificationContext';
 
 function App() {
   return (
-    <Router>
-      <div className="App">
-        <Toaster position="top-right" />
+    <NotificationProvider>
+      <Router>
+        <div className="App">
+          <Toaster position="top-right" />
+          <NotificationListener />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
@@ -109,7 +113,8 @@ function App() {
           <Route path="/booking/verify/:bookingId" element={<VerifyBooking />} />
         </Routes>
       </div>
-    </Router>
+      </Router>
+    </NotificationProvider>
   );
 }
 

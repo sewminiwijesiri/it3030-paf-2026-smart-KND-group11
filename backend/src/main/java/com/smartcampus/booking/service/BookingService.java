@@ -10,6 +10,7 @@ import com.smartcampus.booking.exception.ResourceNotFoundException;
 import com.smartcampus.booking.repository.BookingRepository;
 import com.uniflow.system.catalogue.model.Resource;
 import com.uniflow.system.catalogue.repository.ResourceRepository;
+import com.smartcampus.notification.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,7 @@ public class BookingService {
 
     private final BookingRepository bookingRepository;
     private final ResourceRepository resourceRepository;
+    private final NotificationService notificationService;
 
     @Transactional
     public BookingResponseDTO createBooking(BookingRequestDTO request, String userId) {
@@ -55,6 +57,15 @@ public class BookingService {
                 .build();
 
         Booking savedBooking = bookingRepository.save(booking);
+        
+        // Send real-time notification to admin
+        notificationService.sendAdminNotification(
+            "New Resource Booking",
+            "A new booking for resource ID " + savedBooking.getResourceId() + " has been created.",
+            "BOOKING_CREATED",
+            "/admin-bookings"
+        );
+
         return mapToDTO(savedBooking);
     }
 

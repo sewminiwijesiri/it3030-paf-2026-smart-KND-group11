@@ -4,7 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import io.github.cdimascio.dotenv.Dotenv;
 
-@SpringBootApplication(scanBasePackages = {"com.uniflow.system", "com.smartcampus.booking"})
+@SpringBootApplication(scanBasePackages = {"com.uniflow.system", "com.smartcampus.booking", "com.smartcampus.notification"})
 public class UniflowApplication {
 
 	public static void main(String[] args) {
