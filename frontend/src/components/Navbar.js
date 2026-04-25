@@ -1,13 +1,17 @@
 import React from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Bell, Search, Settings } from 'lucide-react';
+import { Bell, Search, Settings, X, ChevronRight } from 'lucide-react';
 import logoIcon from '../assets/uniflow-icon.svg';
+import { useNotifications } from '../context/NotificationContext';
+import { formatDistanceToNow } from 'date-fns';
 
 const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const token = localStorage.getItem('token');
   const role = localStorage.getItem('role');
+  const { notifications, unreadCount, markAllAsRead, clearNotifications } = useNotifications();
+  const [showNotifications, setShowNotifications] = React.useState(false);
 
   const isHome = location.pathname === '/';
 
@@ -90,11 +94,88 @@ const Navbar = () => {
           ) : (
             <div className="flex items-center gap-3 md:gap-5">
               {/* Notification Badge */}
-              <div className="flex items-center gap-1">
-                <button className="relative p-2.5 rounded-xl transition-all group text-slate-300 hover:text-white hover:bg-white/10">
+              <div className="flex items-center gap-1 relative">
+                <button 
+                  onClick={() => {
+                    setShowNotifications(!showNotifications);
+                    if (!showNotifications) markAllAsRead();
+                  }}
+                  className="relative p-2.5 rounded-xl transition-all group text-slate-300 hover:text-white hover:bg-white/10"
+                >
                   <Bell size={20} className="transition-colors group-hover:text-[#FFD166]" />
-                  <span className="absolute top-2 right-2 w-2.5 h-2.5 bg-rose-500 rounded-full border-2 border-transparent"></span>
+                  {unreadCount > 0 && (
+                    <span className="absolute top-2 right-2 w-5 h-5 bg-rose-500 text-white text-[9px] font-black rounded-full border-2 border-[#0F172A] flex items-center justify-center animate-pulse">
+                      {unreadCount}
+                    </span>
+                  )}
                 </button>
+
+                {/* Notifications Dropdown */}
+                {showNotifications && (
+                  <div className="absolute top-full right-0 mt-3 w-80 bg-[#1E293B] border border-white/10 rounded-2xl shadow-2xl z-[1001] overflow-hidden animate-up">
+                    <div className="p-4 border-b border-white/5 flex items-center justify-between bg-slate-900/50">
+                      <div className="flex items-center gap-3">
+                        <h3 className="text-xs font-black text-white uppercase tracking-widest">Notifications</h3>
+                        {notifications.length > 0 && (
+                          <button 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (window.confirm('Clear all notifications?')) clearNotifications();
+                            }}
+                            className="text-[9px] font-black text-rose-500 hover:text-rose-400 uppercase tracking-widest transition-colors"
+                          >
+                            Clear All
+                          </button>
+                        )}
+                      </div>
+                      <button onClick={() => setShowNotifications(false)} className="text-slate-400 hover:text-white transition-colors">
+                        <X size={14} />
+                      </button>
+                    </div>
+                    <div className="max-h-[400px] overflow-y-auto">
+                      {notifications.length === 0 ? (
+                        <div className="p-10 text-center">
+                          <Bell size={32} className="mx-auto mb-3 text-slate-700" />
+                          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">No new alerts</p>
+                        </div>
+                      ) : (
+                        <div className="divide-y divide-white/5">
+                          {notifications.map((notif, i) => (
+                            <div 
+                              key={notif.id || i} 
+                              onClick={() => {
+                                if (notif.targetUrl) navigate(notif.targetUrl);
+                                setShowNotifications(false);
+                              }}
+                              className="p-4 hover:bg-white/5 transition-colors cursor-pointer group"
+                            >
+                              <div className="flex gap-3">
+                                <div className="mt-1 w-2 h-2 rounded-full bg-[#FFD166] shrink-0 shadow-[0_0_8px_#FFD166]"></div>
+                                <div className="space-y-1">
+                                  <p className="text-[11px] font-black text-white leading-tight group-hover:text-[#FFD166] transition-colors">{notif.title}</p>
+                                  <p className="text-[10px] font-medium text-slate-400 leading-relaxed line-clamp-2">{notif.message}</p>
+                                  <p className="text-[9px] font-black text-slate-500 uppercase tracking-tighter mt-1">
+                                    {formatDistanceToNow(new Date(notif.timestamp), { addSuffix: true })}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                    {notifications.length > 0 && (
+                      <div className="p-3 bg-slate-900/50 border-t border-white/5 text-center">
+                        <button 
+                          onClick={() => navigate('/admin-dashboard')} // Or a dedicated notifications page
+                          className="text-[9px] font-black text-[#FFD166] uppercase tracking-[0.2em] hover:text-white transition-colors flex items-center justify-center gap-1 mx-auto"
+                        >
+                          View Activity Center <ChevronRight size={10} />
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
                 
                 <button className="hidden sm:block p-2.5 rounded-xl transition-all group text-slate-300 hover:text-white hover:bg-white/10">
                   <Settings size={20} className="transition-colors group-hover:text-[#FFD166]" />
