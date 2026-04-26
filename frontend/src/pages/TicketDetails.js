@@ -4,7 +4,7 @@ import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import AdminSidebar from '../components/AdminSidebar';
 import TechnicianSidebar from '../components/TechnicianSidebar';
-import Footer from '../components/Footer';
+
 import api from '../utils/api';
 import { resolveImageUrl } from '../utils/imageUtils';
 
@@ -290,7 +290,7 @@ className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl focus
                     </div>
                 </main>
             </div>
-            <Footer />
+
         </div>
     );
 };

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import api from '../utils/api';
 import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
+
 import logoIcon from '../assets/uniflow-icon.svg';
 import heroBg from '../assets/hero-bg.png';
 
@@ -148,7 +148,7 @@ const Login = () => {
                     </div>
                 </div>
             </main>
-            <Footer />
+
         </div>
     );
 };

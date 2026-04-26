@@ -5,7 +5,7 @@ import AdminSidebar from '../components/AdminSidebar';
 import TechnicianSidebar from '../components/TechnicianSidebar';
 import api from '../utils/api';
 import { useNavigate } from 'react-router-dom';
-import Footer from '../components/Footer';
+
 
 const TicketSubmission = () => {
     const navigate = useNavigate();
@@ -134,9 +134,9 @@ const TicketSubmission = () => {
 
             <Navbar />
 
-            <div className="flex flex-1 relative z-10 w-full overflow-hidden">
+            <div className="flex flex-1 pt-[72px] relative z-10 w-full overflow-hidden">
                 {renderSidebar()}
-                <main className={`flex-1 lg:ml-72 h-[calc(100vh-64px)] overflow-y-auto scroll-smooth pb-10`}>
+                <main className={`flex-1 lg:ml-72 h-[calc(100vh-72px)] overflow-y-auto scroll-smooth pb-10`}>
 
                     {/* Header Section - Modern Hero Style */}
                     <div className="bg-[#002147] border-b border-white/10 py-10 mb-10 shadow-lg">
@@ -207,15 +207,15 @@ const TicketSubmission = () => {
                                                 <div className="relative group">
                                                     <select
                                                         onChange={handleResourceSelect} required
-className={`w-full pl-11 pr-6 py-4 bg-white border-2 rounded-xl focus:bg-white focus:outline-none transition-all font-bold text-[#002147] text-sm appearance-none group-hover:border-[#002147]/20 cursor-pointer shadow-sm ${
-  errors.resourceId
-    ? 'border-rose-400'
-    : touched.resourceId && formData.resourceId
-    ? 'border-emerald-400'
-    : 'border-slate-100 focus:border-[#002147]'
-}`}
-                                                            }`}
+                                                        className={`w-full pl-11 pr-6 py-4 bg-white border-2 rounded-xl focus:bg-white focus:outline-none transition-all font-bold text-[#002147] text-sm appearance-none group-hover:border-[#002147]/20 cursor-pointer shadow-sm ${
+                                                            errors.resourceId
+                                                                ? 'border-rose-400'
+                                                                : touched.resourceId && formData.resourceId
+                                                                    ? 'border-emerald-400'
+                                                                    : 'border-slate-100 focus:border-[#002147]'
+                                                        }`}
                                                     >
+
                                                         <option value="">Scan for resource...</option>
                                                         {!fetching && resources.map(res => <option key={res.id} value={res.id}>{res.name}</option>)}
                                                     </select>
@@ -283,14 +283,13 @@ className="w-full pl-11 pr-6 py-4 bg-white border-2 border-slate-100 rounded-xl 
                                                 <textarea
                                                     name="description" required
                                                     onChange={handleChange}
-className={`flex-1 w-full px-7 py-7 bg-slate-50 border-2 rounded-2xl focus:bg-white focus:outline-none transition-all font-bold text-[#002147] text-sm resize-none placeholder:text-slate-300 min-h-[350px] shadow-inner ${
-  errors.description
-    ? 'border-rose-400'
-    : touched.description && formData.description.length >= 10
-    ? 'border-emerald-400'
-    : 'border-slate-100 focus:border-[#002147]'
-}`}
-                                                        }`}
+                                                    className={`flex-1 w-full px-7 py-7 bg-slate-50 border-2 rounded-2xl focus:bg-white focus:outline-none transition-all font-bold text-[#002147] text-sm resize-none placeholder:text-slate-300 min-h-[350px] shadow-inner ${
+                                                        errors.description
+                                                            ? 'border-rose-400'
+                                                            : touched.description && formData.description.length >= 10
+                                                                ? 'border-emerald-400'
+                                                                : 'border-slate-100 focus:border-[#002147]'
+                                                    }`}
                                                     placeholder="Provide a detailed breakdown of the malfunction..."
                                                 ></textarea>
                                             </div>
@@ -310,14 +309,13 @@ className={`flex-1 w-full px-7 py-7 bg-slate-50 border-2 rounded-2xl focus:bg-wh
                                                 <div className="relative group">
                                                     <input
                                                         type="text" name="preferredContact" onChange={handleChange}
-className={`w-full pl-11 pr-6 py-4 bg-white border-2 rounded-xl focus:bg-white focus:outline-none transition-all font-bold text-[#002147] text-sm placeholder:text-slate-300 shadow-sm ${
-  errors.preferredContact
-    ? 'border-rose-400'
-    : touched.preferredContact && formData.preferredContact.length >= 3
-    ? 'border-emerald-400'
-    : 'border-slate-100 focus:border-[#002147]'
-}`}
-                                                            }`}
+                                                        className={`w-full pl-11 pr-6 py-4 bg-white border-2 rounded-xl focus:bg-white focus:outline-none transition-all font-bold text-[#002147] text-sm placeholder:text-slate-300 shadow-sm ${
+                                                            errors.preferredContact
+                                                                ? 'border-rose-400'
+                                                                : touched.preferredContact && formData.preferredContact.length >= 3
+                                                                    ? 'border-emerald-400'
+                                                                    : 'border-slate-100 focus:border-[#002147]'
+                                                        }`}
                                                         placeholder="Email or Ext"
                                                     />
                                                     <div className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors ${errors.preferredContact ? 'text-rose-400' : touched.preferredContact && formData.preferredContact.length >= 3 ? 'text-emerald-400' : 'text-[#002147]/40 group-focus-within:text-[#002147]'}`}>
@@ -344,38 +342,37 @@ className={`w-full pl-11 pr-6 py-4 bg-white border-2 rounded-xl focus:bg-white f
                                                         }}
                                                         className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20"
                                                     />
-<div
-  className={`w-full h-full border-2 border-dashed rounded-2xl group-hover:bg-[#FF9F1C]/10 transition-all flex flex-col items-center justify-center gap-3 shadow-sm ${
-    errors.files
-      ? 'border-rose-300 bg-rose-50'
-      : selectedFiles.length > 0
-      ? 'border-emerald-400 bg-emerald-50/20'
-      : 'border-slate-200 bg-white'
-  }`}
->
-  <div
-    className={`w-11 h-11 rounded-xl flex items-center justify-center ${
-      errors.files
-        ? 'bg-rose-500 text-white'
-        : selectedFiles.length > 0
-        ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20'
-        : 'bg-slate-50 text-[#002147]/40'
-    }`}
-  >
-    <svg
-      className="w-5 h-5"
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="2.5"
-        d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1M16 8l-4-4m0 0L8 8m4-4v12"
-      />
-    </svg>
-  </div>
+                                                    <div
+                                                        className={`w-full h-full border-2 border-dashed rounded-2xl group-hover:bg-[#FF9F1C]/10 transition-all flex flex-col items-center justify-center gap-3 shadow-sm ${
+                                                            errors.files
+                                                                ? 'border-rose-300 bg-rose-50'
+                                                                : selectedFiles.length > 0
+                                                                    ? 'border-emerald-400 bg-emerald-50/20'
+                                                                    : 'border-slate-200 bg-white'
+                                                        }`}
+                                                    >
+                                                        <div
+                                                            className={`w-11 h-11 rounded-xl flex items-center justify-center ${
+                                                                errors.files
+                                                                    ? 'bg-rose-500 text-white'
+                                                                    : selectedFiles.length > 0
+                                                                        ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20'
+                                                                        : 'bg-slate-50 text-[#002147]/40'
+                                                            }`}
+                                                        >
+                                                            <svg
+                                                                className="w-5 h-5"
+                                                                fill="none"
+                                                                stroke="currentColor"
+                                                                viewBox="0 0 24 24"
+                                                            >
+                                                                <path
+                                                                    strokeLinecap="round"
+                                                                    strokeLinejoin="round"
+                                                                    strokeWidth="2.5"
+                                                                    d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1M16 8l-4-4m0 0L8 8m4-4v12"
+                                                                />
+                                                            </svg>
                                                         </div>
                                                         <span className={`text-[9px] font-black uppercase tracking-[0.2em] ${errors.files ? 'text-rose-600' : selectedFiles.length > 0 ? 'text-emerald-600' : 'text-slate-400'}`}>
                                                             {selectedFiles.length > 0 ? `${selectedFiles.length} IMAGES READY` : 'Add evidence'}
@@ -387,12 +384,11 @@ className={`w-full pl-11 pr-6 py-4 bg-white border-2 rounded-xl focus:bg-white f
                                             <div className="pt-2">
                                                 <button
                                                     type="submit" disabled={loading}
-className={`w-full py-4 rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] transition-all duration-300 flex items-center justify-center gap-3 disabled:opacity-50 group shadow-xl ${
-  Object.keys(errors).length > 0
-    ? 'bg-[#002147] text-white shadow-[#002147]/20'
-    : 'bg-[#FF9F1C] hover:bg-orange-500 text-white shadow-orange-500/20'
-}`}
-                                                        }`}
+                                                    className={`w-full py-4 rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] transition-all duration-300 flex items-center justify-center gap-3 disabled:opacity-50 group shadow-xl ${
+                                                        Object.keys(errors).length > 0
+                                                            ? 'bg-[#002147] text-white shadow-[#002147]/20'
+                                                            : 'bg-[#FF9F1C] hover:bg-orange-500 text-white shadow-orange-500/20'
+                                                    }`}
                                                 >
                                                     {loading ? (
                                                         <span className="animate-pulse">Transmitting...</span>
@@ -410,7 +406,7 @@ className={`w-full py-4 rounded-2xl font-black text-[10px] uppercase tracking-[0
                             )}
                         </div>
                     </div>
-                    <Footer />
+
                 </main>
 
             </div>

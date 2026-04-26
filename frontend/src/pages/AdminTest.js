@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import api from '../utils/api';
 import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
+
 
 const AdminTest = () => {
     const [result, setResult] = useState('');
@@ -67,7 +67,7 @@ const AdminTest = () => {
                     )}
                 </div>
             </main>
-            <Footer />
+
         </div>
     );
 };

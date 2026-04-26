@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
+
 import logoIcon from '../assets/uniflow-icon.svg';
 import heroBg from '../assets/hero-bg.png';
 
@@ -171,7 +171,7 @@ const Register = () => {
                     </div>
                 </div>
             </main>
-            <Footer />
+
         </div>
     );
 };

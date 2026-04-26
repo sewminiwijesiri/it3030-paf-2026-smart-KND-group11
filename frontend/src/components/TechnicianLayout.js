@@ -1,7 +1,7 @@
 import React from 'react';
 import Navbar from './Navbar';
 import TechnicianSidebar from './TechnicianSidebar';
-import Footer from './Footer';
+
 
 const TechnicianLayout = ({ children }) => {
   return (
@@ -15,9 +15,7 @@ const TechnicianLayout = ({ children }) => {
           </div>
         </main>
       </div>
-      <div className="lg:ml-72 transition-all duration-300">
-        <Footer />
-      </div>
+
     </div>
   );
 };

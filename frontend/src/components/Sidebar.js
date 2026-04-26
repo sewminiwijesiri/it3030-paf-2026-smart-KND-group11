@@ -31,7 +31,6 @@ const Sidebar = () => {
             to={item.path}
             className={({ isActive }) =>
               `flex items-center gap-4 px-5 py-3 rounded-2xl font-bold transition-all duration-300 group ${
-              `flex items-center gap-3 px-3 py-2.5 rounded-xl font-bold transition-all duration-300 group ${
                 isActive
                   ? 'bg-[#4DA8DA] text-white shadow-lg shadow-blue-200/50'
                   : 'text-slate-500 hover:text-[#002147] hover:bg-slate-50'
@@ -40,26 +39,25 @@ const Sidebar = () => {
           >
             {({ isActive }) => (
               <>
-<svg
-  className={`w-5 h-5 transition-colors ${
-    isActive
-      ? 'text-white'
-      : 'text-slate-400 group-hover:text-[#002147]'
-  }`}
-  fill="none"
-  stroke="currentColor"
-  viewBox="0 0 24 24"
->
-  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={item.icon} />
-</svg>
+                <svg
+                  className={`w-5 h-5 transition-colors ${
+                    isActive
+                      ? 'text-white'
+                      : 'text-slate-400 group-hover:text-[#002147]'
+                  }`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={item.icon} />
+                </svg>
 
-<span className="text-base tracking-tight font-bold">
-  {item.label}
-</span>
+                <span className="text-base tracking-tight font-bold">
+                  {item.label}
+                </span>
 
-{isActive && (
-  <span className="ml-auto w-2 h-2 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.6)] shrink-0"></span>
-)}
+                {isActive && (
+                  <span className="ml-auto w-2 h-2 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.6)] shrink-0"></span>
                 )}
               </>
             )}
@@ -89,7 +87,6 @@ className="w-full flex items-center justify-center p-4 bg-slate-50 hover:bg-red-
         >
           Sign Out
         </button>
-      </div>
     </aside>
   );
 };

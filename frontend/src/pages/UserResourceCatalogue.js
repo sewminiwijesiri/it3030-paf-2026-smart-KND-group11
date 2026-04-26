@@ -7,7 +7,7 @@ import TechnicianSidebar from '../components/TechnicianSidebar';
 import ResourceFilters from '../components/catalogue/ResourceFilters';
 import BookingFormModal from '../components/BookingFormModal';
 import { toast } from 'react-hot-toast';
-import Footer from '../components/Footer';
+
 import { resolveImageUrl } from '../utils/imageUtils';
 
 const UserResourceCatalogue = () => {
@@ -79,8 +79,7 @@ const UserResourceCatalogue = () => {
             <div className="flex flex-1 pt-[72px] relative z-10 w-full overflow-hidden">
                 {renderSidebar()}
 
-                <main className="flex-1 lg:ml-72 h-[calc(100vh-64px)] overflow-y-auto scroll-smooth">
-                <main className="flex-1 lg:ml-72 h-[calc(100vh-64px)] overflow-y-auto scroll-smooth pb-10">
+                <main className="flex-1 lg:ml-72 h-[calc(100vh-72px)] overflow-y-auto scroll-smooth pb-10">
                     
                     {/* Header Area styled like UserDashboard */}
                     <div className="bg-[#002147] border-b border-white/10 py-10 shadow-lg">
@@ -97,8 +96,7 @@ const UserResourceCatalogue = () => {
                                     <p className="text-blue-100/60 font-bold uppercase tracking-wider text-[11px]">Find and book campus facilities & technical assets.</p>
                                 </div>
                                 <div className="bg-white/5 p-2 border border-white/10 rounded-2xl shrink-0 shadow-inner flex items-center gap-4 px-4">
-                                    <span className="text-[10px] font-black text-blue-200 uppercase tracking-widest pl-2">Available Assets:</span>
-                                    <span className="text-[10px] font-black text-blue-200 uppercase tracking-widest pl-2">Total Items Found:</span>
+                                    <span className="text-[10px] font-black text-blue-200 uppercase tracking-widest pl-2">Total Assets:</span>
                                     <span className="bg-[#FF9F1C] text-white px-4 py-1.5 rounded-xl text-xs font-black shadow-lg shadow-orange-500/20">{resources.length}</span>
                                 </div>
                             </div>
@@ -191,7 +189,7 @@ const UserResourceCatalogue = () => {
                             </div>
                         )}
                     </div>
-                    <Footer />
+
                 </main>
             </div>
 
