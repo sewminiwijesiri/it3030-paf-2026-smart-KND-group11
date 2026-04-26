@@ -10,8 +10,23 @@ import TechnicianSidebar from '../components/TechnicianSidebar';
 
 const Notifications = () => {
   const { notifications, markAllAsRead, clearNotifications } = useNotifications();
+  const [activeFilter, setActiveFilter] = React.useState('ALL');
   const navigate = useNavigate();
   const role = localStorage.getItem('role') || 'USER';
+
+  const filters = [
+    { id: 'ALL', label: 'All Alerts' },
+    { id: 'ISSUES', label: 'Issues', types: ['MAINTENANCE'] },
+    { id: 'REGISTRATIONS', label: 'Registrations', types: ['USER_REGISTRATION'] },
+    { id: 'BOOKINGS', label: 'Bookings', types: ['BOOKING_CREATED', 'BOOKING_APPROVED', 'BOOKING_REJECTED'] },
+    { id: 'SYSTEM', label: 'System', types: ['SYSTEM', 'MAINTENANCE_ASSIGNMENT'] }
+  ];
+
+  const filteredNotifications = React.useMemo(() => {
+    if (activeFilter === 'ALL') return notifications;
+    const filter = filters.find(f => f.id === activeFilter);
+    return notifications.filter(n => filter.types?.includes(n.type) || (activeFilter === 'SYSTEM' && !n.type));
+  }, [notifications, activeFilter]);
 
   const renderSidebar = () => {
     switch (role) {
@@ -69,16 +84,16 @@ const Notifications = () => {
             <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 items-start">
               {/* Notifications List - Main Column */}
               <div className="xl:col-span-8 space-y-4">
-                {notifications.length === 0 ? (
+                {filteredNotifications.length === 0 ? (
                   <div className="bg-white rounded-[2.5rem] border border-slate-100 p-20 text-center shadow-sm animate-fade-in">
                     <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6 text-slate-200">
                       <Bell className="w-10 h-10" />
                     </div>
-                    <h3 className="text-xl font-black text-slate-800 mb-2">Inbox is Empty</h3>
-                    <p className="text-slate-400 text-sm font-medium">When you receive alerts, they'll appear here.</p>
+                    <h3 className="text-xl font-black text-slate-800 mb-2">Registry Empty</h3>
+                    <p className="text-slate-400 text-sm font-medium">No alerts found for this filter category.</p>
                   </div>
                 ) : (
-                  notifications.map((notif, index) => (
+                  filteredNotifications.map((notif, index) => (
                     <div 
                       key={notif.id || index}
                       onClick={() => {
@@ -92,7 +107,9 @@ const Notifications = () => {
                       )}
 
                       <div className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border transition-all ${!notif.read ? 'bg-[#0F172A] border-[#0F172A] text-[#FFD166]' : 'bg-slate-50 border-slate-100 text-slate-400'}`}>
-                        <Bell className="w-5 h-5" />
+                        {notif.type === 'USER_REGISTRATION' ? <CheckCircle className="w-5 h-5" /> :
+                         notif.type === 'MAINTENANCE' ? <AlertCircle className="w-5 h-5" /> :
+                         <Bell className="w-5 h-5" />}
                       </div>
 
                       <div className="flex-1 min-w-0">
@@ -104,6 +121,7 @@ const Notifications = () => {
                             <span className={`px-1.5 py-0.5 rounded-[4px] text-[7px] font-black uppercase tracking-widest border flex items-center h-4 ${
                               notif.type?.includes('BOOKING') ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 
                               notif.type?.includes('MAINTENANCE') ? 'bg-amber-50 text-amber-600 border-amber-100' :
+                              notif.type === 'USER_REGISTRATION' ? 'bg-indigo-50 text-indigo-600 border-indigo-100' :
                               'bg-slate-50 text-slate-500 border-slate-100'}`}>
                               {notif.type || 'SYSTEM'}
                             </span>
@@ -156,8 +174,8 @@ const Notifications = () => {
                         <p className="text-xl font-black text-white">{notifications.filter(n => !n.read).length}</p>
                       </div>
                       <div className="bg-slate-800/50 rounded-2xl p-4 border border-slate-700/50">
-                        <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-1">Archived</p>
-                        <p className="text-xl font-black text-white">0</p>
+                        <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-1">Active Filter</p>
+                        <p className="text-[10px] font-black text-white uppercase tracking-tight">{activeFilter}</p>
                       </div>
                     </div>
                   </div>
@@ -166,12 +184,23 @@ const Notifications = () => {
                 <div className="bg-white rounded-[32px] border border-slate-100 p-8 shadow-sm">
                   <h3 className="text-xs font-black text-slate-900 uppercase tracking-widest mb-6 flex items-center gap-2">
                     <span className="w-1 h-3 bg-[#FFD166] rounded-full"></span>
-                    Quick Filters
+                    Operational Filters
                   </h3>
-                  <div className="space-y-3">
-                    {['ALL ALERTS', 'BOOKINGS', 'MAINTENANCE', 'SYSTEM'].map(filter => (
-                      <button key={filter} className="w-full text-left px-4 py-3 rounded-xl text-[9px] font-black text-slate-500 uppercase tracking-widest hover:bg-slate-50 hover:text-[#0F172A] transition-all border border-transparent hover:border-slate-100">
-                        {filter}
+                  <div className="space-y-2">
+                    {filters.map(filter => (
+                      <button 
+                        key={filter.id} 
+                        onClick={() => setActiveFilter(filter.id)}
+                        className={`w-full text-left px-4 py-3 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all border flex items-center justify-between group ${
+                          activeFilter === filter.id 
+                            ? 'bg-[#0F172A] text-[#FFD166] border-[#0F172A] shadow-lg shadow-slate-900/10 translate-x-1' 
+                            : 'bg-white text-slate-400 border-transparent hover:bg-slate-50 hover:text-slate-600 hover:border-slate-100'
+                        }`}
+                      >
+                        {filter.label}
+                        <span className={`w-1.5 h-1.5 rounded-full transition-all ${
+                          activeFilter === filter.id ? 'bg-[#FFD166]' : 'bg-slate-200 group-hover:bg-slate-300'
+                        }`}></span>
                       </button>
                     ))}
                   </div>

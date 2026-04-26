@@ -39,6 +39,7 @@ public class MaintenanceService {
         MaintenanceRequest request = maintenanceRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Request not found"));
         
+        MaintenanceRequest.MaintenanceStatus oldStatus = request.getStatus();
         request.setStatus(status);
         if (notes != null) request.setResolutionNotes(notes);
         if (newAttachments != null && !newAttachments.isEmpty()) {
@@ -51,7 +52,32 @@ public class MaintenanceService {
             }
         }
         request.setUpdatedAt(LocalDateTime.now());
-        return maintenanceRepository.save(request);
+        MaintenanceRequest savedRequest = maintenanceRepository.save(request);
+
+        // Notify User and Admin about status changes
+        if (oldStatus != status) {
+            String title = "";
+            String message = "";
+            String targetUrlUser = "/my-tickets";
+            String targetUrlAdmin = "/admin/maintenance";
+
+            if (status == MaintenanceRequest.MaintenanceStatus.IN_PROGRESS) {
+                title = "Technician On-Site";
+                message = "Work has started on your request for " + request.getResourceName() + ".";
+            } else if (status == MaintenanceRequest.MaintenanceStatus.RESOLVED) {
+                title = "Issue Resolved";
+                message = "The malfunction at " + request.getResourceName() + " has been rectified.";
+            }
+
+            if (!title.isEmpty()) {
+                // Notify Requester
+                notificationService.sendUserNotification(request.getRequesterEmail(), title, message, "MAINTENANCE", targetUrlUser);
+                // Notify Admin
+                notificationService.sendAdminNotification(title, "Operator Update: " + message, "MAINTENANCE", targetUrlAdmin);
+            }
+        }
+
+        return savedRequest;
     }
 
     public List<MaintenanceRequest> getAllRequests() {

@@ -56,9 +56,9 @@ const UserResourceCatalogue = () => {
 
     const getStatusStyles = (status) => {
         switch (status) {
-            case 'AVAILABLE': return 'bg-[#3f4175] text-white shadow-md border-transparent';
-            case 'BUSY': return 'bg-[#FFD166] text-slate-900 border-[#FFCC29] shadow-sm';
-            default: return 'bg-slate-200 text-slate-700 border-slate-300';
+            case 'AVAILABLE': return 'bg-[#4DA8DA]/10 text-[#4DA8DA] border-[#4DA8DA]/20 shadow-sm';
+            case 'BUSY': return 'bg-[#FF9F1C]/10 text-[#FF9F1C] border-[#FF9F1C]/20 shadow-sm';
+            default: return 'bg-slate-100 text-slate-500 border-slate-200';
         }
     };
 
@@ -80,6 +80,7 @@ const UserResourceCatalogue = () => {
                 {renderSidebar()}
 
                 <main className="flex-1 lg:ml-72 h-[calc(100vh-64px)] overflow-y-auto scroll-smooth">
+                <main className="flex-1 lg:ml-72 h-[calc(100vh-64px)] overflow-y-auto scroll-smooth pb-10">
                     
                     {/* Header Area styled like UserDashboard */}
                     <div className="bg-[#002147] border-b border-white/10 py-10 shadow-lg">
@@ -97,6 +98,7 @@ const UserResourceCatalogue = () => {
                                 </div>
                                 <div className="bg-white/5 p-2 border border-white/10 rounded-2xl shrink-0 shadow-inner flex items-center gap-4 px-4">
                                     <span className="text-[10px] font-black text-blue-200 uppercase tracking-widest pl-2">Available Assets:</span>
+                                    <span className="text-[10px] font-black text-blue-200 uppercase tracking-widest pl-2">Total Items Found:</span>
                                     <span className="bg-[#FF9F1C] text-white px-4 py-1.5 rounded-xl text-xs font-black shadow-lg shadow-orange-500/20">{resources.length}</span>
                                 </div>
                             </div>
@@ -143,9 +145,9 @@ const UserResourceCatalogue = () => {
                                                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
                                                 />
                                             ) : (
-                                                <div className="w-full h-full flex items-center justify-center text-slate-300">
-                                                    <svg className="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m4 0h1m-5 10h1m4 0h1m-5-4h1m4 0h1" />
+                                                <div className="w-full h-full flex items-center justify-center text-[#002147]/10">
+                                                    <svg className="w-20 h-20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2-2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m4 0h1m-5 10h1m4 0h1m-5-4h1m4 0h1" />
                                                     </svg>
                                                 </div>
                                             )}
@@ -157,11 +159,11 @@ const UserResourceCatalogue = () => {
 
                                         <div className="p-6 flex-1 flex flex-col">
                                             <div className="mb-4">
-                                                <h3 className="text-xl font-bold text-slate-800 leading-tight mb-2 min-h-[3rem] line-clamp-2">
+                                                <h3 className="text-xl font-black text-[#002147] leading-tight mb-2 min-h-[3rem] line-clamp-2 uppercase tracking-tight">
                                                     {resource.name}
                                                 </h3>
                                                 <p className="text-[10px] font-black text-slate-400 flex items-center gap-2 uppercase tracking-widest">
-                                                    <svg className="w-4 h-4 text-[#FFD166]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                                                    <svg className="w-4 h-4 text-[#FF9F1C]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                                                     {resource.location}
                                                 </p>
                                             </div>
@@ -178,9 +180,10 @@ const UserResourceCatalogue = () => {
 
 <button 
   onClick={() => handleBookClick(resource)}
-  className="w-full py-4 bg-[#FFD166] text-slate-900 font-bold rounded-full text-[11px] uppercase tracking-widest shadow-lg shadow-[#FFD166]/20 hover:scale-105 hover:bg-[#FFCC29] transition-transform active:scale-95 mt-auto"
+  className="w-full py-4 bg-[#FF9F1C] text-white font-black rounded-2xl text-[11px] uppercase tracking-widest shadow-xl shadow-orange-500/20 hover:scale-105 hover:bg-orange-500 transition-all active:scale-95 mt-auto flex items-center justify-center gap-2 group-hover:gap-4"
 >
-  Book This Slot
+  Reserve Resource
+  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
 </button>
                                         </div>
                                     </div>

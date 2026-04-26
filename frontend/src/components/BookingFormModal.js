@@ -189,22 +189,43 @@ const BookingFormModal = ({ resource, onClose, onSuccess }) => {
     <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
       <div className="bg-white rounded-[1.5rem] shadow-2xl w-full max-w-md overflow-hidden relative animate-fade-in-up">
         {/* Header */}
-        <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
-          <div>
-            <h2 className="text-lg font-black text-slate-800">Book {resource.name}</h2>
-            <div className="flex items-center gap-2 mt-0.5">
-                <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">📍 {resource.location}</span>
-                <span className="text-slate-200">|</span>
-                <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">👥 Capacity: {resource.capacity || 'N/A'}</span>
-            </div>
-          </div>
-          <button
-            onClick={onClose}
-            className="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors shadow-sm"
+<div className="px-8 py-8 border-b border-white/10 flex items-center justify-between bg-[#002147] text-white">
+  <div>
+    <h2 className="text-xl font-black">Book {resource.name}</h2>
+
+    <div className="flex items-center gap-2 mt-1">
+      <span className="text-[9px] font-black text-blue-200 uppercase tracking-widest opacity-80">
+        📍 {resource.location}
+      </span>
+      <span className="text-blue-200 opacity-60">|</span>
+      <span className="text-[9px] font-black text-blue-200 uppercase tracking-widest opacity-80">
+        👥 Capacity: {resource.capacity || "N/A"}
+      </span>
+    </div>
+  </div>
+
+  <button
+    onClick={onClose}
+    className="w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all"
+  
           >
             <X className="w-4 h-4" />
           </button>
         </div>
+
+        <div className="p-8">
+          {/* Resource Info */}
+          <div className="bg-slate-50 border border-slate-100 rounded-3xl p-6 mb-8">
+            <h3 className="font-black text-[#002147] text-lg">{resource.name}</h3>
+            <div className="flex flex-wrap items-center gap-4 mt-3">
+              <span className="text-[10px] font-black text-[#4DA8DA] bg-white px-3 py-1.5 rounded-xl shadow-sm border border-slate-100 uppercase tracking-wider">
+                📍 {resource.location}
+              </span>
+              <span className="text-[10px] font-black text-[#4DA8DA] bg-white px-3 py-1.5 rounded-xl shadow-sm border border-slate-100 uppercase tracking-wider">
+                👥 Capacity: {resource.capacity || 'N/A'}
+              </span>
+            </div>
+          </div>
 
         <div className="p-6">
           {error && (
@@ -226,7 +247,7 @@ const BookingFormModal = ({ resource, onClose, onSuccess }) => {
                 min={todayLocal}
                 value={formData.bookingDate}
                 onChange={handleChange}
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-[#002147] focus:outline-none focus:ring-2 focus:ring-[#002147]/20 focus:border-[#002147] transition-all"
               />
             </div>
 
@@ -242,8 +263,11 @@ const BookingFormModal = ({ resource, onClose, onSuccess }) => {
                   required
                   value={formData.startTime}
                   onChange={handleChange}
-                  className={`w-full bg-slate-50 border rounded-xl px-4 py-2.5 text-sm font-bold focus:outline-none focus:ring-2 transition-all ${
-                    startTimeError ? 'border-rose-300 text-rose-600 focus:ring-rose-500' : 'border-slate-200 text-slate-700 focus:ring-indigo-500'
+className={`w-full bg-slate-50 border rounded-xl px-4 py-3 text-sm font-bold focus:outline-none focus:ring-2 transition-all ${
+  startTimeError
+    ? 'border-rose-300 text-rose-600 focus:ring-rose-500'
+    : 'border-slate-200 text-[#002147] focus:ring-[#002147]/20 focus:border-[#002147]'
+}`}
                   }`}
                 />
               </div>
@@ -257,20 +281,54 @@ const BookingFormModal = ({ resource, onClose, onSuccess }) => {
                   required
                   value={formData.endTime}
                   onChange={handleChange}
-                  className={`w-full bg-slate-50 border rounded-xl px-4 py-2.5 text-sm font-bold focus:outline-none focus:ring-2 transition-all ${
-                    endTimeError ? 'border-rose-300 text-rose-600 focus:ring-rose-500' : 'border-slate-200 text-slate-700 focus:ring-indigo-500'
+className={`w-full bg-slate-50 border rounded-xl px-4 py-3 text-sm font-bold focus:outline-none focus:ring-2 transition-all ${
+  endTimeError
+    ? 'border-rose-300 text-rose-600 focus:ring-rose-500'
+    : 'border-slate-200 text-[#002147] focus:ring-[#002147]/20 focus:border-[#002147]'
+}`}
                   }`}
                 />
               </div>
             </div>
 
-            {/* Inline Errors for Time */}
-            {(startTimeError || endTimeError || conflictError || availabilityError) && (
-              <div className="p-3 bg-amber-50/50 border border-amber-100 rounded-xl space-y-1">
-                {startTimeError && <p className="text-[10px] font-bold text-rose-500 flex items-center gap-1">❌ {startTimeError}</p>}
-                {endTimeError && <p className="text-[10px] font-bold text-rose-500 flex items-center gap-1">❌ {endTimeError}</p>}
-                {conflictError && <p className="text-[10px] font-bold text-amber-600 flex items-center gap-1">⚠️ {conflictError}</p>}
-                {availabilityError && <p className="text-[10px] font-bold text-rose-500 flex items-center gap-1">⏱️ {availabilityError}</p>}
+{/* Availability Info */}
+{availabilityDetails && (availabilityDetails.availableDays?.length > 0 || availabilityDetails.availableStartTime) && (
+  <div className="text-[10px] font-black text-[#4DA8DA] mt-2 uppercase tracking-widest bg-blue-50/50 px-3 py-1 rounded-lg border border-blue-100/50 inline-block">
+    Available on: {(availabilityDetails.availableDays?.length > 0)
+      ? availabilityDetails.availableDays
+          .map(d => d.charAt(0).toUpperCase() + d.slice(1).toLowerCase())
+          .join(', ')
+      : 'All days'}
+    {availabilityDetails.availableStartTime &&
+      ` (${availabilityDetails.availableStartTime.substring(0,5)} - ${availabilityDetails.availableEndTime.substring(0,5)})`}
+  </div>
+)}
+
+{/* Inline Errors for Time */}
+{(startTimeError || endTimeError || conflictError || availabilityError) && (
+  <div className="p-3 bg-amber-50/50 border border-amber-100 rounded-xl space-y-1 mt-2">
+    {startTimeError && (
+      <p className="text-[10px] font-bold text-rose-500 flex items-center gap-1">
+        ❌ {startTimeError}
+      </p>
+    )}
+    {endTimeError && (
+      <p className="text-[10px] font-bold text-rose-500 flex items-center gap-1">
+        ❌ {endTimeError}
+      </p>
+    )}
+    {conflictError && (
+      <p className="text-[10px] font-bold text-amber-600 flex items-center gap-1">
+        ⚠️ {conflictError}
+      </p>
+    )}
+    {availabilityError && (
+      <p className="text-[10px] font-bold text-rose-500 flex items-center gap-1">
+        ⏱️ {availabilityError}
+      </p>
+    )}
+  </div>
+)}
               </div>
             )}
 
@@ -285,8 +343,8 @@ const BookingFormModal = ({ resource, onClose, onSuccess }) => {
                 placeholder="Briefly describe the booking purpose..."
                 value={formData.purpose}
                 onChange={handleChange}
-                rows="2"
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all resize-none"
+rows="3"
+className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-medium text-[#002147] focus:outline-none focus:ring-2 focus:ring-[#002147]/20 focus:border-[#002147] transition-all resize-none shadow-inner"
               ></textarea>
             </div>
 
@@ -307,8 +365,11 @@ const BookingFormModal = ({ resource, onClose, onSuccess }) => {
                 required
                 value={formData.expectedAttendees}
                 onChange={handleChange}
-                className={`w-full bg-slate-50 border rounded-xl px-4 py-2.5 text-sm font-bold focus:outline-none focus:ring-2 transition-all ${
-                  isCapacityExceeded ? 'border-rose-400 text-rose-600 focus:ring-rose-500 bg-rose-50/30' : 'border-slate-200 text-slate-700 focus:ring-indigo-500'
+className={`w-full bg-slate-50 border rounded-xl px-4 py-3 text-sm font-bold focus:outline-none focus:ring-2 transition-all ${
+  isCapacityExceeded
+    ? 'border-rose-400 text-rose-600 focus:ring-rose-500 bg-rose-50/30'
+    : 'border-slate-200 text-[#002147] focus:ring-[#002147]/20 focus:border-[#002147]'
+}`}
                 }`}
               />
             </div>
@@ -325,10 +386,11 @@ const BookingFormModal = ({ resource, onClose, onSuccess }) => {
               <button
                 type="submit"
                 disabled={isSubmitDisabled}
-                className={`flex-[2] px-6 py-3.5 rounded-xl text-[11px] font-black text-white uppercase tracking-widest shadow-lg transition-all flex items-center justify-center gap-2 ${
-                  isSubmitDisabled 
-                    ? 'bg-slate-200 shadow-none cursor-not-allowed text-slate-400' 
-                    : 'bg-indigo-600 hover:bg-indigo-700 hover:shadow-indigo-200 hover:-translate-y-0.5'
+className={`flex-[2] px-6 py-4 rounded-2xl text-sm font-black text-white uppercase tracking-widest shadow-xl transition-all flex items-center justify-center gap-2 ${
+  isSubmitDisabled
+    ? 'bg-slate-200 shadow-none cursor-not-allowed text-slate-400'
+    : 'bg-[#FF9F1C] hover:bg-orange-500 hover:shadow-orange-500/20 hover:-translate-y-0.5 active:scale-95'
+}`}
                 }`}
               >
                 {loading ? (

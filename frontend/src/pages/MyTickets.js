@@ -18,6 +18,7 @@ import {
     Tag
 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import Footer from '../components/Footer';
 
 const MyTickets = () => {
     const [tickets, setTickets] = useState([]);
@@ -99,19 +100,25 @@ const MyTickets = () => {
 
             <div className="flex flex-1 relative z-10 w-full overflow-hidden">
                 <Sidebar />
-                <main className="flex-1 lg:ml-72 h-[calc(100vh-64px)] overflow-y-auto scroll-smooth">
+<main className="flex-1 lg:ml-72 h-[calc(100vh-72px)] overflow-y-auto scroll-smooth">
 
-                    {/* Header Section - Modern Hero Style */}
-                    <div className="bg-[#002147] border-b border-white/10 py-10 mb-8 shadow-lg">
-                        <div className="max-w-[1200px] mx-auto px-6 lg:px-10">
-                            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                                <div>
-                                    <div className="flex items-center gap-2 mb-3">
-                                        <div className="w-1.5 h-1.5 rounded-full bg-[#FF9F1C] animate-pulse"></div>
-                                        <p className="text-blue-200 font-black text-[10px] uppercase tracking-[0.4em]">Service Registry</p>
-                                    </div>
-                                    <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight leading-tight">
-                                        My <span className="text-blue-100/50">Requests</span>
+  {/* Header Section */}
+  <div className="bg-[#002147] border-b border-white/10 sticky top-0 z-30 shadow-lg backdrop-blur-md">
+    <div className="max-w-[1200px] mx-auto px-6 py-6 lg:px-10">
+
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+
+        <div>
+          <div className="flex items-center gap-2 mb-3">
+            <div className="w-2 h-2 rounded-full bg-[#FF9F1C] animate-pulse"></div>
+            <p className="text-blue-200 font-black text-[10px] uppercase tracking-[0.4em]">
+              Service Registry
+            </p>
+          </div>
+
+          <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight leading-tight">
+            My <span className="text-blue-100/50">Requests</span>
+          </h1>
                                     </h1>
                                 </div>
                                 <Link to="/report-incident" className="group flex items-center gap-3 bg-[#FF9F1C] text-white px-8 py-3.5 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-orange-500 transition-all shadow-xl shadow-orange-500/20 active:scale-95">
@@ -121,15 +128,24 @@ const MyTickets = () => {
                             </div>
 
                             {/* Summary Stats Bar */}
-                            <div className="grid grid-cols-3 gap-6 mt-10">
+<div className="grid grid-cols-3 gap-5 mt-10">
                                 {[
                                     { label: 'Total Records', value: stats.total, color: 'text-white', bg: 'bg-white/5' },
                                     { label: 'Active Tasks', value: stats.active, color: 'text-orange-400', bg: 'bg-white/5' },
                                     { label: 'Resolved', value: stats.resolved, color: 'text-emerald-400', bg: 'bg-white/5' }
                                 ].map((stat, i) => (
-                                    <div key={i} className={`${stat.bg} border border-white/10 rounded-2xl p-5 transition-all hover:bg-white/10`}>
-                                        <p className="text-[9px] font-black text-blue-200 uppercase tracking-widest mb-1.5 opacity-60">{stat.label}</p>
-                                        <p className={`text-2xl font-black ${stat.color} italic leading-none`}>{stat.value}</p>
+<div
+  key={i}
+  className={`${stat.bg} border border-white/10 rounded-2xl p-5 transition-all hover:bg-white/10 hover:shadow-md`}
+>
+  <p className="text-[9px] font-black text-blue-200 uppercase tracking-widest mb-1.5 opacity-70">
+    {stat.label}
+  </p>
+
+  <p className={`text-2xl font-black ${stat.color} italic leading-none`}>
+    {stat.value}
+  </p>
+</div>
                                     </div>
                                 ))}
                             </div>
@@ -139,15 +155,15 @@ const MyTickets = () => {
                     <div className="max-w-[1200px] mx-auto px-6 lg:px-10 py-10">
 
                         {/* Interactive Toolbar */}
-                        <div className="flex flex-col xl:flex-row items-center justify-between gap-3 mb-6 bg-white p-3 rounded-xl border border-slate-200/60 shadow-sm">
+<div className="flex flex-col xl:flex-row items-center justify-between gap-6 mb-8 bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
                             <div className="flex flex-wrap items-center gap-2">
                                 {['ALL', 'ACTIVE', 'RESOLVED'].map((t) => (
                                     <button
                                         key={t}
                                         onClick={() => setFilter(t)}
                                         className={`px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${filter === t
-                                                ? 'bg-[#FFD166] text-slate-900 shadow-lg shadow-[#FFD166]/20'
-                                                : 'text-slate-400 hover:text-slate-600 hover:bg-slate-50'
+                                                ? 'bg-[#002147] text-white shadow-lg'
+                                                : 'text-slate-400 hover:text-[#002147] hover:bg-slate-50'
                                             }`}
                                     >
                                         {t}
@@ -273,6 +289,7 @@ const MyTickets = () => {
                             </div>
                         )}
                     </div>
+                    <Footer />
                 </main>
             </div>
         </div>
