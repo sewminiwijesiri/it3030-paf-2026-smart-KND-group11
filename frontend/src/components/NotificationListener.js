@@ -19,52 +19,57 @@ const NotificationListener = () => {
             return;
         }
 
-        console.log(`Initializing WebSocket for role: ${role}, email: ${email}`);
-        const socket = new SockJS('http://localhost:8081/ws-notifications');
-        const stompClient = new Client({
-            webSocketFactory: () => socket,
-            debug: (str) => {
-                console.log('STOMP Debug:', str);
-            },
-            reconnectDelay: 5000,
-            heartbeatIncoming: 4000,
-            heartbeatOutgoing: 4000,
-        });
+        let stompClient = null;
 
-        stompClient.onConnect = (frame) => {
-            console.log('CONNECTED TO STOMP BROKER');
-            
-            // Subscribe to admin notifications if role is ADMIN
-            if (role === 'ADMIN') {
-                console.log('Subscribing to: /topic/admin-notifications');
-                stompClient.subscribe('/topic/admin-notifications', (notification) => {
-                    const data = JSON.parse(notification.body);
-                    console.log('RECEIVED ADMIN NOTIFICATION:', data);
-                    addNotification(data);
-                    showNotification(data);
-                });
-            }
+        const connect = () => {
+            console.log(`Initializing WebSocket for role: ${role}, email: ${email}`);
+            const socket = new SockJS('http://localhost:8081/ws-notifications');
+            stompClient = new Client({
+                webSocketFactory: () => socket,
+                debug: (str) => {
+                    console.log('STOMP Debug:', str);
+                },
+                reconnectDelay: 5000,
+                heartbeatIncoming: 4000,
+                heartbeatOutgoing: 4000,
+            });
 
-            // Subscribe to user-specific notifications if email exists
-            if (email) {
-                // Use a safer topic structure or log it clearly
-                const userTopic = `/topic/user/${email}/notifications`;
-                console.log(`Subscribing to: ${userTopic}`);
-                stompClient.subscribe(userTopic, (notification) => {
-                    const data = JSON.parse(notification.body);
-                    console.log('RECEIVED USER NOTIFICATION:', data);
-                    addNotification(data);
-                    showNotification(data);
-                });
-            }
+            stompClient.onConnect = (frame) => {
+                console.log('CONNECTED TO STOMP BROKER');
+                
+                // Subscribe to admin notifications if role is ADMIN
+                if (role === 'ADMIN') {
+                    console.log('Subscribing to: /topic/admin-notifications');
+                    stompClient.subscribe('/topic/admin-notifications', (notification) => {
+                        const data = JSON.parse(notification.body);
+                        console.log('RECEIVED ADMIN NOTIFICATION:', data);
+                        addNotification(data);
+                        showNotification(data);
+                    });
+                }
+
+                // Subscribe to user-specific notifications if email exists
+                if (email) {
+                    const userTopic = `/topic/user/${email}/notifications`;
+                    console.log(`Subscribing to: ${userTopic}`);
+                    stompClient.subscribe(userTopic, (notification) => {
+                        const data = JSON.parse(notification.body);
+                        console.log('RECEIVED USER NOTIFICATION:', data);
+                        addNotification(data);
+                        showNotification(data);
+                    });
+                }
+            };
+
+            stompClient.onStompError = (frame) => {
+                console.error('STOMP ERROR:', frame.headers['message']);
+                console.error('STOMP DETAILS:', frame.body);
+            };
+
+            stompClient.activate();
         };
 
-        stompClient.onStompError = (frame) => {
-            console.error('STOMP ERROR:', frame.headers['message']);
-            console.error('STOMP DETAILS:', frame.body);
-        };
-
-        stompClient.activate();
+        connect();
 
         return () => {
             console.log('Deactivating WebSocket connection');

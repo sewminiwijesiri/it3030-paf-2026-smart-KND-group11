@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import api from '../utils/api';
 
 const NotificationContext = createContext();
@@ -24,10 +24,10 @@ export const NotificationProvider = ({ children }) => {
         fetchNotifications();
     }, []);
 
-    const addNotification = (notification) => {
+    const addNotification = useCallback((notification) => {
         setNotifications(prev => [notification, ...prev]);
         setUnreadCount(prev => prev + 1);
-    };
+    }, []);
 
     const markAllAsRead = async () => {
         try {

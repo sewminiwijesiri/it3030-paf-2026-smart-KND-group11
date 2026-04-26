@@ -23,7 +23,7 @@ const AdminLogs = () => {
             try {
                 setLoading(true);
                 const [bookingsRes, incidentsRes, usersRes] = await Promise.all([
-                    api.get('/api/bookings/admin/all').catch(() => ({ data: [] })),
+                    api.get('/api/bookings').catch(() => ({ data: [] })),
                     api.get('/api/maintenance').catch(() => ({ data: [] })),
                     api.get('/admin/users').catch(() => ({ data: [] }))
                 ]);
