@@ -127,24 +127,24 @@ const TicketDetails = () => {
             <Navbar />
             <div className="flex flex-1 pt-[72px] relative z-10 w-full overflow-hidden">
                 {renderSidebar()}
-<main className="flex-1 lg:ml-72 h-[calc(100vh-72px)] overflow-y-auto scroll-smooth">
+                <main className={`flex-1 lg:ml-72 h-[calc(100vh-64px)] overflow-y-auto scroll-smooth pb-10`}>
 
-  {/* Header Area styled like UserDashboard */}
-  <div className="bg-[#002147] border-b border-white/10 py-8 shadow-lg">
-                        <div className="max-w-[1000px] mx-auto px-6">
+                    {/* Header Section - Modern Hero Style */}
+                    <div className="bg-[#002147] border-b border-white/10 py-10 shadow-lg mb-10">
+                        <div className="max-w-[1200px] mx-auto px-6 lg:px-10">
                             <div className="flex flex-col md:flex-row justify-between items-start gap-8">
                                 <div>
-                                    <div className="flex gap-3 mb-4">
-                                        <span className="px-3 py-1 bg-white/5 text-blue-200 text-[10px] font-black uppercase tracking-[0.2em] rounded shadow-sm border border-white/10">
-                                            #{ticket.id.slice(-8).toUpperCase()}
+                                    <div className="flex flex-wrap gap-3 mb-5">
+                                        <span className="px-4 py-1.5 bg-white/5 border border-white/10 text-blue-200 text-[9px] font-black uppercase tracking-[0.2em] rounded-xl shadow-inner">
+                                            INCIDENT #{ticket.id.slice(-8).toUpperCase()}
                                         </span>
-                                        <span className={`px-3 py-1 rounded text-[10px] font-black uppercase tracking-[0.2em] shadow-sm border ${ticket.status === 'OPEN' ? 'bg-[#FF9F1C] text-white border-[#FF9F1C]' :
-                                                ticket.status === 'RESOLVED' ? 'bg-[#4DA8DA] text-white border-[#4DA8DA]' : 'bg-slate-700 text-white border-slate-600'
+                                        <span className={`px-4 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-[0.2em] shadow-lg border ${ticket.status === 'OPEN' ? 'bg-[#FF9F1C] text-white border-[#FF9F1C]/20 shadow-orange-500/20' :
+                                                ticket.status === 'RESOLVED' ? 'bg-[#4DA8DA] text-white border-[#4DA8DA]/20 shadow-blue-500/20' : 'bg-[#002147] text-white border-white/10'
                                             }`}>
                                             {ticket.status.replace('_', ' ')}
                                         </span>
                                     </div>
-<h1 className="text-4xl md:text-5xl font-black text-white tracking-tight mb-2 uppercase">
+                                    <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight mb-2">
                                         {ticket.resourceName}
                                     </h1>
                                     <p className="text-blue-100/60 font-bold uppercase tracking-[0.2em] text-[10px]">

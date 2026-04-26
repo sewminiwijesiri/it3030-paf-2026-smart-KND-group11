@@ -134,26 +134,28 @@ const TicketSubmission = () => {
 
             <Navbar />
 
-            <div className="flex flex-1 pt-[72px] relative z-10 w-full overflow-hidden">
+            <div className="flex flex-1 relative z-10 w-full overflow-hidden">
                 {renderSidebar()}
-<main className="flex-1 lg:ml-72 h-[calc(100vh-72px)] overflow-y-auto scroll-smooth pb-10">
+                <main className={`flex-1 lg:ml-72 h-[calc(100vh-64px)] overflow-y-auto scroll-smooth pb-10`}>
 
-  {/* Header Section - Synced with Dashboard Style */}
-  <div className="bg-[#002147] border-b border-white/10 py-6 mb-8 shadow-lg">
+                    {/* Header Section - Modern Hero Style */}
+                    <div className="bg-[#002147] border-b border-white/10 py-10 mb-10 shadow-lg">
                         <div className="max-w-[1200px] mx-auto px-6 lg:px-10">
-                            <p className="text-blue-200 font-black text-[10px] uppercase tracking-[0.4em] mb-2 flex items-center gap-2">
+                            <p className="text-blue-200 font-black text-[10px] uppercase tracking-[0.4em] mb-3 flex items-center gap-2">
                                 <span className="w-1.5 h-1.5 rounded-full bg-[#FF9F1C]"></span>
                                 Incident Portal
                             </p>
 
-                            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-<h1 className="text-3xl md:text-4xl font-black text-white tracking-tight leading-tight">
-  Report <span className="text-blue-100/50">Fault</span>
-</h1>
-                                </h1>
+                            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                                <div>
+                                    <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight leading-tight mb-2">
+                                        Report <span className="text-blue-100/50">Fault</span>
+                                    </h1>
+                                    <p className="text-blue-100/60 font-bold uppercase tracking-wider text-[11px]">Submit a new maintenance or technical issue</p>
+                                </div>
 
                                 <div className="flex gap-3 mt-2 md:mt-0">
-                                    <div className="px-5 py-2 bg-white/5 border border-white/10 rounded-xl text-[9px] font-black uppercase tracking-widest text-blue-200">
+                                    <div className="px-5 py-2 bg-white/5 border border-white/10 rounded-xl text-[9px] font-black uppercase tracking-widest text-blue-200 shadow-inner">
                                         Terminal Active
                                     </div>
                                 </div>

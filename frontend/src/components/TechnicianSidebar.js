@@ -18,29 +18,37 @@ const TechnicianSidebar = () => {
   };
 
   return (
-    <aside className="fixed left-0 top-[72px] bottom-0 w-64 bg-[#0F172A] hidden lg:flex flex-col z-[50] border-r border-white/5">
-      <div className="flex-1 py-6 px-5 space-y-1 overflow-y-auto">
-        <p className="text-[9px] font-black text-slate-600 uppercase tracking-[0.3em] mb-6 ml-1">Field Terminal</p>
+    <aside className="fixed left-0 top-[72px] bottom-0 w-72 bg-[#002147] hidden lg:flex flex-col z-[50] border-r border-white/5">
+      <div className="flex-1 py-10 px-6 space-y-1 overflow-y-auto scroll-smooth">
+        
+        {/* Branding Area */}
+        <div className="mb-10 pl-4">
+          <p className="text-[10px] font-black text-blue-200/40 uppercase tracking-[0.4em] mb-1">Field Terminal</p>
+          <h2 className="text-white text-lg font-black tracking-tight">Technician <span className="text-[#FF9F1C]">Hub</span></h2>
+        </div>
+
         {menuItems.map((item, index) => (
           <NavLink
             key={index}
             to={item.path}
             className={({ isActive }) =>
-              `flex items-center gap-3 px-4 py-3 rounded-2xl font-bold transition-all duration-300 group ${
+              `flex items-center gap-4 px-5 py-4 rounded-2xl font-bold transition-all duration-300 group mb-2 ${
                 isActive
-                  ? 'bg-white/5 text-[#FFD166] border border-white/5 shadow-2xl'
-                  : 'text-slate-500 hover:text-white hover:bg-white/5'
+                  ? 'bg-white/10 text-white shadow-xl shadow-black/20'
+                  : 'text-blue-100/50 hover:text-white hover:bg-white/5'
               }`
             }
           >
             {({ isActive }) => (
               <>
-                <svg className={`w-4 h-4 transition-colors ${isActive ? 'text-[#FFD166]' : 'text-slate-700 group-hover:text-slate-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className={`w-5 h-5 transition-all duration-500 ${isActive ? 'text-[#FF9F1C] scale-110' : 'text-blue-100/30 group-hover:text-blue-100/60'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={item.icon} />
                 </svg>
-                <span className="text-[13px] tracking-tight font-bold">{item.label}</span>
+                <span className="text-sm tracking-tight font-black">{item.label}</span>
                 {isActive && (
-                  <span className="ml-auto w-1 h-1 rounded-full bg-[#FFD166] shadow-[0_0_15px_#FFD166] shrink-0"></span>
+                  <div className="ml-auto flex items-center">
+                    <div className="w-1.5 h-1.5 rounded-full bg-[#FF9F1C] shadow-[0_0_15px_#FF9F1C]"></div>
+                  </div>
                 )}
               </>
             )}
@@ -49,18 +57,18 @@ const TechnicianSidebar = () => {
       </div>
 
       {/* Sidebar Footer */}
-      <div className="p-8 space-y-6">
-        <div className="space-y-1 ml-1">
-            <p className="text-[8px] font-black text-slate-600 uppercase tracking-[0.3em]">Build V2.4.0</p>
+      <div className="p-8 space-y-6 bg-black/10 border-t border-white/5">
+        <div className="space-y-1.5 ml-1">
+            <p className="text-[8px] font-black text-blue-200/30 uppercase tracking-[0.3em]">System Build V2.4.0</p>
             <div className="flex items-center gap-2">
-                <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full shadow-[0_0_8px_#10b981]"></span>
-                <span className="text-[8px] font-black text-emerald-500 uppercase tracking-[0.2em]">Node-Secure OK</span>
+                <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full shadow-[0_0_10px_rgba(16,185,129,0.5)]"></span>
+                <span className="text-[8px] font-black text-emerald-400 uppercase tracking-[0.2em]">Telemetry Secure</span>
             </div>
         </div>
 
         <button
           onClick={handleLogout}
-          className="w-full flex items-center justify-center p-4 bg-white/5 hover:bg-white/10 text-slate-500 hover:text-white rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all border border-white/5"
+          className="w-full flex items-center justify-center p-4 bg-rose-500/10 hover:bg-rose-500 text-rose-500 hover:text-white rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all duration-500 border border-rose-500/20"
         >
           Disconnect Terminal
         </button>

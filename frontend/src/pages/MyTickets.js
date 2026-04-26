@@ -98,21 +98,27 @@ const MyTickets = () => {
 
             <Navbar />
 
-            <div className="flex flex-1 pt-[72px] relative z-10 w-full overflow-hidden">
+            <div className="flex flex-1 relative z-10 w-full overflow-hidden">
                 <Sidebar />
 <main className="flex-1 lg:ml-72 h-[calc(100vh-72px)] overflow-y-auto scroll-smooth">
 
-  {/* Glass Header */}
+  {/* Header Section */}
   <div className="bg-[#002147] border-b border-white/10 sticky top-0 z-30 shadow-lg backdrop-blur-md">
     <div className="max-w-[1200px] mx-auto px-6 py-6 lg:px-10">
-                            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                                <div>
-                                    <div className="flex items-center gap-2 mb-2">
-                                        <div className="w-2 h-2 rounded-full bg-[#FF9F1C] animate-pulse"></div>
-                                        <p className="text-blue-200 font-black text-[10px] uppercase tracking-[0.4em]">Service Registry</p>
-                                    </div>
-<h1 className="text-3xl md:text-4xl font-black text-white tracking-tight leading-tight">
-                                        My Requests
+
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+
+        <div>
+          <div className="flex items-center gap-2 mb-3">
+            <div className="w-2 h-2 rounded-full bg-[#FF9F1C] animate-pulse"></div>
+            <p className="text-blue-200 font-black text-[10px] uppercase tracking-[0.4em]">
+              Service Registry
+            </p>
+          </div>
+
+          <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight leading-tight">
+            My <span className="text-blue-100/50">Requests</span>
+          </h1>
                                     </h1>
                                 </div>
                                 <Link to="/report-incident" className="group flex items-center gap-3 bg-[#FF9F1C] text-white px-8 py-3.5 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-orange-500 transition-all shadow-xl shadow-orange-500/20 active:scale-95">
@@ -122,7 +128,7 @@ const MyTickets = () => {
                             </div>
 
                             {/* Summary Stats Bar */}
-                            <div className="grid grid-cols-3 gap-4 mt-10">
+<div className="grid grid-cols-3 gap-5 mt-10">
                                 {[
                                     { label: 'Total Records', value: stats.total, color: 'text-white', bg: 'bg-white/5' },
                                     { label: 'Active Tasks', value: stats.active, color: 'text-orange-400', bg: 'bg-white/5' },
@@ -130,13 +136,13 @@ const MyTickets = () => {
                                 ].map((stat, i) => (
 <div
   key={i}
-  className={`${stat.bg} border border-white/10 rounded-2xl p-4 transition-all hover:bg-white/10 hover:shadow-md`}
+  className={`${stat.bg} border border-white/10 rounded-2xl p-5 transition-all hover:bg-white/10 hover:shadow-md`}
 >
-  <p className="text-[9px] font-black text-blue-200 uppercase tracking-widest mb-1 opacity-70">
+  <p className="text-[9px] font-black text-blue-200 uppercase tracking-widest mb-1.5 opacity-70">
     {stat.label}
   </p>
 
-  <p className={`text-2xl font-black ${stat.color} italic`}>
+  <p className={`text-2xl font-black ${stat.color} italic leading-none`}>
     {stat.value}
   </p>
 </div>
