@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -116,6 +116,7 @@ function App() {
             path="/notifications"
             element={<ProtectedRoute allowedRoles={['USER', 'ADMIN', 'TECHNICIAN']}><Notifications /></ProtectedRoute>}
           />
+          <Route path="/reports" element={<Navigate to="/my-tickets" replace />} />
           <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
           <Route path="/access-denied" element={<AccessDenied />} />
           

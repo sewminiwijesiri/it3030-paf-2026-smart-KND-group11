@@ -58,7 +58,7 @@ public class MaintenanceService {
         if (oldStatus != status) {
             String title = "";
             String message = "";
-            String targetUrlUser = "/reports";
+            String targetUrlUser = "/my-tickets";
             String targetUrlAdmin = "/admin/maintenance";
 
             if (status == MaintenanceRequest.MaintenanceStatus.IN_PROGRESS) {
