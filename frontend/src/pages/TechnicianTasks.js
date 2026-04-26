@@ -3,21 +3,17 @@ import TechnicianLayout from '../components/TechnicianLayout';
 import api from '../utils/api';
 import { resolveImageUrl } from '../utils/imageUtils';
 import { 
-  Zap, 
   Clock, 
   CheckCircle2, 
   AlertTriangle, 
   Camera, 
-  FileText, 
   ChevronRight,
-  ShieldCheck,
   Activity,
   History,
   MessageSquare,
   X,
   TrendingUp,
   Search,
-  ExternalLink,
   Calendar
 } from 'lucide-react';
 import toast from 'react-hot-toast';

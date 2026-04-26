@@ -16,7 +16,7 @@ const UserDashboard = () => {
     useEffect(() => {
         const fetchDashboardData = async () => {
             try {
-                // Fetch User Data
+                // 1. Fetch User Data
                 const userResponse = await api.get('/auth/me');
                 setUserData({
                     name: userResponse.data.name,
@@ -25,14 +25,24 @@ const UserDashboard = () => {
                 localStorage.setItem('name', userResponse.data.name);
                 localStorage.setItem('email', userResponse.data.email);
 
-                // Fetch User Tickets for stats and recent activity
+                // 2. Fetch User Tickets (Maintenance/Incidents)
                 const ticketsResponse = await api.get('/api/maintenance/my');
                 const tickets = ticketsResponse.data;
 
+                // 3. Fetch User Bookings
+                const bookingsResponse = await api.get('/api/bookings/me');
+                const bookings = bookingsResponse.data;
+
                 setStats({
-                    active: tickets.filter(t => t.status === 'OPEN' || t.status === 'IN_PROGRESS').length,
+                    // Active Bookings = Approved Bookings
+                    active: bookings.filter(b => b.status === 'APPROVED').length,
+                    
+                    // Completed Actions = Resolved Maintenance Tickets
                     completed: tickets.filter(t => t.status === 'RESOLVED').length,
-                    pending: tickets.filter(t => t.status === 'PENDING').length
+                    
+                    // Pending Requests = Pending Bookings + Pending Tickets
+                    pending: bookings.filter(b => b.status === 'PENDING').length + 
+                             tickets.filter(t => t.status === 'PENDING').length
                 });
 
                 setRecentTickets(tickets.slice(0, 5));
@@ -53,11 +63,7 @@ const UserDashboard = () => {
         { label: 'Platform Rating', value: '4.9', icon: 'M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.518 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.921-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.518-4.674z', color: 'text-amber-500', bg: 'bg-amber-50', border: 'border-amber-100' },
     ];
 
-    const recentRequests = [
-        { id: '#REQ-829', title: 'Lab B2 Projector Setup', type: 'Facility', status: 'In Progress', date: '2 hours ago' },
-        { id: '#REQ-812', title: 'Asset Rental: DSLR Camera', type: 'Asset', status: 'Completed', date: 'Yesterday' },
-        { id: '#REQ-799', title: 'Maintenance: VR Station 01', type: 'Technical', status: 'Pending', date: 'Oct 14' },
-    ];
+
 
     const role = localStorage.getItem('role') || 'USER';
 
@@ -69,10 +75,10 @@ const UserDashboard = () => {
 
             <Navbar />
 
-            <div className="flex flex-1 relative z-10 w-full overflow-hidden">
+            <div className="flex flex-1 pt-[72px] relative z-10 w-full overflow-hidden">
                 <Sidebar />
 
-                <main className={`flex-1 ${role === 'USER' ? 'lg:ml-64' : 'lg:ml-72'} h-[calc(100vh-72px)] overflow-y-auto scroll-smooth`}>
+                <main className={`flex-1 lg:ml-64 h-[calc(100vh-72px)] overflow-y-auto scroll-smooth`}>
 
                     {/* Header */}
                     <div className="bg-white border-b border-slate-200 py-6">
@@ -214,7 +220,7 @@ const UserDashboard = () => {
                                     <div className="space-y-6">
                                         {[
                                             { label: 'Report Incident', path: '/report-incident', icon: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z' },
-                                            { label: 'Browse Resources', path: '/resources', icon: 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4' }
+                                            { label: 'Browse Resources', path: '/book', icon: 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4' }
                                         ].map((action, i) => (
                                             <Link key={i} to={action.path} className="flex items-center gap-4 group">
                                                 <div className="w-10 h-10 bg-slate-50 border border-slate-100 rounded-xl flex items-center justify-center text-slate-400 group-hover:bg-[#FFD166] group-hover:text-slate-900 transition-all">

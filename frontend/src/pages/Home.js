@@ -1,26 +1,40 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { Link } from 'react-router-dom';
-import { ArrowRight, CheckCircle, Zap } from 'lucide-react';
+
 import heroBg from '../assets/hero-bg.png';
 import showcaseImg from '../assets/campus-showcase.png';
+import api from '../utils/api';
 
 const Home = () => {
-    // Local assets for primary sections, Unsplash for secondary ones
+    const [resources, setResources] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchResources = async () => {
+            try {
+                const response = await api.get('/api/resources');
+                setResources(response.data.slice(0, 3)); // Only show top 3 on home
+            } catch (err) {
+                console.error("Failed to fetch resources for home:", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchResources();
+    }, []);
+
+    // Local assets for primary sections
     const aboutImg = showcaseImg;
-    const resourceImgs = [
-        "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=600",
-        "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=600",
-        "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=600"
-    ];
+
 
     return (
         <div className="min-h-screen bg-white">
             <Navbar />
             
             <main>
-                {/* 1. HERO SECTION - Premium Local Background */}
+                {/* Hero Section (Unchanged) */}
                 <section 
                     id="hero"
                     className="relative min-h-screen flex items-center justify-center bg-cover bg-center overflow-hidden"
@@ -76,7 +90,7 @@ const Home = () => {
                     </div>
                 </section>
 
-                {/* 2. ABOUT SECTION - UniFlow Insights */}
+                {/* About Section (Unchanged) */}
                 <section id="about-us" className="py-24 bg-white">
                     <div className="container mx-auto px-4 md:px-8">
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 md:gap-24 items-center">
@@ -110,7 +124,7 @@ const Home = () => {
                     </div>
                 </section>
 
-                {/* 3. STATISTICS BAR - Vibrant Accent */}
+                {/* Statistics Bar (Unchanged) */}
                 <section className="bg-[#FFCC29] py-20 relative overflow-hidden">
                     <div className="container mx-auto px-4 md:px-8 relative z-10">
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
@@ -127,11 +141,9 @@ const Home = () => {
                             ))}
                         </div>
                     </div>
-                    {/* Decorative Blob */}
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-white/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
                 </section>
 
-                {/* 4. RESOURCE HIGHLIGHTS - eSchool Themed Cards */}
+                {/* 4. RESOURCE HIGHLIGHTS - Dynamic Cards */}
                 <section id="catalogue" className="py-24 bg-white border-t border-slate-50">
                     <div className="container mx-auto px-4 md:px-8">
                         <div className="text-center mb-16">
@@ -139,48 +151,80 @@ const Home = () => {
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                            {[
-                                { title: 'Advanced Laboratories', category: 'Science & Tech', price: 'Free', img: resourceImgs[0], rating: 4.9 },
-                                { title: 'Creative Studios', category: 'Arts & Media', price: 'Bookable', img: resourceImgs[1], rating: 4.8 },
-                                { title: 'Collaborative Spaces', category: 'General', price: 'Open', img: resourceImgs[2], rating: 5.0 },
-                            ].map((res, i) => (
-                                <div key={i} className="bg-white rounded border border-slate-200 overflow-hidden hover:shadow-xl transition-all duration-300">
-                                    <div className="relative h-[240px]">
-                                        <img src={res.img} alt={res.title} className="w-full h-full object-cover" />
-                                        <div className="absolute top-4 right-4">
-                                            <span className="bg-[#3f4175] text-white px-3 py-1 text-[11px] font-bold shadow-md">
-                                                {res.price}
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div className="p-6">
-                                        <div className="flex items-center gap-3 mb-4">
-                                            <div className="w-8 h-8 rounded-full bg-slate-100 overflow-hidden border border-slate-200">
-                                                <img src={`https://ui-avatars.com/api/?name=Campus+System&background=f1f5f9&color=64748b`} alt="Admin" />
+                            {loading ? (
+                                [1, 2, 3].map(n => (
+                                    <div key={n} className="h-[450px] bg-slate-50 animate-pulse rounded-2xl"></div>
+                                ))
+                            ) : (
+                                resources.map((res, i) => (
+                                    <div key={res.id} className="bg-white rounded-[40px] overflow-hidden group shadow-2xl shadow-slate-900/5 hover:shadow-slate-900/15 transition-all duration-500 border border-slate-100 hover:-translate-y-2">
+                                        <div className="h-72 relative overflow-hidden">
+                                            <img 
+                                                src={res.imageUrl || "https://images.unsplash.com/photo-1497366216548-37526070297c"} 
+                                                alt={res.name} 
+                                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" 
+                                            />
+                                            {/* Gradient Overlay */}
+                                            <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                                            
+                                            <div className="absolute top-6 right-6">
+                                                <span className="bg-slate-900 text-[#FFD166] px-5 py-2.5 rounded-full text-[9px] font-black uppercase tracking-[0.2em] shadow-2xl backdrop-blur-sm border border-white/10">
+                                                    {res.type.replace('_', ' ')}
+                                                </span>
                                             </div>
-                                            <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">{res.category}</p>
                                         </div>
-                                        
-                                        <h3 className="text-xl font-bold text-slate-800 mb-2">{res.title}</h3>
-                                        
-                                        <div className="flex items-center gap-1 mb-8">
-                                            {[...Array(5)].map((_, i) => (
-                                                <svg key={i} className={`w-4 h-4 ${i < Math.floor(res.rating) ? 'text-[#FFD166]' : 'text-slate-200'}`} fill="currentColor" viewBox="0 0 20 20">
-                                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                                </svg>
-                                            ))}
-                                            <span className="text-xs text-slate-500 font-medium ml-1">({res.rating})</span>
-                                        </div>
-                                        
-                                        <div className="flex justify-start">
-                                            <button className="bg-[#FFD166] text-slate-900 px-6 py-2.5 rounded-full font-bold text-[11px] uppercase tracking-widest hover:scale-105 transition-transform">
-                                                Book Now
-                                            </button>
+                                        <div className="p-10">
+                                            <div className="mb-4">
+                                                <p className="text-[10px] font-black text-[#5B5FEF] uppercase tracking-[0.2em]">Campus Asset</p>
+                                            </div>
+                                            
+                                            <h3 className="text-2xl font-black text-slate-900 mb-2 tracking-tight leading-tight group-hover:text-[#5B5FEF] transition-colors">{res.name}</h3>
+                                            
+                                            <div className="flex items-center gap-2 mb-6">
+                                                <div className="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-[10px]">📍</div>
+                                                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-widest">{res.location}</span>
+                                            </div>
+
+                                            <div className="flex items-center justify-between pt-6 border-t border-slate-100">
+                                                <div className="space-y-1">
+                                                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Availability</p>
+                                                    <div className="flex items-center gap-2">
+                                                        <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                                                        <span className="text-[11px] font-black text-slate-900 uppercase tracking-widest">{res.capacity} Seats</span>
+                                                    </div>
+                                                </div>
+
+                                                <button 
+                                                    onClick={() => {
+                                                        const token = localStorage.getItem('token');
+                                                        if (token) {
+                                                            window.location.href = '/book';
+                                                        } else {
+                                                            window.location.href = '/login?redirect=/book';
+                                                        }
+                                                    }}
+                                                    className="group/btn relative overflow-hidden bg-slate-900 text-white px-7 py-3.5 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-xl shadow-slate-900/20"
+                                                >
+                                                    <span className="relative z-10 flex items-center gap-2">
+                                                        Book Now
+                                                        <svg className="w-3 h-3 group-hover/btn:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                                        </svg>
+                                                    </span>
+                                                    <div className="absolute inset-0 bg-gradient-to-r from-[#FFD166] to-[#FFD166] translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300"></div>
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            ))}
+                                ))
+                            )}
                         </div>
+                        
+                        {!loading && resources.length === 0 && (
+                            <div className="text-center py-20 bg-slate-50 rounded-[32px] border-2 border-dashed border-slate-200">
+                                <p className="text-slate-400 font-bold uppercase tracking-[0.2em]">No active resources found in the registry.</p>
+                            </div>
+                        )}
                     </div>
                 </section>
             </main>

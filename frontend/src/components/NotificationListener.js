@@ -8,19 +8,23 @@ import { useNotifications } from '../context/NotificationContext';
 const NotificationListener = () => {
     const { addNotification } = useNotifications();
 
+    const token = localStorage.getItem('token');
+    const role = localStorage.getItem('role');
+    const email = localStorage.getItem('email');
+
     useEffect(() => {
-        const role = localStorage.getItem('role');
-        
-        // Only connect if user is admin
-        if (role !== 'ADMIN') {
+        // Only connect if user is logged in
+        if (!token || !role) {
+            console.log('No token or role found, skipping WebSocket connection');
             return;
         }
 
+        console.log(`Initializing WebSocket for role: ${role}, email: ${email}`);
         const socket = new SockJS('http://localhost:8081/ws-notifications');
         const stompClient = new Client({
             webSocketFactory: () => socket,
             debug: (str) => {
-                console.log(str);
+                console.log('STOMP Debug:', str);
             },
             reconnectDelay: 5000,
             heartbeatIncoming: 4000,
@@ -28,27 +32,47 @@ const NotificationListener = () => {
         });
 
         stompClient.onConnect = (frame) => {
-            console.log('Connected: ' + frame);
-            stompClient.subscribe('/topic/admin-notifications', (notification) => {
-                const data = JSON.parse(notification.body);
-                addNotification(data);
-                showNotification(data);
-            });
+            console.log('CONNECTED TO STOMP BROKER');
+            
+            // Subscribe to admin notifications if role is ADMIN
+            if (role === 'ADMIN') {
+                console.log('Subscribing to: /topic/admin-notifications');
+                stompClient.subscribe('/topic/admin-notifications', (notification) => {
+                    const data = JSON.parse(notification.body);
+                    console.log('RECEIVED ADMIN NOTIFICATION:', data);
+                    addNotification(data);
+                    showNotification(data);
+                });
+            }
+
+            // Subscribe to user-specific notifications if email exists
+            if (email) {
+                // Use a safer topic structure or log it clearly
+                const userTopic = `/topic/user/${email}/notifications`;
+                console.log(`Subscribing to: ${userTopic}`);
+                stompClient.subscribe(userTopic, (notification) => {
+                    const data = JSON.parse(notification.body);
+                    console.log('RECEIVED USER NOTIFICATION:', data);
+                    addNotification(data);
+                    showNotification(data);
+                });
+            }
         };
 
         stompClient.onStompError = (frame) => {
-            console.error('Broker reported error: ' + frame.headers['message']);
-            console.error('Additional details: ' + frame.body);
+            console.error('STOMP ERROR:', frame.headers['message']);
+            console.error('STOMP DETAILS:', frame.body);
         };
 
         stompClient.activate();
 
         return () => {
+            console.log('Deactivating WebSocket connection');
             if (stompClient) {
                 stompClient.deactivate();
             }
         };
-    }, []);
+    }, [token, role, email, addNotification]);
 
     const showNotification = (data) => {
         toast.custom((t) => (

@@ -25,7 +25,6 @@ const TicketSubmission = () => {
     const [success, setSuccess] = useState(false);
 
     const categories = ['IT Support', 'Electrical', 'Plumbing', 'Furniture', 'Facility Structure', 'Other'];
-    const priorities = ['LOW', 'MEDIUM', 'HIGH', 'URGENT'];
 
     useEffect(() => {
         const fetchResources = async () => {
@@ -134,9 +133,9 @@ const TicketSubmission = () => {
 
             <Navbar />
 
-            <div className="flex flex-1 relative z-10 w-full overflow-hidden">
+            <div className="flex flex-1 pt-[72px] relative z-10 w-full overflow-hidden">
                 {renderSidebar()}
-                <main className={`flex-1 ${role === 'USER' ? 'lg:ml-64' : 'lg:ml-72'} h-[calc(100vh-72px)] overflow-y-auto scroll-smooth pb-10`}>
+                <main className={`flex-1 lg:ml-64 h-[calc(100vh-72px)] overflow-y-auto scroll-smooth pb-10`}>
 
                     {/* Header Section - Synced with Dashboard Style */}
                     <div className="bg-white border-b border-slate-200 py-6 mb-8">

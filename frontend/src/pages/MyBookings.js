@@ -3,14 +3,14 @@ import { useBookings } from '../hooks/useBookings';
 import { bookingService } from '../services/bookingService';
 import BookingStatusBadge from '../components/Booking/BookingStatusBadge';
 import { BOOKING_STATUS } from '../utils/bookingConstants';
-import { Trash2, PlusCircle, AlertCircle, Calendar, Clock, MapPin, Users, Filter, QrCode, X } from 'lucide-react';
+import { Trash2, AlertCircle, Calendar, Clock, Users, Filter, QrCode, X } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import AdminSidebar from '../components/AdminSidebar';
 import TechnicianSidebar from '../components/TechnicianSidebar';
 
 const MyBookings = () => {
-  const { bookings, loading, error, fetchMyBookings, cancelBooking, createBooking } = useBookings();
+  const { bookings, loading, error, fetchMyBookings, cancelBooking } = useBookings();
   const [filterStatus, setFilterStatus] = useState('');
   const [qrModalOpen, setQrModalOpen] = useState(false);
   const [currentQrCode, setCurrentQrCode] = useState(null);
@@ -57,10 +57,10 @@ const MyBookings = () => {
     <div className="min-h-screen bg-[#f8fafc] flex flex-col font-sans relative overflow-hidden">
       <Navbar />
       
-      <div className="flex flex-1">
+      <div className="flex flex-1 pt-[72px]">
         {renderSidebar()}
 
-        <main className={`flex-1 ${role === 'USER' ? 'lg:ml-64' : 'lg:ml-72'} p-6 md:p-8 transition-all duration-300`}>
+        <main className={`flex-1 lg:ml-64 p-6 md:p-8 transition-all duration-300`}>
           <div className="max-w-5xl mx-auto">
             
             {/* Header Section */}

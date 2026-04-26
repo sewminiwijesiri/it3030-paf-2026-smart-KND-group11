@@ -44,6 +44,7 @@ public class SecurityConfig {
             )
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/auth/**", "/login/**", "/oauth2/**").permitAll() // Public
+                .requestMatchers("/api/resources/**").permitAll() // Allow public browsing of resources
                 .requestMatchers("/api/public/**").permitAll() // Public Booking Verification
                 .requestMatchers("/ws-notifications/**").permitAll() // WebSocket Notifications
                 .requestMatchers("/admin/**").hasRole("ADMIN") // Admin only
