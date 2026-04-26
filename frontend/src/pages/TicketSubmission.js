@@ -4,7 +4,7 @@ import Sidebar from '../components/Sidebar';
 import AdminSidebar from '../components/AdminSidebar';
 import TechnicianSidebar from '../components/TechnicianSidebar';
 import api from '../utils/api';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 
 const TicketSubmission = () => {
@@ -15,7 +15,8 @@ const TicketSubmission = () => {
         category: 'IT Support',
         description: '',
         priority: 'MEDIUM',
-        preferredContact: ''
+        preferredContact: '',
+        attachments: []
     });
     const [resources, setResources] = useState([]);
     const [selectedFiles, setSelectedFiles] = useState([]);
@@ -26,6 +27,9 @@ const TicketSubmission = () => {
     const [success, setSuccess] = useState(false);
 
     const categories = ['IT Support', 'Electrical', 'Plumbing', 'Furniture', 'Facility Structure', 'Other'];
+
+    const { id } = useParams();
+    const isEditMode = !!id;
 
     useEffect(() => {
         const fetchResources = async () => {
@@ -38,8 +42,30 @@ const TicketSubmission = () => {
                 setFetching(false);
             }
         };
+
+        const fetchTicketData = async () => {
+            if (!isEditMode) return;
+            try {
+                const response = await api.get(`/api/maintenance/${id}`);
+                const ticket = response.data;
+                setFormData({
+                    resourceId: ticket.resourceId,
+                    resourceName: ticket.resourceName,
+                    category: ticket.category,
+                    description: ticket.description,
+                    priority: ticket.priority,
+                    preferredContact: ticket.preferredContact || '',
+                    attachments: ticket.attachments || []
+                });
+            } catch (err) {
+                console.error('Error fetching ticket data', err);
+                setErrors({ submit: 'Failed to load ticket data for editing.' });
+            }
+        };
+
         fetchResources();
-    }, []);
+        fetchTicketData();
+    }, [id, isEditMode]);
 
     const validate = () => {
         const newErrors = {};
@@ -47,8 +73,12 @@ const TicketSubmission = () => {
         if (!formData.description) newErrors.description = 'Incident details are required.';
         else if (formData.description.length < 10) newErrors.description = 'Must be at least 10 characters.';
 
-        if (formData.preferredContact && formData.preferredContact.length < 3) {
-            newErrors.preferredContact = 'Invalid contact format.';
+        if (formData.preferredContact) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const phoneOrExtRegex = /^[\d\s\-\+\(\)]{3,15}$/; // Supports extensions and phone numbers
+            if (!emailRegex.test(formData.preferredContact) && !phoneOrExtRegex.test(formData.preferredContact)) {
+                newErrors.preferredContact = 'Enter a valid email, phone, or extension.';
+            }
         }
 
         if (selectedFiles.length > 3) newErrors.files = 'Max 3 images allowed.';
@@ -94,22 +124,30 @@ const TicketSubmission = () => {
 
         setLoading(true);
         try {
-            const attachmentUrls = [];
-            for (const file of selectedFiles) {
-                const uploadData = new FormData();
-                uploadData.append('file', file);
-                const uploadRes = await api.post('/api/files/upload', uploadData, {
-                    headers: { 'Content-Type': 'multipart/form-data' }
-                });
-                attachmentUrls.push(uploadRes.data.fileUrl);
+            let attachmentUrls = [...formData.attachments];
+            // If files are selected, upload them first
+            if (selectedFiles.length > 0) {
+                for (const file of selectedFiles) {
+                    const uploadData = new FormData();
+                    uploadData.append('file', file);
+                    const uploadRes = await api.post('/api/files/upload', uploadData, {
+                        headers: { 'Content-Type': 'multipart/form-data' }
+                    });
+                    attachmentUrls.push(uploadRes.data.fileUrl);
+                }
             }
 
-            await api.post('/api/maintenance', { ...formData, attachments: attachmentUrls });
+            if (isEditMode) {
+                await api.put(`/api/maintenance/${id}`, { ...formData, attachments: attachmentUrls });
+            } else {
+                await api.post('/api/maintenance', { ...formData, attachments: attachmentUrls });
+            }
+            
             setSuccess(true);
             setTimeout(() => navigate('/my-tickets'), 2000);
         } catch (err) {
             const errorMsg = err.response?.data?.message || err.message || 'Verification Error';
-            setErrors({ submit: `Submission Failed: ${errorMsg}.` });
+            setErrors({ submit: `Operation Failed: ${errorMsg}.` });
             console.error(err);
         } finally {
             setLoading(false);
@@ -149,9 +187,11 @@ const TicketSubmission = () => {
                             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                                 <div>
                                     <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight leading-tight mb-2">
-                                        Report <span className="text-blue-100/50">Fault</span>
+                                        {isEditMode ? 'Edit' : 'Report'} <span className="text-blue-100/50">Fault</span>
                                     </h1>
-                                    <p className="text-blue-100/60 font-bold uppercase tracking-wider text-[11px]">Submit a new maintenance or technical issue</p>
+                                    <p className="text-blue-100/60 font-bold uppercase tracking-wider text-[11px]">
+                                        {isEditMode ? 'Modify your existing maintenance request' : 'Submit a new maintenance or technical issue'}
+                                    </p>
                                 </div>
 
                                 <div className="flex gap-3 mt-2 md:mt-0">
@@ -171,7 +211,7 @@ const TicketSubmission = () => {
                                     <div className="w-24 h-24 bg-[#002147] rounded-[32px] flex items-center justify-center text-white shadow-xl shadow-[#002147]/20 mb-10 animate-bounce">
                                         <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
                                     </div>
-                                    <h2 className="text-4xl font-black text-[#002147] mb-3 tracking-tight">Request Transmitted</h2>
+                                    <h2 className="text-4xl font-black text-[#002147] mb-3 tracking-tight">Request {isEditMode ? 'Updated' : 'Transmitted'}</h2>
                                     <p className="text-slate-400 font-bold uppercase tracking-[0.4em] text-[10px]">Syncing with maintenance registry...</p>
                                 </div>
                             ) : (
@@ -206,6 +246,7 @@ const TicketSubmission = () => {
                                                 </div>
                                                 <div className="relative group">
                                                     <select
+                                                        value={formData.resourceId}
                                                         onChange={handleResourceSelect} required
                                                         className={`w-full pl-11 pr-6 py-4 bg-white border-2 rounded-xl focus:bg-white focus:outline-none transition-all font-bold text-[#002147] text-sm appearance-none group-hover:border-[#002147]/20 cursor-pointer shadow-sm ${
                                                             errors.resourceId
@@ -229,8 +270,8 @@ const TicketSubmission = () => {
                                                 <label className="text-xs font-black text-slate-500 uppercase tracking-[0.2em] ml-1">Incident Class</label>
                                                 <div className="relative group">
                                                     <select
-                                                        name="category" onChange={handleChange}
-className="w-full pl-11 pr-6 py-4 bg-white border-2 border-slate-100 rounded-xl focus:bg-white focus:border-[#002147] focus:outline-none transition-all font-bold text-[#002147] text-sm appearance-none group-hover:border-[#002147]/20 cursor-pointer shadow-sm"
+                                                        name="category" value={formData.category} onChange={handleChange}
+                                                        className="w-full pl-11 pr-6 py-4 bg-white border-2 border-slate-100 rounded-xl focus:bg-white focus:border-[#002147] focus:outline-none transition-all font-bold text-[#002147] text-sm appearance-none group-hover:border-[#002147]/20 cursor-pointer shadow-sm"
                                                     >
                                                         {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
                                                     </select>
@@ -281,7 +322,7 @@ className="w-full pl-11 pr-6 py-4 bg-white border-2 border-slate-100 rounded-xl 
                                                     ) : null}
                                                 </div>
                                                 <textarea
-                                                    name="description" required
+                                                    name="description" value={formData.description} required
                                                     onChange={handleChange}
                                                     className={`flex-1 w-full px-7 py-7 bg-slate-50 border-2 rounded-2xl focus:bg-white focus:outline-none transition-all font-bold text-[#002147] text-sm resize-none placeholder:text-slate-300 min-h-[350px] shadow-inner ${
                                                         errors.description
@@ -308,7 +349,7 @@ className="w-full pl-11 pr-6 py-4 bg-white border-2 border-slate-100 rounded-xl 
                                                 </div>
                                                 <div className="relative group">
                                                     <input
-                                                        type="text" name="preferredContact" onChange={handleChange}
+                                                        type="text" name="preferredContact" value={formData.preferredContact} onChange={handleChange}
                                                         className={`w-full pl-11 pr-6 py-4 bg-white border-2 rounded-xl focus:bg-white focus:outline-none transition-all font-bold text-[#002147] text-sm placeholder:text-slate-300 shadow-sm ${
                                                             errors.preferredContact
                                                                 ? 'border-rose-400'
@@ -316,7 +357,7 @@ className="w-full pl-11 pr-6 py-4 bg-white border-2 border-slate-100 rounded-xl 
                                                                     ? 'border-emerald-400'
                                                                     : 'border-slate-100 focus:border-[#002147]'
                                                         }`}
-                                                        placeholder="Email or Ext"
+                                                        placeholder="Email, Extension or Phone"
                                                     />
                                                     <div className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors ${errors.preferredContact ? 'text-rose-400' : touched.preferredContact && formData.preferredContact.length >= 3 ? 'text-emerald-400' : 'text-[#002147]/40 group-focus-within:text-[#002147]'}`}>
                                                         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2-2v10a2 2 0 002 2z" /></svg>
@@ -381,6 +422,19 @@ className="w-full pl-11 pr-6 py-4 bg-white border-2 border-slate-100 rounded-xl 
                                                 </div>
                                             </div>
 
+                                            {formData.attachments && formData.attachments.length > 0 && (
+                                                <div className="space-y-3">
+                                                    <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Existing Evidence</label>
+                                                    <div className="flex flex-wrap gap-2">
+                                                        {formData.attachments.map((url, i) => (
+                                                            <div key={i} className="w-12 h-12 rounded-lg overflow-hidden border border-slate-200 bg-white">
+                                                                <img src={url} alt="Evidence" className="w-full h-full object-cover" />
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            )}
+
                                             <div className="pt-2">
                                                 <button
                                                     type="submit" disabled={loading}
@@ -394,7 +448,7 @@ className="w-full pl-11 pr-6 py-4 bg-white border-2 border-slate-100 rounded-xl 
                                                         <span className="animate-pulse">Transmitting...</span>
                                                     ) : (
                                                         <>
-                                                            {Object.keys(errors).length > 0 ? 'Fix Errors' : 'Dispatch Request'}
+                                                            {Object.keys(errors).length > 0 ? 'Fix Errors' : isEditMode ? 'Save Changes' : 'Dispatch Request'}
                                                             <svg className={`w-4 h-4 transition-transform ${Object.keys(errors).length > 0 ? 'animate-pulse' : 'group-hover:translate-x-2'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
                                                         </>
                                                     )}
