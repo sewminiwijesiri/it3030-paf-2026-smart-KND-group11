@@ -8,6 +8,7 @@ import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import AdminSidebar from '../components/AdminSidebar';
 import TechnicianSidebar from '../components/TechnicianSidebar';
+import Footer from '../components/Footer';
 
 const MyBookings = () => {
   const { bookings, loading, error, fetchMyBookings, cancelBooking } = useBookings();
@@ -59,42 +60,67 @@ const MyBookings = () => {
       
       <div className="flex flex-1 pt-[72px]">
         {renderSidebar()}
+<main className={`flex-1 lg:ml-72 p-6 md:p-8 transition-all duration-300`}>
+  <div className="max-w-[1200px] mx-auto">
 
-        <main className={`flex-1 lg:ml-64 p-6 md:p-8 transition-all duration-300`}>
-          <div className="max-w-5xl mx-auto">
-            
-            {/* Header Section */}
-            <header className="bg-white border-b border-slate-200 py-6 mb-8 -mx-6 md:-mx-8 px-6 md:px-8">
-              <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-                <div>
-                  <p className="text-[#0F172A] font-black text-[10px] uppercase tracking-[0.4em] mb-2 flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#FFD166]"></span>
-                    Reservation Hub
-                  </p>
-                  <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight leading-tight">
-                    My <span className="text-slate-400">Bookings</span>
-                  </h1>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="px-4 py-1.5 bg-slate-50 border border-slate-100 rounded-xl text-[9px] font-black uppercase tracking-widest text-slate-500">
-                    Total Assets: {filteredBookings.length}
-                  </div>
+    {/* Header Section */}
+    <div className="bg-[#002147] border-b border-white/10 py-8 mb-8 rounded-2xl shadow-lg">
+      <div className="px-6 lg:px-10">
+
+        <p className="text-blue-200 font-black text-[10px] uppercase tracking-[0.4em] mb-3 flex items-center gap-2">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#FF9F1C]"></span>
+          Reservation Registry
+        </p>
+
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+          
+          {/* Left */}
+          <div>
+            <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight leading-tight mb-2">
+              My <span className="text-blue-100/50">Bookings</span>
+            </h1>
+            <p className="text-blue-100/60 font-bold uppercase tracking-wider text-[11px]">
+              Manage your resource reservations and schedules.
+            </p>
+          </div>
+
+          {/* Right */}
+          <div className="bg-white/5 p-2 border border-white/10 rounded-2xl shadow-inner flex items-center gap-4 px-4">
+            <span className="text-[10px] font-black text-blue-200 uppercase tracking-widest">
+              Active Slots:
+            </span>
+            <span className="bg-[#FF9F1C] text-white px-4 py-1.5 rounded-xl text-xs font-black shadow-lg shadow-orange-500/20">
+              {filteredBookings.length}
+            </span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
                 </div>
               </div>
-            </header>
+            </div>
+          </div>
 
+          <div className="max-w-[1200px] mx-auto px-6 lg:px-10">
             {/* Filters Panel */}
             <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-[#0F172A] text-[#FFD166] rounded-lg flex items-center justify-center shadow-lg shadow-slate-900/10">
-                  <Filter className="w-4 h-4" />
-                </div>
-                <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Filter Status</span>
+<div className="w-10 h-10 bg-blue-50 text-[#002147] rounded-xl flex items-center justify-center border border-blue-100">
+  <Filter className="w-5 h-5" />
+</div>
+
+<label className="text-xs font-black text-slate-500 uppercase tracking-widest">
+  Filter Status
+</label>
               </div>
               <select
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value)}
-                className="bg-white border border-slate-200 rounded-xl px-6 py-2.5 text-[11px] font-black uppercase tracking-widest text-[#0F172A] focus:outline-none focus:ring-4 focus:ring-slate-900/5 transition-all w-full md:w-64 appearance-none shadow-sm cursor-pointer"
+className="bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#002147]/20 focus:border-[#002147] transition-all w-full md:w-64 appearance-none shadow-inner cursor-pointer"
               >
                 <option value="">All Registries</option>
                 {Object.values(BOOKING_STATUS).map((status) => (
@@ -116,7 +142,7 @@ const MyBookings = () => {
             {/* Loading State */}
             {loading ? (
               <div className="flex flex-col items-center justify-center h-64 space-y-4 animate-fade-in">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-indigo-600"></div>
+                <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-[#002147]"></div>
                 <p className="text-slate-400 font-bold uppercase tracking-widest text-[10px]">Loading Bookings...</p>
               </div>
             ) : !error && filteredBookings.length === 0 ? (
@@ -198,13 +224,11 @@ const MyBookings = () => {
                         <>
                           <button
                             onClick={() => handleGenerateQR(booking.id)}
-                            className="w-full px-4 py-2 bg-[#0F172A] text-white rounded-lg text-[9px] font-black uppercase tracking-[0.2em] hover:bg-slate-800 transition-all flex items-center justify-center gap-2 shadow-lg shadow-slate-900/10"
-                          >
-                            <QrCode size={12} className="text-[#FFD166]" /> Get QR
-                          </button>
-                          <button
-                            onClick={() => handleCancelClick(booking.id)}
-                            className="w-full px-4 py-2 bg-white border border-rose-100 text-rose-500 hover:bg-rose-50 rounded-lg text-[9px] font-black uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-2"
+className="w-full md:w-auto px-4 py-3 bg-blue-50 border border-blue-100 text-[#4DA8DA] hover:bg-[#4DA8DA] hover:text-white rounded-xl text-[11px] font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-sm hover:shadow-md"
+>
+  <QrCode size={12} className="text-[#FFD166]" /> Get QR
+</button>
+className="w-full md:w-auto px-4 py-3 bg-white border border-rose-200 text-rose-600 hover:bg-rose-50 hover:text-rose-700 rounded-xl text-[11px] font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-sm hover:shadow-md"
                           >
                             <Trash2 size={12} /> Cancel
                           </button>
@@ -221,8 +245,8 @@ const MyBookings = () => {
                 ))}
               </div>
             )}
-
           </div>
+          <Footer />
         </main>
       </div>
 
@@ -242,9 +266,9 @@ const MyBookings = () => {
               
               <div className="bg-slate-50 p-6 rounded-3xl border border-slate-100 flex items-center justify-center min-h-[250px]">
                 {qrLoading ? (
-                  <div className="animate-spin rounded-full h-10 w-10 border-b-4 border-indigo-600"></div>
+                  <div className="animate-spin rounded-full h-10 w-10 border-b-4 border-[#002147]"></div>
                 ) : currentQrCode ? (
-                  <img src={`data:image/png;base64,${currentQrCode}`} alt="Booking QR Code" className="w-48 h-48 rounded-xl shadow-sm" />
+                  <img src={`data:image/png;base64,${currentQrCode}`} alt="Booking QR Code" className="w-48 h-48 rounded-xl shadow-md border-4 border-white" />
                 ) : (
                   <div className="text-rose-500 text-sm font-bold flex items-center gap-2">
                     <AlertCircle className="w-5 h-5"/> Failed to load QR Code

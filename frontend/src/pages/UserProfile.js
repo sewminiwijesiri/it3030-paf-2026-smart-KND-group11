@@ -120,22 +120,23 @@ const UserProfile = () => {
             <div className="flex flex-1 pt-[72px] relative z-10 w-full overflow-hidden">
                 {renderSidebar()}
 
-<main className={`flex-1 lg:ml-64 h-[calc(100vh-72px)] overflow-y-auto scroll-smooth`}>
-
+<main className="flex-1 lg:ml-72 h-[calc(100vh-72px)] overflow-y-auto scroll-smooth pb-10">
   {/* Header Area styled like Dashboard */}
-  <div className="bg-white border-b border-slate-200 py-4">
-                        <div className="max-w-[1000px] mx-auto px-6">
-                            <p className="text-[#3f4175] font-black text-[9px] uppercase tracking-[0.4em] mb-1.5 drop-shadow-sm flex items-center gap-2">
-                                <span className="w-1.5 h-1.5 rounded-full bg-[#FFD166]"></span>
+  <div className="bg-[#002147] border-b border-white/10 py-8 shadow-lg">
+    <div className="max-w-[1000px] mx-auto px-6">
+      <p className="text-blue-200 font-black text-[10px] uppercase tracking-[0.4em] mb-3 flex items-center gap-2">
+        <span className="w-1.5 h-1.5 rounded-full bg-[#FF9F1C]"></span>
                                 Account Management
                             </p>
                             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
                                 <div>
-                                    <h1 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight leading-tight mb-0.5">
-                                        Account Settings
-                                    </h1>
-                                    <p className="text-slate-500 font-bold uppercase tracking-wider text-[9px] max-w-sm">
-                                        Manage your personal info and security.
+<h1 className="text-3xl md:text-4xl font-black text-white tracking-tight leading-tight mb-2">
+  Account <span className="text-blue-100/50">Settings</span>
+</h1>
+
+<p className="text-blue-100/60 font-bold uppercase tracking-wider text-[11px] max-w-sm">
+  Manage your personal information and security preferences.
+</p>
                                     </p>
                                 </div>
 <div className="flex items-center gap-3">
@@ -155,8 +156,8 @@ const UserProfile = () => {
     disabled={updateLoading}
     className={`shrink-0 px-6 py-2.5 rounded-full font-black text-[10px] uppercase tracking-widest transition-all shadow-lg ${
       isEditing
-        ? 'bg-[#0F172A] text-white hover:bg-slate-800'
-        : 'bg-[#FFD166] text-slate-900 shadow-[#FFD166]/20 hover:scale-[1.02] hover:bg-[#FFCC29]'
+        ? 'bg-white text-[#002147] hover:bg-blue-50'
+        : 'bg-[#FF9F1C] text-white shadow-orange-500/20 hover:scale-[1.02] hover:bg-orange-500'
     } disabled:opacity-50`}
   >
     {updateLoading ? 'Saving...' : isEditing ? 'Save Changes' : 'Edit Profile'}
@@ -194,7 +195,7 @@ const UserProfile = () => {
                                                     disabled={!isEditing}
                                                     value={nameInput}
                                                     onChange={(e) => setNameInput(e.target.value)}
-                                                    className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-[13px] font-bold text-slate-800 focus:outline-none focus:ring-1 focus:ring-[#0F172A] disabled:opacity-60 transition-all placeholder:text-slate-400"
+className="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-3 text-sm font-bold text-[#002147] focus:outline-none focus:ring-2 focus:ring-[#002147]/20 focus:border-[#002147] disabled:opacity-60 transition-all placeholder:text-slate-300"
                                                 />
                                             </div>
                                             <div>
@@ -207,9 +208,12 @@ const UserProfile = () => {
                                                 />
                                             </div>
                                             <div>
-                                                <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5 block">Account Role</label>
-                                                <div className="w-full bg-slate-100 border border-slate-200 text-[#3f4175] rounded-lg px-4 py-2.5 text-[13px] font-black flex items-center gap-2 uppercase tracking-wide">
-                                                    <span className="w-1.5 h-1.5 rounded-full bg-[#FFD166]"></span>
+<label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block">
+  Account Role
+</label>
+
+<div className="w-full bg-slate-50 border border-slate-200 text-[#002147] rounded-xl px-5 py-3 text-sm font-black flex items-center gap-2 uppercase tracking-wide">
+  <span className="w-2 h-2 rounded-full bg-[#FF9F1C]"></span>
                                                     {userData.role}
                                                 </div>
                                             </div>
@@ -239,7 +243,7 @@ const UserProfile = () => {
                                             </div>
                                             <button
                                                 onClick={() => setShowPasswordModal(true)}
-                                                className="shrink-0 px-5 py-2.5 bg-[#0F172A] text-white rounded-lg font-black text-[9px] uppercase tracking-widest hover:bg-slate-800 transition shadow-md"
+className="shrink-0 px-6 py-3 bg-[#002147] text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-[#003166] transition shadow-lg shadow-blue-900/10"
                                             >
                                                 Change Password
                                             </button>
@@ -252,17 +256,22 @@ const UserProfile = () => {
                             <div className="space-y-8">
 
                                 {/* Avatar Card */}
-                                <section className="bg-white p-6 rounded-[16px] border border-slate-200 text-center group shadow-sm relative overflow-hidden">
-                                    <div className="absolute top-0 left-0 w-full h-1.5 bg-[#FFD166]"></div>
-                                    <div className="w-24 h-24 bg-slate-50 border border-slate-200 text-[#0F172A] rounded-full mx-auto mb-4 flex items-center justify-center text-3xl font-black italic relative overflow-hidden">
-                                        {userData.name.charAt(0)}
-                                        <button className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-[9px] font-black uppercase tracking-widest cursor-pointer">
-                                            Update
-                                        </button>
-                                    </div>
-                                    <h3 className="text-xl font-bold text-slate-800 leading-none mb-2">{userData.name}</h3>
-                                    <span className="inline-block px-2.5 py-1 bg-[#3f4175] text-white text-[8px] font-black uppercase tracking-widest rounded border border-transparent shadow-[0_2px_10px_rgba(63,65,117,0.3)]">
-                                        Verified
+<section className="bg-white p-6 rounded-2xl border border-slate-200 text-center group shadow-sm relative overflow-hidden">
+  <div className="absolute top-0 left-0 w-full h-2 bg-[#FF9F1C]"></div>
+
+  <div className="w-28 h-28 bg-slate-50 border border-slate-200 text-[#002147] rounded-full mx-auto mb-5 flex items-center justify-center text-4xl font-black italic relative overflow-hidden">
+    {userData.name.charAt(0)}
+
+    <button className="absolute inset-0 bg-[#002147]/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-[10px] font-black uppercase tracking-widest cursor-pointer">
+      Update
+    </button>
+  </div>
+
+  <h3 className="text-xl font-black text-[#002147] leading-none mb-2">
+    {userData.name}
+  </h3>
+
+  <span className="inline-block px-3 py-1 bg-[#4DA8DA] text-white text-[9px] font-black uppercase tracking-widest rounded-lg shadow-lg shadow-blue-500/20">       Verified
                                     </span>
                                 </section>
 
@@ -292,12 +301,23 @@ const UserProfile = () => {
                                 </section>
 
                                 {/* Quick Tools Badge */}
-                                <div className="bg-[#0F172A] p-6 rounded-[16px] border border-slate-800 text-white relative overflow-hidden shadow-lg">
-                                    <div className="absolute top-0 right-0 w-32 h-32 bg-[#FFD166]/20 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2"></div>
-                                    <div className="relative z-10">
-                                        <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Help Center</p>
-                                        <p className="text-xs font-bold leading-snug mb-4">Need help with your account?</p>
-                                        <button className="text-[9px] font-black uppercase tracking-widest bg-white/10 border border-white/20 px-4 py-2 rounded hover:bg-white/20 transition-all">Support Desk</button>
+<div className="bg-[#002147] p-6 rounded-2xl border border-white/5 text-white relative overflow-hidden shadow-lg">
+  <div className="absolute top-0 right-0 w-32 h-32 bg-[#FF9F1C]/20 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2"></div>
+
+  <div className="relative z-10">
+    <p className="text-[10px] font-black text-blue-200 uppercase tracking-widest mb-2">
+      Help Center
+    </p>
+
+    <p className="text-sm font-bold leading-snug mb-4">
+      Having trouble with your account settings?
+    </p>
+
+    <button className="text-[10px] font-black uppercase tracking-widest bg-white/10 border border-white/20 px-4 py-2 rounded-xl hover:bg-white/20 transition-all">
+      Support Desk
+    </button>
+  </div>
+</div>
                                     </div>
                                 </div>
                             </div>

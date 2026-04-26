@@ -22,8 +22,14 @@ const Navbar = () => {
   };
 
   return (
-    <div className={`fixed top-0 left-0 right-0 h-[72px] z-[1000] transition-all duration-500 ${isHome ? "bg-slate-900/80 backdrop-blur-md shadow-2xl border-b border-white/5" : "bg-[#0F172A]/90 backdrop-blur-xl border-b border-white/5 shadow-md"}`}>
-      <nav className="container mx-auto px-4 md:px-8 h-full flex justify-between items-center">
+<div
+  className={`fixed top-0 left-0 right-0 z-[1000] transition-all duration-500 ${
+    isHome
+      ? "bg-transparent pt-2"
+      : "bg-[#002147] border-b border-white/5 shadow-md backdrop-blur-md"
+  }`}
+>
+  <nav className="container mx-auto px-4 md:px-8 h-[72px] flex justify-between items-center">
         {/* Left: Logo */}
         <div className="flex items-center flex-shrink-0">
           <Link to="/" className="flex items-center gap-3 no-underline group">
@@ -57,7 +63,7 @@ const Navbar = () => {
                   key={i} 
                   to={dest}
                   onClick={handleClick}
-                  className="text-[10px] font-black tracking-[0.2em] uppercase transition-colors hover:text-[#FFD166] text-slate-200"
+                  className="text-[10px] font-black tracking-[0.2em] uppercase transition-colors hover:text-[#FF9F1C] text-slate-200"
                 >
                   {item}
                 </Link>
@@ -83,10 +89,10 @@ const Navbar = () => {
                 <Search size={18} />
               </button>
               <div className="flex items-center gap-4">
-                  <Link to="/login" className="hidden md:block text-[11px] font-black uppercase tracking-widest transition-colors hover:text-[#FFD166] no-underline text-white">
+                  <Link to="/login" className="hidden md:block text-[11px] font-black uppercase tracking-widest transition-colors hover:text-[#FF9F1C] no-underline text-white">
                     Login
                   </Link>
-                  <Link to="/register" className="bg-[#FFD166] text-slate-900 px-6 py-2.5 rounded-full text-[11px] font-black shadow-lg shadow-[#FFD166]/20 hover:scale-105 hover:bg-white transition-all no-underline uppercase tracking-widest">
+                  <Link to="/register" className="bg-[#FF9F1C] text-slate-900 px-6 py-2.5 rounded-full text-[11px] font-black shadow-lg shadow-orange-500/20 hover:scale-105 hover:bg-white transition-all no-underline uppercase tracking-widest">
                     Get Started
                   </Link>
               </div>
@@ -102,9 +108,9 @@ const Navbar = () => {
                   }}
                   className="relative p-2.5 rounded-xl transition-all group text-slate-300 hover:text-white hover:bg-white/10"
                 >
-                  <Bell size={20} className="transition-colors group-hover:text-[#FFD166]" />
+                  <Bell size={20} className="transition-colors group-hover:text-[#FF9F1C]" />
                   {unreadCount > 0 && (
-                    <span className="absolute top-2 right-2 w-5 h-5 bg-rose-500 text-white text-[9px] font-black rounded-full border-2 border-[#0F172A] flex items-center justify-center animate-pulse">
+                    <span className="absolute top-2 right-2 w-5 h-5 bg-rose-500 text-white text-[9px] font-black rounded-full border-2 border-[#002147] flex items-center justify-center animate-pulse">
                       {unreadCount}
                     </span>
                   )}
@@ -112,7 +118,7 @@ const Navbar = () => {
 
                 {/* Notifications Dropdown */}
                 {showNotifications && (
-                  <div className="absolute top-full right-0 mt-3 w-80 bg-[#1E293B] border border-white/10 rounded-2xl shadow-2xl z-[1001] overflow-hidden animate-up">
+                  <div className="absolute top-full right-0 mt-3 w-80 bg-[#002147] border border-white/10 rounded-2xl shadow-2xl z-[1001] overflow-hidden animate-up">
                     <div className="p-4 border-b border-white/5 flex items-center justify-between bg-slate-900/50">
                       <div className="flex items-center gap-3">
                         <h3 className="text-xs font-black text-white uppercase tracking-widest">Notifications</h3>
@@ -150,9 +156,9 @@ const Navbar = () => {
                               className="p-4 hover:bg-white/5 transition-colors cursor-pointer group"
                             >
                               <div className="flex gap-3">
-                                <div className="mt-1 w-2 h-2 rounded-full bg-[#FFD166] shrink-0 shadow-[0_0_8px_#FFD166]"></div>
+                                <div className="mt-1 w-2 h-2 rounded-full bg-[#FF9F1C] shrink-0 shadow-[0_0_8px_#FF9F1C]"></div>
                                 <div className="space-y-1">
-                                  <p className="text-[11px] font-black text-white leading-tight group-hover:text-[#FFD166] transition-colors">{notif.title}</p>
+                                  <p className="text-[11px] font-black text-white leading-tight group-hover:text-[#FF9F1C] transition-colors">{notif.title}</p>
                                   <p className="text-[10px] font-medium text-slate-400 leading-relaxed line-clamp-2">{notif.message}</p>
                                   <p className="text-[9px] font-black text-slate-500 uppercase tracking-tighter mt-1">
                                     {formatDistanceToNow(new Date(notif.timestamp), { addSuffix: true })}
@@ -167,11 +173,11 @@ const Navbar = () => {
                     {notifications.length > 0 && (
                       <div className="p-3 bg-slate-900/50 border-t border-white/5 text-center">
                         <button 
-                          onClick={() => {
-                            navigate('/notifications');
-                            setShowNotifications(false);
-                          }}
-                          className="text-[9px] font-black text-[#FFD166] uppercase tracking-[0.2em] hover:text-white transition-colors flex items-center justify-center gap-1 mx-auto"
+onClick={() => {
+  navigate('/notifications');
+  setShowNotifications(false);
+}}
+className="text-[9px] font-black text-[#FF9F1C] uppercase tracking-[0.2em] hover:text-white transition-colors flex items-center justify-center gap-1 mx-auto"
                         >
                           View Activity Center <ChevronRight size={10} />
                         </button>
