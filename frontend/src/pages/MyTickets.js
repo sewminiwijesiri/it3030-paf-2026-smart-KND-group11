@@ -15,7 +15,8 @@ import {
     LayoutGrid,
     List,
     Calendar,
-    Tag
+    Tag,
+    Edit
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -264,6 +265,16 @@ const MyTickets = () => {
                                                 </div>
 
                                                 <div className="flex items-center gap-1.5">
+                                                    {ticket.status === 'OPEN' && (
+                                                        <Link
+                                                            to={`/edit-ticket/${ticket.id}`}
+                                                            className="p-1.5 rounded-md bg-blue-50 text-[#002147] opacity-0 group-hover:opacity-100 hover:bg-[#002147] hover:text-white transition-all duration-300"
+                                                            title="Edit Incident"
+                                                            onClick={(e) => e.stopPropagation()}
+                                                        >
+                                                            <Edit className="w-3 h-3" />
+                                                        </Link>
+                                                    )}
                                                     <button
                                                         onClick={(e) => handleDelete(e, ticket.id)}
                                                         className="p-1.5 rounded-md bg-rose-50 text-rose-500 opacity-0 group-hover:opacity-100 hover:bg-rose-500 hover:text-white transition-all duration-300"

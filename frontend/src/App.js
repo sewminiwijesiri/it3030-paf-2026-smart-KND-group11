@@ -75,6 +75,10 @@ function App() {
             element={<ProtectedRoute allowedRoles={['USER', 'ADMIN', 'TECHNICIAN']}><TicketSubmission /></ProtectedRoute>}
           />
           <Route
+            path="/edit-ticket/:id"
+            element={<ProtectedRoute allowedRoles={['USER', 'ADMIN', 'TECHNICIAN']}><TicketSubmission /></ProtectedRoute>}
+          />
+          <Route
             path="/tickets/:id"
             element={<ProtectedRoute allowedRoles={['USER', 'ADMIN', 'TECHNICIAN']}><TicketDetails /></ProtectedRoute>}
           />

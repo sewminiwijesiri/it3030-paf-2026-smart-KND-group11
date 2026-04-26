@@ -131,6 +131,24 @@ public class MaintenanceService {
         }
         maintenanceRepository.deleteById(id);
     }
+
+    public MaintenanceRequest updateRequest(String id, MaintenanceRequest updatedRequest) {
+        MaintenanceRequest existing = maintenanceRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Request not found"));
+        
+        if (existing.getStatus() != MaintenanceRequest.MaintenanceStatus.OPEN) {
+            throw new RuntimeException("Only open requests can be edited");
+        }
+
+        if (updatedRequest.getDescription() != null) existing.setDescription(updatedRequest.getDescription());
+        if (updatedRequest.getCategory() != null) existing.setCategory(updatedRequest.getCategory());
+        if (updatedRequest.getPriority() != null) existing.setPriority(updatedRequest.getPriority());
+        if (updatedRequest.getPreferredContact() != null) existing.setPreferredContact(updatedRequest.getPreferredContact());
+        if (updatedRequest.getAttachments() != null) existing.setAttachments(updatedRequest.getAttachments());
+        
+        existing.setUpdatedAt(LocalDateTime.now());
+        return maintenanceRepository.save(existing);
+    }
     
     public List<MaintenanceRequest> getHistoryByResource(String resourceName) {
         return maintenanceRepository.findByResourceName(resourceName);
