@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -20,7 +21,17 @@ public class NotificationController {
     @GetMapping
     public ResponseEntity<List<Notification>> getMyNotifications(Authentication authentication) {
         String email = authentication.getName();
-        return ResponseEntity.ok(notificationRepository.findByUserIdOrderByTimestampDesc(email));
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+        
+        List<Notification> results = new ArrayList<>(notificationRepository.findByUserIdOrderByTimestampDesc(email));
+        
+        if (isAdmin) {
+            results.addAll(notificationRepository.findByUserIdOrderByTimestampDesc("ADMIN"));
+            results.sort((a, b) -> b.getTimestamp().compareTo(a.getTimestamp()));
+        }
+        
+        return ResponseEntity.ok(results);
     }
 
     @PutMapping("/{id}/read")
