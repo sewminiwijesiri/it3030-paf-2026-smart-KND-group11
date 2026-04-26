@@ -182,12 +182,15 @@ const AdminMaintenance = () => {
                                                     {ticket.requesterEmail?.[0].toUpperCase()}
                                                 </div>
                                                 <div>
-                                                    <div className="flex items-center gap-2 mb-1">
-                                                        <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest">INC-{ticket.id.slice(-6).toUpperCase()}</span>
-                                                        <span className="text-[9px] font-black text-[#FFD166] uppercase tracking-[0.2em]">{ticket.category}</span>
+                                                    <div className="flex items-center gap-2 mb-1.5">
+                                                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">INC-{ticket.id.slice(-6).toUpperCase()}</span>
+                                                        <span className="text-[9px] font-black text-[#FFD166] bg-[#0F172A] px-2 py-0.5 rounded uppercase tracking-[0.2em]">{ticket.category || 'Maintenance'}</span>
                                                     </div>
-                                                    <p className="font-black text-slate-900 text-sm leading-none mb-1 uppercase italic tracking-tight">{ticket.resourceName}</p>
-                                                    <p className="text-[10px] text-slate-400 font-bold truncate max-w-[200px]">{ticket.requesterEmail}</p>
+                                                    <p className="font-black text-slate-900 text-[13px] tracking-tight mb-1">{ticket.resourceName}</p>
+                                                    <p className="text-[10px] text-slate-500 font-bold truncate max-w-[200px] flex items-center gap-1">
+                                                        <span className="w-1 h-1 rounded-full bg-slate-300"></span>
+                                                        {ticket.requesterEmail}
+                                                    </p>
                                                 </div>
                                             </div>
                                         </td>
@@ -229,8 +232,11 @@ const AdminMaintenance = () => {
                                             ) : (
                                                 <div className="flex items-center gap-3 group/assign">
                                                     <div className="flex flex-col">
-                                                        <p className="text-[10px] font-black text-slate-800 leading-none mb-1">{ticket.technicianEmail || 'Standby Mode'}</p>
-                                                        <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Active Operator</p>
+                                                        <p className="text-[11px] font-black text-slate-900 leading-none mb-1.5">{ticket.technicianEmail || 'System Standby'}</p>
+                                                        <div className="flex items-center gap-1.5">
+                                                            <span className="w-1 h-1 rounded-full bg-emerald-500"></span>
+                                                            <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Active Operator</p>
+                                                        </div>
                                                     </div>
                                                     <button 
                                                         onClick={() => setAssigningId(ticket.id)}

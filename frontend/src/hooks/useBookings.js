@@ -12,7 +12,13 @@ export const useBookings = () => {
     setError(null);
     try {
       const data = await bookingService.getMyBookings();
-      setBookings(data);
+      // Sort by createdAt descending (newest first)
+      const sortedData = [...data].sort((a, b) => {
+        const dateA = new Date(a.createdAt || a.id);
+        const dateB = new Date(b.createdAt || b.id);
+        return dateB - dateA;
+      });
+      setBookings(sortedData);
     } catch (err) {
       const errMsg = err.response?.data?.message || 'Failed to fetch personal bookings';
       setError(errMsg);
@@ -27,7 +33,13 @@ export const useBookings = () => {
     setError(null);
     try {
       const data = await bookingService.getAllBookings(filters);
-      setBookings(data);
+      // Sort by createdAt descending (newest first)
+      const sortedData = [...data].sort((a, b) => {
+        const dateA = new Date(a.createdAt || a.id);
+        const dateB = new Date(b.createdAt || b.id);
+        return dateB - dateA;
+      });
+      setBookings(sortedData);
     } catch (err) {
       const errMsg = err.response?.data?.message || 'Failed to fetch all bookings';
       setError(errMsg);
@@ -65,12 +77,24 @@ export const useBookings = () => {
   const cancelBooking = async (id) => {
     try {
       await bookingService.cancelBooking(id);
-      setBookings(prev => prev.map(b => b.id === id ? { ...b, status: 'CANCELLED' } : b));
-      toast.success('Booking cancelled successfully');
+      setBookings(prev => prev.filter(b => b.id !== id));
+      toast.success('Booking removed successfully');
       return true;
     } catch (err) {
-      const errMsg = err.response?.data?.message || 'Failed to cancel booking';
+      const errMsg = err.response?.data?.message || 'Failed to remove booking';
       toast.error(errMsg);
+      return false;
+    }
+  };
+
+  const bulkDeleteBookings = async (ids) => {
+    try {
+      // Local-only clear as requested by user
+      setBookings(prev => prev.filter(b => !ids.includes(b.id)));
+      toast.success(`${ids.length} records cleared from view`);
+      return true;
+    } catch (err) {
+      toast.error('Failed to clear records');
       return false;
     }
   };
@@ -83,6 +107,7 @@ export const useBookings = () => {
     fetchAllBookings,
     createBooking,
     updateStatus,
-    cancelBooking
+    cancelBooking,
+    bulkDeleteBookings
   };
 };

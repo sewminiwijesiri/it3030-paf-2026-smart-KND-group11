@@ -29,108 +29,162 @@ const Notifications = () => {
         {renderSidebar()}
 
         <main className={`flex-1 lg:ml-64 p-6 md:p-10 transition-all duration-300`}>
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-6xl mx-auto w-full">
             
             {/* Page Header */}
             <header className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-slate-100 pb-8 animate-fade-in-up">
               <div>
-                <div className="flex items-center gap-3 mb-2">
-                    <span className="inline-block px-3 py-1 bg-indigo-600 text-white text-[9px] font-black uppercase tracking-[0.2em] rounded-full">
+                <div className="flex items-center gap-2 mb-2">
+                    <span className="inline-block px-2 py-0.5 bg-[#0F172A] text-white text-[7px] font-black uppercase tracking-[0.3em] rounded">
                         System Alerts
                     </span>
-                    <span className="text-slate-300 text-xs font-bold">/</span>
-                    <span className="text-slate-400 text-xs font-bold italic">Activity Center</span>
+                    <span className="text-slate-300 text-[10px] font-bold">/</span>
+                    <span className="text-slate-400 text-[10px] font-bold italic opacity-60">Activity Center</span>
                 </div>
-                <h1 className="text-4xl font-black text-slate-900 tracking-tight leading-none mb-2">
+                <h1 className="text-2xl font-black text-slate-900 tracking-tight leading-none mb-1.5">
                   Notifications
                 </h1>
-                <p className="text-slate-400 font-medium">Keep track of all system events and personal updates.</p>
+                <p className="text-slate-500 font-bold text-xs">Manage system events and personal updates.</p>
               </div>
 
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
                 <button 
                   onClick={markAllAsRead}
-                  className="px-5 py-2.5 bg-white border border-slate-200 text-slate-600 hover:text-indigo-600 hover:border-indigo-100 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-sm flex items-center gap-2"
+                  className="px-4 py-2 bg-white border border-slate-200 text-slate-600 hover:text-[#0F172A] hover:border-slate-300 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all shadow-sm flex items-center gap-2"
                 >
-                  <CheckCircle className="w-3.5 h-3.5" /> Mark All Read
+                  <CheckCircle className="w-3 h-3" /> Mark All Read
                 </button>
                 <button 
                   onClick={() => {
                     if (window.confirm('Are you sure you want to clear all notifications?')) clearNotifications();
                   }}
-                  className="px-5 py-2.5 bg-rose-50 border border-rose-100 text-rose-600 hover:bg-rose-100 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-sm flex items-center gap-2"
+                  className="px-4 py-2 bg-rose-50 border border-rose-100 text-rose-600 hover:bg-rose-500 hover:text-white hover:border-rose-500 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all shadow-sm flex items-center gap-2"
                 >
-                  <Trash2 className="w-3.5 h-3.5" /> Clear All
+                  <Trash2 className="w-3 h-3" /> Clear All
                 </button>
               </div>
             </header>
 
             {/* Notifications List */}
-            <div className="space-y-4">
-              {notifications.length === 0 ? (
-                <div className="bg-white rounded-[2.5rem] border border-slate-100 p-20 text-center shadow-sm animate-fade-in">
-                  <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6 text-slate-200">
-                    <Bell className="w-10 h-10" />
-                  </div>
-                  <h3 className="text-xl font-black text-slate-800 mb-2">Inbox is Empty</h3>
-                  <p className="text-slate-400 text-sm font-medium">When you receive alerts, they'll appear here.</p>
-                </div>
-              ) : (
-                notifications.map((notif, index) => (
-                  <div 
-                    key={notif.id || index}
-                    onClick={() => {
-                      if (notif.targetUrl) navigate(notif.targetUrl);
-                    }}
-                    className={`bg-white rounded-[2rem] border border-slate-100 p-6 flex items-start gap-6 hover:shadow-xl hover:border-indigo-100 transition-all duration-300 group cursor-pointer animate-fade-in-up ${!notif.read ? 'border-l-4 border-l-indigo-500' : ''}`}
-                    style={{ animationDelay: `${index * 50}ms` }}
-                  >
-                    <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 border transition-all ${!notif.read ? 'bg-indigo-50 border-indigo-100 text-indigo-600' : 'bg-slate-50 border-slate-100 text-slate-400'}`}>
-                      <Bell className="w-6 h-6" />
+            <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 items-start">
+              {/* Notifications List - Main Column */}
+              <div className="xl:col-span-8 space-y-4">
+                {notifications.length === 0 ? (
+                  <div className="bg-white rounded-[2.5rem] border border-slate-100 p-20 text-center shadow-sm animate-fade-in">
+                    <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6 text-slate-200">
+                      <Bell className="w-10 h-10" />
                     </div>
+                    <h3 className="text-xl font-black text-slate-800 mb-2">Inbox is Empty</h3>
+                    <p className="text-slate-400 text-sm font-medium">When you receive alerts, they'll appear here.</p>
+                  </div>
+                ) : (
+                  notifications.map((notif, index) => (
+                    <div 
+                      key={notif.id || index}
+                      onClick={() => {
+                        if (notif.targetUrl) navigate(notif.targetUrl);
+                      }}
+                      className={`bg-white rounded-2xl border border-slate-200/60 p-4 flex items-center gap-4 hover:shadow-lg hover:border-slate-300 transition-all duration-300 group cursor-pointer animate-fade-in-up relative overflow-hidden ${!notif.read ? 'bg-slate-50/30' : ''}`}
+                      style={{ animationDelay: `${index * 50}ms` }}
+                    >
+                      {!notif.read && (
+                        <div className="absolute top-0 left-0 w-1 h-full bg-[#FFD166]"></div>
+                      )}
 
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between mb-1">
-                        <h4 className={`text-lg font-black tracking-tight transition-colors group-hover:text-indigo-600 ${!notif.read ? 'text-slate-900' : 'text-slate-500'}`}>
-                          {notif.title}
-                        </h4>
-                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-1.5">
-                          <Clock className="w-3 h-3" /> {formatDistanceToNow(new Date(notif.timestamp), { addSuffix: true })}
-                        </span>
+                      <div className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border transition-all ${!notif.read ? 'bg-[#0F172A] border-[#0F172A] text-[#FFD166]' : 'bg-slate-50 border-slate-100 text-slate-400'}`}>
+                        <Bell className="w-5 h-5" />
                       </div>
-                      
-                      <p className={`text-sm font-medium leading-relaxed mb-4 ${!notif.read ? 'text-slate-600' : 'text-slate-400'}`}>
-                        {notif.message}
-                      </p>
 
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                           <span className={`px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border ${notif.type?.includes('BOOKING') ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-indigo-50 text-indigo-600 border-indigo-100'}`}>
-                             {notif.type || 'SYSTEM'}
-                           </span>
-                           {!notif.read && (
-                             <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span>
-                           )}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex flex-wrap items-center justify-between gap-2 mb-0.5">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <h4 className={`text-[13px] font-black tracking-tight transition-colors group-hover:text-[#0F172A] leading-none ${!notif.read ? 'text-slate-900' : 'text-slate-500'}`}>
+                              {notif.title}
+                            </h4>
+                            <span className={`px-1.5 py-0.5 rounded-[4px] text-[7px] font-black uppercase tracking-widest border flex items-center h-4 ${
+                              notif.type?.includes('BOOKING') ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 
+                              notif.type?.includes('MAINTENANCE') ? 'bg-amber-50 text-amber-600 border-amber-100' :
+                              'bg-slate-50 text-slate-500 border-slate-100'}`}>
+                              {notif.type || 'SYSTEM'}
+                            </span>
+                            <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-1 opacity-70 h-4">
+                              <Clock className="w-2 h-2" /> {formatDistanceToNow(new Date(notif.timestamp), { addSuffix: true })}
+                            </span>
+                          </div>
                         </div>
                         
-                        {notif.targetUrl && (
-                          <div className="text-[10px] font-black text-indigo-600 uppercase tracking-[0.2em] flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all translate-x-4 group-hover:translate-x-0">
-                            Action Required <ChevronRight className="w-3 h-3" />
+                        <p className={`text-[10px] font-bold leading-relaxed mb-1 ${!notif.read ? 'text-slate-600' : 'text-slate-400'}`}>
+                          {notif.message}
+                        </p>
+
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                             {!notif.read && (
+                               <div className="flex items-center gap-1.5">
+                                 <span className="w-1.5 h-1.5 rounded-full bg-[#FFD166] animate-pulse"></span>
+                                 <span className="text-[7px] font-black text-[#FFD166] uppercase tracking-widest">New Update</span>
+                               </div>
+                             )}
                           </div>
-                        )}
+                          
+                          {notif.targetUrl && (
+                            <div className="text-[9px] font-black text-[#0F172A] uppercase tracking-[0.2em] flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all translate-x-2 group-hover:translate-x-0">
+                              Navigate <ChevronRight className="w-3 h-3" />
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+
+              {/* Activity Insights - Side Column */}
+              <div className="xl:col-span-4 space-y-6 sticky top-24">
+                <div className="bg-[#0F172A] rounded-[32px] p-8 text-white shadow-xl relative overflow-hidden group">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-[#FFD166] opacity-10 rounded-full -mr-16 -mt-16 transition-transform group-hover:scale-150 duration-700"></div>
+                  <h3 className="text-sm font-black uppercase tracking-[0.2em] mb-6 text-slate-400">Activity Summary</h3>
+                  
+                  <div className="space-y-6">
+                    <div>
+                      <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Total Alerts</p>
+                      <p className="text-3xl font-black text-[#FFD166]">{notifications.length}</p>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="bg-slate-800/50 rounded-2xl p-4 border border-slate-700/50">
+                        <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-1">Unread</p>
+                        <p className="text-xl font-black text-white">{notifications.filter(n => !n.read).length}</p>
+                      </div>
+                      <div className="bg-slate-800/50 rounded-2xl p-4 border border-slate-700/50">
+                        <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-1">Archived</p>
+                        <p className="text-xl font-black text-white">0</p>
                       </div>
                     </div>
                   </div>
-                ))
-              )}
+                </div>
+
+                <div className="bg-white rounded-[32px] border border-slate-100 p-8 shadow-sm">
+                  <h3 className="text-xs font-black text-slate-900 uppercase tracking-widest mb-6 flex items-center gap-2">
+                    <span className="w-1 h-3 bg-[#FFD166] rounded-full"></span>
+                    Quick Filters
+                  </h3>
+                  <div className="space-y-3">
+                    {['ALL ALERTS', 'BOOKINGS', 'MAINTENANCE', 'SYSTEM'].map(filter => (
+                      <button key={filter} className="w-full text-left px-4 py-3 rounded-xl text-[9px] font-black text-slate-500 uppercase tracking-widest hover:bg-slate-50 hover:text-[#0F172A] transition-all border border-transparent hover:border-slate-100">
+                        {filter}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </div>
 
             {/* Footer Note */}
             {notifications.length > 0 && (
-                <div className="mt-12 text-center">
-                    <div className="inline-flex items-center gap-2 px-6 py-3 bg-slate-100 rounded-full">
-                        <AlertCircle className="w-4 h-4 text-slate-400" />
-                        <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
+                <div className="mt-8 text-center pb-10">
+                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-slate-50 border border-slate-100 rounded-lg">
+                        <AlertCircle className="w-3 h-3 text-slate-400" />
+                        <p className="text-[8px] font-black text-slate-400 uppercase tracking-[0.2em]">
                             History is stored locally on this device
                         </p>
                     </div>

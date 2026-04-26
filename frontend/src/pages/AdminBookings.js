@@ -7,10 +7,11 @@ import { CheckCircle, XCircle } from 'lucide-react';
 import AdminLayout from '../components/AdminLayout';
 
 const AdminBookings = () => {
-  const { bookings, loading, error, fetchAllBookings, updateStatus } = useBookings();
+  const { bookings, loading, error, fetchAllBookings, updateStatus, bulkDeleteBookings } = useBookings();
   const [filters, setFilters] = useState({});
   const [rejectingBooking, setRejectingBooking] = useState(null);
   const [rejectReason, setRejectReason] = useState('');
+  const [selectedIds, setSelectedIds] = useState([]);
 
   useEffect(() => {
     fetchAllBookings(filters);
@@ -31,6 +32,27 @@ const AdminBookings = () => {
     if (success) {
       setRejectingBooking(null);
       setRejectReason('');
+    }
+  };
+
+  const toggleSelectAll = () => {
+    if (selectedIds.length === bookings.length) {
+      setSelectedIds([]);
+    } else {
+      setSelectedIds(bookings.map(b => b.id));
+    }
+  };
+
+  const toggleSelect = (id) => {
+    setSelectedIds(prev => 
+      prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
+    );
+  };
+
+  const handleBulkClear = async () => {
+    if (window.confirm(`Clear ${selectedIds.length} selected records permanently?`)) {
+      const success = await bulkDeleteBookings(selectedIds);
+      if (success) setSelectedIds([]);
     }
   };
 
@@ -57,7 +79,23 @@ const AdminBookings = () => {
         </div>
 
         <div className="bg-white rounded-[28px] border border-slate-100 shadow-sm p-6 md:p-8 relative">
-          <BookingFilters currentFilters={filters} onFilterChange={setFilters} />
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+            <BookingFilters currentFilters={filters} onFilterChange={setFilters} />
+            
+            {selectedIds.length > 0 && (
+              <div className="flex items-center gap-3 animate-fade-in">
+                <span className="text-[10px] font-black text-[#FFD166] bg-[#0F172A] px-4 py-2 rounded-xl shadow-lg uppercase tracking-widest">
+                  {selectedIds.length} Selected
+                </span>
+                <button 
+                  onClick={handleBulkClear}
+                  className="px-5 py-2 bg-rose-500 text-white rounded-xl text-[9px] font-black uppercase tracking-widest hover:bg-rose-600 transition-all shadow-md shadow-rose-500/20 flex items-center gap-2"
+                >
+                  Clear Selection
+                </button>
+              </div>
+            )}
+          </div>
 
       {loading && <p className="text-gray-500">Loading bookings...</p>}
       
@@ -79,6 +117,14 @@ const AdminBookings = () => {
             <table className="w-full whitespace-nowrap">
               <thead>
                 <tr className="bg-slate-50 border-b border-slate-200 text-left">
+                  <th className="px-6 py-4 w-10">
+                    <input 
+                      type="checkbox" 
+                      className="w-4 h-4 rounded border-slate-300 text-[#0F172A] focus:ring-[#0F172A] cursor-pointer"
+                      checked={selectedIds.length === bookings.length && bookings.length > 0}
+                      onChange={toggleSelectAll}
+                    />
+                  </th>
                   <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Asset / User</th>
                   <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Schedule</th>
                   <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Purpose</th>
@@ -89,7 +135,15 @@ const AdminBookings = () => {
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {bookings.map((booking) => (
-                  <tr key={booking.id} className="hover:bg-slate-50/50 transition-colors group">
+                  <tr key={booking.id} className={`hover:bg-slate-50/50 transition-colors group ${selectedIds.includes(booking.id) ? 'bg-indigo-50/30' : ''}`}>
+                    <td className="px-6 py-5">
+                      <input 
+                        type="checkbox" 
+                        className="w-4 h-4 rounded border-slate-300 text-[#0F172A] focus:ring-[#0F172A] cursor-pointer"
+                        checked={selectedIds.includes(booking.id)}
+                        onChange={() => toggleSelect(booking.id)}
+                      />
+                    </td>
                     <td className="px-6 py-5">
                       <div className="flex flex-col">
                         <span className="text-[11px] font-black text-slate-900 tracking-tight flex items-center gap-2">

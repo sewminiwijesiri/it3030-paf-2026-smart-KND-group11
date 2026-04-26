@@ -6,10 +6,10 @@ export const BOOKING_STATUS = {
 };
 
 export const STATUS_COLORS = {
-  [BOOKING_STATUS.PENDING]: 'bg-yellow-100 text-yellow-800',
-  [BOOKING_STATUS.APPROVED]: 'bg-green-100 text-green-800',
-  [BOOKING_STATUS.REJECTED]: 'bg-red-100 text-red-800',
-  [BOOKING_STATUS.CANCELLED]: 'bg-gray-100 text-gray-800',
+  [BOOKING_STATUS.PENDING]: 'bg-amber-50 text-amber-600 border-amber-100',
+  [BOOKING_STATUS.APPROVED]: 'bg-emerald-50 text-emerald-600 border-emerald-100',
+  [BOOKING_STATUS.REJECTED]: 'bg-rose-50 text-rose-600 border-rose-100',
+  [BOOKING_STATUS.CANCELLED]: 'bg-slate-50 text-slate-400 border-slate-100',
 };
 
 export const STATUS_LABELS = {

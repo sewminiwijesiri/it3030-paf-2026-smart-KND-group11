@@ -167,7 +167,10 @@ const Navbar = () => {
                     {notifications.length > 0 && (
                       <div className="p-3 bg-slate-900/50 border-t border-white/5 text-center">
                         <button 
-                          onClick={() => navigate('/admin-dashboard')} // Or a dedicated notifications page
+                          onClick={() => {
+                            navigate('/notifications');
+                            setShowNotifications(false);
+                          }}
                           className="text-[9px] font-black text-[#FFD166] uppercase tracking-[0.2em] hover:text-white transition-colors flex items-center justify-center gap-1 mx-auto"
                         >
                           View Activity Center <ChevronRight size={10} />
