@@ -58,10 +58,24 @@ public class BookingService {
 
         Booking savedBooking = bookingRepository.save(booking);
         
+        // Fetch resource name for the notification
+        String resourceName = resourceRepository.findById(savedBooking.getResourceId())
+                .map(com.uniflow.system.catalogue.model.Resource::getName)
+                .orElse("Resource");
+
+        // Send real-time notification to user who created the booking
+        notificationService.sendUserNotification(
+            savedBooking.getUserId(),
+            "Booking Created",
+            "Your booking request for " + resourceName + " has been submitted successfully.",
+            "BOOKING_CREATED",
+            "/my-bookings"
+        );
+
         // Send real-time notification to admin
         notificationService.sendAdminNotification(
             "New Resource Booking",
-            "A new booking for resource ID " + savedBooking.getResourceId() + " has been created.",
+            "A new booking for " + resourceName + " has been created by " + savedBooking.getUserId(),
             "BOOKING_CREATED",
             "/admin-bookings"
         );
@@ -100,6 +114,37 @@ public class BookingService {
         booking.setReason(statusUpdate.getReason());
 
         Booking updatedBooking = bookingRepository.save(booking);
+
+        // Fetch resource name for the notification
+        String resourceName = resourceRepository.findById(updatedBooking.getResourceId())
+                .map(com.uniflow.system.catalogue.model.Resource::getName)
+                .orElse("Resource");
+
+        // Send real-time notification to user
+        String status = updatedBooking.getStatus().toString();
+        String message = "Your booking for " + resourceName + " has been " + status.toLowerCase();
+        if (updatedBooking.getReason() != null && !updatedBooking.getReason().isEmpty()) {
+            message += ". Reason: " + updatedBooking.getReason();
+        }
+
+        System.out.println("Sending notification to user: " + updatedBooking.getUserId() + " with status: " + status);
+        
+        notificationService.sendUserNotification(
+            updatedBooking.getUserId(),
+            "Booking Status Updated",
+            message,
+            "BOOKING_STATUS_UPDATED",
+            "/my-bookings"
+        );
+
+        // Also notify admins (for verification and tracking)
+        notificationService.sendAdminNotification(
+            "Booking Updated",
+            "Booking #" + updatedBooking.getId() + " has been " + status.toLowerCase() + " for user " + updatedBooking.getUserId(),
+            "BOOKING_UPDATED",
+            "/admin-bookings"
+        );
+
         return mapToDTO(updatedBooking);
     }
 
@@ -113,7 +158,15 @@ public class BookingService {
         }
         
         booking.setStatus(BookingStatus.CANCELLED);
-        bookingRepository.save(booking);
+        Booking savedBooking = bookingRepository.save(booking);
+
+        // Send real-time notification to admin
+        notificationService.sendAdminNotification(
+            "Booking Cancelled",
+            "Booking #" + id + " for resource ID " + savedBooking.getResourceId() + " has been cancelled by user " + userId,
+            "BOOKING_CANCELLED",
+            "/admin-bookings"
+        );
     }
 
     public boolean hasConflict(String resourceId, LocalDate date, java.time.LocalTime startTime, java.time.LocalTime endTime) {
@@ -149,6 +202,12 @@ public class BookingService {
     private BookingResponseDTO mapToDTO(Booking booking) {
         BookingResponseDTO dto = new BookingResponseDTO();
         BeanUtils.copyProperties(booking, dto);
+        
+        // Fetch resource name
+        resourceRepository.findById(booking.getResourceId()).ifPresent(res -> {
+            dto.setResourceName(res.getName());
+        });
+        
         return dto;
     }
 }

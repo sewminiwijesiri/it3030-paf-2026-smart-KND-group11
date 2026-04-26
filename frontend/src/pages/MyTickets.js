@@ -5,7 +5,6 @@ import api from '../utils/api';
 import { Link } from 'react-router-dom';
 import {
     Search,
-    Filter,
     Trash2,
     ArrowRight,
     Clock,
@@ -99,20 +98,20 @@ const MyTickets = () => {
 
             <Navbar />
 
-            <div className="flex flex-1 relative z-10 w-full overflow-hidden">
+            <div className="flex flex-1 pt-[72px] relative z-10 w-full overflow-hidden">
                 <Sidebar />
-                <main className="flex-1 lg:ml-72 h-[calc(100vh-64px)] overflow-y-auto scroll-smooth">
+<main className="flex-1 lg:ml-72 h-[calc(100vh-72px)] overflow-y-auto scroll-smooth">
 
-                    {/* Glass Header */}
-                    <div className="bg-[#002147] border-b border-white/10 sticky top-0 z-30 shadow-lg">
-                        <div className="max-w-[1200px] mx-auto px-6 py-8 lg:px-10">
+  {/* Glass Header */}
+  <div className="bg-[#002147] border-b border-white/10 sticky top-0 z-30 shadow-lg backdrop-blur-md">
+    <div className="max-w-[1200px] mx-auto px-6 py-6 lg:px-10">
                             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                                 <div>
                                     <div className="flex items-center gap-2 mb-2">
                                         <div className="w-2 h-2 rounded-full bg-[#FF9F1C] animate-pulse"></div>
                                         <p className="text-blue-200 font-black text-[10px] uppercase tracking-[0.4em]">Service Registry</p>
                                     </div>
-                                    <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight leading-tight">
+<h1 className="text-3xl md:text-4xl font-black text-white tracking-tight leading-tight">
                                         My Requests
                                     </h1>
                                 </div>
@@ -129,9 +128,18 @@ const MyTickets = () => {
                                     { label: 'Active Tasks', value: stats.active, color: 'text-orange-400', bg: 'bg-white/5' },
                                     { label: 'Resolved', value: stats.resolved, color: 'text-emerald-400', bg: 'bg-white/5' }
                                 ].map((stat, i) => (
-                                    <div key={i} className={`${stat.bg} border border-white/10 rounded-2xl p-4 transition-all hover:bg-white/10`}>
-                                        <p className="text-[9px] font-black text-blue-200 uppercase tracking-widest mb-1 opacity-60">{stat.label}</p>
-                                        <p className={`text-2xl font-black ${stat.color} italic`}>{stat.value}</p>
+<div
+  key={i}
+  className={`${stat.bg} border border-white/10 rounded-2xl p-4 transition-all hover:bg-white/10 hover:shadow-md`}
+>
+  <p className="text-[9px] font-black text-blue-200 uppercase tracking-widest mb-1 opacity-70">
+    {stat.label}
+  </p>
+
+  <p className={`text-2xl font-black ${stat.color} italic`}>
+    {stat.value}
+  </p>
+</div>
                                     </div>
                                 ))}
                             </div>
@@ -141,7 +149,7 @@ const MyTickets = () => {
                     <div className="max-w-[1200px] mx-auto px-6 lg:px-10 py-10">
 
                         {/* Interactive Toolbar */}
-                        <div className="flex flex-col xl:flex-row items-center justify-between gap-6 mb-10 bg-white p-6 rounded-[32px] border border-slate-200 shadow-sm">
+<div className="flex flex-col xl:flex-row items-center justify-between gap-6 mb-8 bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
                             <div className="flex flex-wrap items-center gap-2">
                                 {['ALL', 'ACTIVE', 'RESOLVED'].map((t) => (
                                     <button
@@ -165,7 +173,7 @@ const MyTickets = () => {
                                         placeholder="Search by ID, Resource..."
                                         value={searchQuery}
                                         onChange={(e) => setSearchQuery(e.target.value)}
-                                        className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-medium focus:outline-none focus:ring-4 focus:ring-[#1E293B]/5 focus:bg-white focus:border-[#1E293B]/20 transition-all placeholder:text-slate-400"
+                                        className="w-full pl-12 pr-4 py-2.5 bg-slate-50 border border-slate-100 rounded-xl text-xs font-bold focus:outline-none focus:ring-4 focus:ring-[#1E293B]/5 focus:bg-white focus:border-[#1E293B]/20 transition-all placeholder:text-slate-400"
                                     />
                                 </div>
                                 <div className="flex items-center gap-1 bg-slate-50 p-1 rounded-xl border border-slate-100">
@@ -199,59 +207,54 @@ const MyTickets = () => {
                                 <p className="text-slate-400 font-bold uppercase text-[10px] tracking-[0.2em]">Clear skies. No active maintenance alerts.</p>
                             </div>
                         ) : (
-                            <div className={viewMode === 'grid' ? "grid grid-cols-1 md:grid-cols-2 gap-6" : "space-y-4"}>
+                            <div className={viewMode === 'grid' ? "grid grid-cols-1 md:grid-cols-2 gap-4 items-start" : "space-y-3"}>
                                 {filteredTickets.map((ticket) => {
                                     const status = getStatusConfig(ticket.status);
                                     return (
                                         <Link
                                             key={ticket.id}
                                             to={`/tickets/${ticket.id}`}
-                                            className={`group bg-white rounded-[32px] border border-slate-200/60 transition-all duration-500 hover:shadow-2xl hover:shadow-slate-200/50 hover:-translate-y-1 relative overflow-hidden ${viewMode === 'list' ? 'flex items-center p-6 gap-6' : 'p-8 flex flex-col'
+                                            className={`group bg-white rounded-xl border border-slate-200/60 transition-all duration-500 hover:shadow-lg hover:-translate-y-0.5 relative overflow-hidden ${viewMode === 'list' ? 'flex items-center p-3 gap-3' : 'p-4 flex flex-col'
                                                 }`}
                                         >
                                             {/* Top Decorative Line */}
                                             <div className={`absolute top-0 left-0 w-full h-1 opacity-0 group-hover:opacity-100 transition-opacity ${status.bg.replace('bg-', 'bg-')}`}></div>
 
-                                            <div className={viewMode === 'list' ? "flex items-center gap-6 flex-1" : "space-y-6"}>
-                                                <div className="flex items-center justify-between">
-                                                    <div className={`px-4 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest border flex items-center gap-2 ${status.bg} ${status.color} ${status.border}`}>
-                                                        <status.icon className="w-3 h-3" />
-                                                        {status.label}
-                                                    </div>
-                                                    {viewMode === 'grid' && (
-                                                        <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest">
+                                                <div className="min-w-0">
+                                                    <div className="flex items-center justify-between mb-1.5">
+                                                        <div className={`px-2 py-0.5 rounded-md text-[7px] font-black uppercase tracking-widest border flex items-center gap-1.5 ${status.bg} ${status.color} ${status.border}`}>
+                                                            <status.icon className="w-2 h-2" />
+                                                            {status.label}
+                                                        </div>
+                                                        <span className="text-[9px] font-black text-slate-300 uppercase tracking-widest">
                                                             #{ticket.id.slice(-6).toUpperCase()}
                                                         </span>
-                                                    )}
-                                                </div>
+                                                    </div>
 
-                                                <div className="space-y-3">
-                                                    <h3 className={`font-black text-slate-900 tracking-tight group-hover:text-[#1E293B] transition-colors uppercase leading-tight ${viewMode === 'list' ? 'text-lg' : 'text-2xl'}`}>
+                                                    <h3 className={`font-black text-slate-900 tracking-tight group-hover:text-[#1E293B] transition-colors uppercase leading-tight mb-1 ${viewMode === 'list' ? 'text-sm' : 'text-lg'}`}>
                                                         {ticket.resourceName}
                                                     </h3>
 
-                                                    {/* Description Preview */}
-                                                    <p className={`text-slate-500 font-medium leading-relaxed italic opacity-80 group-hover:opacity-100 transition-opacity ${viewMode === 'list' ? 'text-xs line-clamp-1' : 'text-sm line-clamp-2'}`}>
-                                                        "{ticket.description}"
+                                                    <p className={`text-slate-600 font-bold leading-relaxed opacity-90 group-hover:opacity-100 transition-opacity mb-2 ${viewMode === 'list' ? 'text-[9px] line-clamp-1' : 'text-[10px] line-clamp-1'}`}>
+                                                        {ticket.description}
                                                     </p>
 
-                                                    <div className="flex flex-wrap items-center gap-4">
-                                                        <div className="flex items-center gap-2 text-slate-400">
-                                                            <Tag className="w-3 h-3" />
-                                                            <span className="text-[10px] font-bold uppercase tracking-wider">{ticket.category}</span>
+                                                    <div className="flex flex-wrap items-center gap-3">
+                                                        <div className="flex items-center gap-1.5 text-slate-400">
+                                                            <Tag className="w-2.5 h-2.5" />
+                                                            <span className="text-[8px] font-bold uppercase tracking-wider">{ticket.category}</span>
                                                         </div>
-                                                        <div className="flex items-center gap-2 text-slate-400">
-                                                            <Calendar className="w-3 h-3" />
-                                                            <span className="text-[10px] font-bold uppercase tracking-wider">
+                                                        <div className="flex items-center gap-1.5 text-slate-400">
+                                                            <Calendar className="w-2.5 h-2.5" />
+                                                            <span className="text-[8px] font-bold uppercase tracking-wider">
                                                                 {new Date(ticket.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
                                                             </span>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
 
-                                            <div className={`${viewMode === 'list' ? 'flex items-center gap-6' : 'mt-8 pt-6 border-t border-slate-50 flex items-center justify-between'}`}>
-                                                <div className={`flex items-center gap-2 px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border ${ticket.priority === 'URGENT' ? 'bg-rose-50 text-rose-500 border-rose-100' :
+                                            <div className={`${viewMode === 'list' ? 'flex flex-col items-end gap-2 ml-auto' : 'mt-3 pt-2.5 border-t border-slate-50 flex items-center justify-between'}`}>
+                                                <div className={`flex items-center gap-1.5 px-2 py-0.5 rounded text-[7px] font-black uppercase tracking-widest border ${ticket.priority === 'URGENT' ? 'bg-rose-50 text-rose-500 border-rose-100' :
                                                         ticket.priority === 'HIGH' ? 'bg-amber-50 text-amber-500 border-amber-100' :
                                                             'bg-slate-50 text-slate-400 border-slate-100'
                                                     }`}>
@@ -261,16 +264,16 @@ const MyTickets = () => {
                                                     {ticket.priority}
                                                 </div>
 
-                                                <div className="flex items-center gap-3">
+                                                <div className="flex items-center gap-1.5">
                                                     <button
                                                         onClick={(e) => handleDelete(e, ticket.id)}
-                                                        className="p-2.5 rounded-xl bg-rose-50 text-rose-500 opacity-0 group-hover:opacity-100 hover:bg-rose-500 hover:text-white transition-all duration-300"
+                                                        className="p-1.5 rounded-md bg-rose-50 text-rose-500 opacity-0 group-hover:opacity-100 hover:bg-rose-500 hover:text-white transition-all duration-300"
                                                         title="Delete Incident"
                                                     >
-                                                        <Trash2 className="w-4 h-4" />
+                                                        <Trash2 className="w-3 h-3" />
                                                     </button>
-                                                    <div className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center group-hover:bg-[#FFD166] group-hover:text-slate-900 transition-all duration-500">
-                                                        <ArrowRight className="w-5 h-5" />
+                                                    <div className="w-7 h-7 rounded-md bg-slate-900 text-white flex items-center justify-center group-hover:bg-[#FFD166] group-hover:text-slate-900 transition-all duration-500">
+                                                        <ArrowRight className="w-3.5 h-3.5" />
                                                     </div>
                                                 </div>
                                             </div>

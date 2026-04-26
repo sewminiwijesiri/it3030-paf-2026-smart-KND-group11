@@ -46,6 +46,11 @@ export const bookingService = {
     const response = await axiosInstance.delete(`/bookings/${id}`);
     return response.data;
   },
+  
+  bulkDeleteBookings: async (ids) => {
+    const response = await axiosInstance.delete(`/bookings/batch-delete`, { data: ids });
+    return response.data;
+  },
 
   getQRCode: async (id) => {
     const origin = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000';

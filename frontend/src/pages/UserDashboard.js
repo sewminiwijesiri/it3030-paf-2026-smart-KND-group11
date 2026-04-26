@@ -37,18 +37,38 @@ const UserDashboard = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const userRes = await api.get('/auth/me');
-                setUserData({ name: userRes.data.name, email: userRes.data.email });
-                localStorage.setItem('name', userRes.data.name);
-                localStorage.setItem('email', userRes.data.email);
+// 1. Fetch User Data
+const userResponse = await api.get('/auth/me');
 
-                const ticketsRes = await api.get('/api/maintenance/my');
-                const tickets = ticketsRes.data;
-                setStats({
-                    active: tickets.filter(t => t.status === 'OPEN' || t.status === 'IN_PROGRESS').length,
-                    completed: tickets.filter(t => t.status === 'RESOLVED' || t.status === 'CLOSED').length,
-                    pending: tickets.filter(t => t.status === 'PENDING').length,
-                    total: tickets.length
+setUserData({
+  name: userResponse.data.name,
+  email: userResponse.data.email
+});
+
+localStorage.setItem('name', userResponse.data.name);
+localStorage.setItem('email', userResponse.data.email);
+
+// 2. Fetch User Tickets
+const ticketsResponse = await api.get('/api/maintenance/my');
+const tickets = ticketsResponse.data;
+
+// 3. Fetch User Bookings
+const bookingsResponse = await api.get('/api/bookings/me');
+const bookings = bookingsResponse.data;
+
+setStats({
+  active: bookings.filter(b => b.status === 'APPROVED').length,
+
+  completed: tickets.filter(
+    t => t.status === 'RESOLVED' || t.status === 'CLOSED'
+  ).length,
+
+  pending:
+    bookings.filter(b => b.status === 'PENDING').length +
+    tickets.filter(t => t.status === 'OPEN' || t.status === 'IN_PROGRESS').length,
+
+  total: tickets.length + bookings.length
+});
                 });
                 setRecentTickets(tickets.slice(0, 4));
             } catch (err) {
@@ -65,70 +85,105 @@ const UserDashboard = () => {
         navigate('/login');
     };
 
-    const getStatusConfig = (status) => {
-        switch (status) {
-            case 'OPEN': return { label: 'Open', color: 'text-rose-600', bg: 'bg-rose-50', border: 'border-rose-200', Icon: AlertCircle };
-            case 'IN_PROGRESS': return { label: 'In Progress', color: 'text-amber-600', bg: 'bg-amber-50', border: 'border-amber-200', Icon: Clock };
-            case 'RESOLVED': return { label: 'Resolved', color: 'text-emerald-600', bg: 'bg-emerald-50', border: 'border-emerald-200', Icon: CheckCircle2 };
-            case 'CLOSED': return { label: 'Closed', color: 'text-slate-500', bg: 'bg-slate-100', border: 'border-slate-200', Icon: CheckCircle2 };
-            default: return { label: status, color: 'text-slate-400', bg: 'bg-slate-50', border: 'border-slate-100', Icon: FileText };
-        }
-    };
+const getStatusConfig = (status) => {
+  switch (status) {
+    case 'OPEN':
+      return {
+        label: 'Open',
+        color: 'text-rose-600',
+        bg: 'bg-rose-50',
+        border: 'border-rose-200',
+        Icon: AlertCircle
+      };
+    case 'IN_PROGRESS':
+      return {
+        label: 'In Progress',
+        color: 'text-amber-600',
+        bg: 'bg-amber-50',
+        border: 'border-amber-200',
+        Icon: Clock
+      };
+    case 'RESOLVED':
+      return {
+        label: 'Resolved',
+        color: 'text-emerald-600',
+        bg: 'bg-emerald-50',
+        border: 'border-emerald-200',
+        Icon: CheckCircle2
+      };
+    case 'CLOSED':
+      return {
+        label: 'Closed',
+        color: 'text-slate-500',
+        bg: 'bg-slate-100',
+        border: 'border-slate-200',
+        Icon: CheckCircle2
+      };
+    default:
+      return {
+        label: status,
+        color: 'text-slate-400',
+        bg: 'bg-slate-50',
+        border: 'border-slate-100',
+        Icon: FileText
+      };
+  }
+};
 
-    const quickActions = [
-        {
-            id: 'report',
-            title: 'Report a Fault',
-            desc: 'Submit a new maintenance or technical issue',
-            path: '/report-incident',
-            icon: AlertTriangle,
-            accent: colors.orange,
-            accentText: '#FFFFFF',
-            bg: 'bg-[#002147]',
-            textMain: 'text-white',
-            textSub: 'text-blue-200',
-            cta: 'Submit Request'
-        },
-        {
-            id: 'requests',
-            title: 'My Requests',
-            desc: 'View and track all your submitted tickets',
-            path: '/my-tickets',
-            icon: ClipboardList,
-            accent: colors.orange,
-            accentText: '#FFFFFF',
-            bg: 'bg-[#FF9F1C]',
-            textMain: 'text-white',
-            textSub: 'text-orange-50',
-            cta: 'View Tickets'
-        },
-        {
-            id: 'bookings',
-            title: 'My Bookings',
-            desc: 'Manage your resource and facility bookings',
-            path: '/my-bookings',
-            icon: BookOpen,
-            accent: colors.lightBlue,
-            accentText: '#FFFFFF',
-            bg: 'bg-white',
-            textMain: 'text-slate-900',
-            textSub: 'text-slate-500',
-            cta: 'View Bookings'
-        },
-        {
-            id: 'resources',
-            title: 'Browse Resources',
-            desc: 'Explore and book available university resources',
-            path: '/book',
-            icon: Activity,
-            accent: colors.navy,
-            accentText: '#FFFFFF',
-            bg: 'bg-white',
-            textMain: 'text-slate-900',
-            textSub: 'text-slate-500',
-            cta: 'Explore'
-        },
-    ];
+const quickActions = [
+  {
+    id: 'report',
+    title: 'Report a Fault',
+    desc: 'Submit a new maintenance or technical issue',
+    path: '/report-incident',
+    icon: AlertTriangle,
+    accent: colors.orange,
+    accentText: '#FFFFFF',
+    bg: 'bg-[#002147]',
+    textMain: 'text-white',
+    textSub: 'text-blue-200',
+    cta: 'Submit Request'
+  },
+  {
+    id: 'requests',
+    title: 'My Requests',
+    desc: 'View and track all your submitted tickets',
+    path: '/my-tickets',
+    icon: ClipboardList,
+    accent: colors.orange,
+    accentText: '#FFFFFF',
+    bg: 'bg-[#FF9F1C]',
+    textMain: 'text-white',
+    textSub: 'text-orange-50',
+    cta: 'View Tickets'
+  },
+  {
+    id: 'bookings',
+    title: 'My Bookings',
+    desc: 'Manage your resource and facility bookings',
+    path: '/my-bookings',
+    icon: BookOpen,
+    accent: colors.lightBlue,
+    accentText: '#FFFFFF',
+    bg: 'bg-white',
+    textMain: 'text-slate-900',
+    textSub: 'text-slate-500',
+    cta: 'View Bookings'
+  },
+  {
+    id: 'resources',
+    title: 'Browse Resources',
+    desc: 'Explore and book available university resources',
+    path: '/book',
+    icon: Activity,
+    accent: colors.navy,
+    accentText: '#FFFFFF',
+    bg: 'bg-white',
+    textMain: 'text-slate-900',
+    textSub: 'text-slate-500',
+    cta: 'Explore'
+  }
+];
 
     const initials = userData.name ? userData.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() : 'U';
 
@@ -162,6 +217,10 @@ const UserDashboard = () => {
                         <Link to="/profile" className="p-2.5 rounded-xl text-white/80 hover:text-white hover:bg-white/10 transition-all no-underline">
                             <Settings size={18} />
                         </Link>
+            <div className="flex flex-1 pt-[72px] relative z-10 w-full overflow-hidden">
+                <Sidebar />
+
+                <main className={`flex-1 lg:ml-64 h-[calc(100vh-72px)] overflow-y-auto scroll-smooth`}>
 
                         <div className="h-6 w-[1px] bg-white/20 mx-2 hidden sm:block"></div>
 
@@ -288,11 +347,22 @@ const UserDashboard = () => {
                             <div className="xl:col-span-2 bg-white rounded-[32px] border border-slate-200 shadow-sm overflow-hidden">
                                 <div className="flex items-center justify-between px-8 py-6 border-b border-slate-100 bg-slate-50/50">
                                     <div>
-                                        <h2 className="text-base font-black text-[#002147] tracking-tight">Recent Activity</h2>
-                                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Your submission registry</p>
-                                    </div>
-                                    <Link to="/my-tickets" className="text-[10px] font-black text-[#002147] uppercase tracking-widest hover:text-[#FF9F1C] transition-colors no-underline flex items-center gap-1">
-                                        View All Reports <ChevronRight size={12} />
+<div>
+  <h2 className="text-lg font-black text-[#002147] tracking-tight flex items-center gap-2">
+    <span className="w-1 h-4 bg-[#FF9F1C] rounded-full"></span>
+    Recent Activity
+  </h2>
+  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5 ml-3">
+    Your submission registry
+  </p>
+</div>
+
+<Link
+  to="/my-tickets"
+  className="px-5 py-2 bg-slate-50 border border-slate-100 text-[#002147] rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-[#FF9F1C] hover:text-white hover:border-[#FF9F1C] transition-all shadow-sm no-underline flex items-center gap-1"
+>
+  View All Reports <ChevronRight size={12} />
+</Link>
                                     </Link>
                                 </div>
 
@@ -301,50 +371,69 @@ const UserDashboard = () => {
                                         <div className="flex items-center justify-center py-20">
                                             <div className="w-10 h-10 border-4 border-slate-100 border-t-[#002147] rounded-full animate-spin" />
                                         </div>
-                                    ) : recentTickets.length === 0 ? (
-                                        <div className="flex flex-col items-center justify-center py-20 text-center px-8">
-                                            <div className="w-20 h-20 bg-slate-50 rounded-3xl flex items-center justify-center mb-4 border border-slate-100">
-                                                <FileText size={32} className="text-slate-300" />
-                                            </div>
-                                            <h3 className="font-black text-[#002147] text-sm mb-1 uppercase tracking-tight">Registry Empty</h3>
-                                            <p className="text-slate-400 text-[11px] font-medium">You have no active maintenance records at this time.</p>
-                                            <Link to="/report-incident" className="mt-6 px-6 py-3 bg-[#002147] text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-[#003166] transition-all no-underline shadow-md">
-                                                Start New Report
-                                            </Link>
-                                        </div>
-                                    ) : (
-                                        recentTickets.map((ticket) => {
-                                            const s = getStatusConfig(ticket.status);
-                                            const SIcon = s.Icon;
-                                            return (
-                                                <Link
-                                                    key={ticket.id}
-                                                    to={`/tickets/${ticket.id}`}
-                                                    className="flex items-center gap-4 px-8 py-6 hover:bg-slate-50 transition-all group no-underline"
-                                                >
-                                                    <div className={`w-12 h-12 rounded-2xl ${s.bg} ${s.border} border flex items-center justify-center shrink-0 shadow-sm transition-transform group-hover:scale-105`}>
-                                                        <SIcon size={20} className={s.color} />
-                                                    </div>
-                                                    <div className="flex-1 min-w-0">
-                                                        <div className="flex items-center gap-2 mb-1">
-                                                            <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Ref: #{ticket.id?.slice(-6).toUpperCase()}</span>
-                                                            <span className="w-1 h-1 bg-slate-200 rounded-full"></span>
-                                                            <span className="flex items-center gap-1 text-[9px] font-bold text-slate-400 uppercase">
-                                                                <Calendar size={9} />
-                                                                {new Date(ticket.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
-                                                            </span>
-                                                        </div>
-                                                        <p className="font-black text-[#002147] text-sm truncate group-hover:text-[#FF9F1C] transition-colors uppercase tracking-tight">
-                                                            {ticket.resourceName || 'Unnamed Request'}
-                                                        </p>
-                                                    </div>
-                                                    <div className="flex flex-col items-end gap-2">
-                                                        <span className={`px-4 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest border shadow-sm ${s.bg} ${s.color} ${s.border} shrink-0`}>
-                                                            {s.label}
-                                                        </span>
-                                                        <div className="flex items-center gap-1 text-[9px] font-black text-slate-300 group-hover:text-[#002147] transition-colors">
-                                                            VIEW <ChevronRight size={10} />
-                                                        </div>
+) : recentTickets.length === 0 ? (
+  <div className="flex flex-col items-center justify-center py-20 text-center px-8">
+    <div className="w-20 h-20 bg-slate-50 rounded-3xl flex items-center justify-center mb-4 border border-slate-100">
+      <FileText size={32} className="text-slate-300" />
+    </div>
+
+    <h3 className="font-black text-[#002147] text-sm mb-1 uppercase tracking-tight">
+      Registry Empty
+    </h3>
+
+    <p className="text-slate-400 text-[11px] font-medium">
+      You have no active maintenance records at this time.
+    </p>
+
+    <Link
+      to="/report-incident"
+      className="mt-6 px-6 py-3 bg-[#002147] text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-[#003166] transition-all no-underline shadow-md"
+    >
+      Start New Report
+    </Link>
+  </div>
+) : (
+  recentTickets.map((ticket) => {
+    const s = getStatusConfig(ticket.status);
+    const SIcon = s.Icon;
+
+    return (
+      <Link
+        key={ticket.id}
+        to={`/tickets/${ticket.id}`}
+        className="flex items-center justify-between px-6 py-5 hover:bg-slate-50 transition-all group no-underline border-l-4 border-transparent hover:border-[#FF9F1C]"
+      >
+        {/* Left */}
+        <div className="flex items-center gap-4">
+          <div className={`w-11 h-11 rounded-xl ${s.bg} ${s.border} border flex items-center justify-center shadow-sm`}>
+            <SIcon size={18} className={s.color} />
+          </div>
+
+          <div>
+            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">
+              #{ticket.id?.slice(-6).toUpperCase()}
+            </p>
+
+            <p className="font-black text-[#002147] text-sm tracking-tight group-hover:text-[#FF9F1C] transition-colors">
+              {ticket.resourceName || 'Unnamed Request'}
+            </p>
+          </div>
+        </div>
+
+        {/* Right */}
+        <div className="flex items-center gap-4">
+          <span className={`px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border ${s.bg} ${s.color} ${s.border}`}>
+            {s.label}
+          </span>
+
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all bg-[#002147] text-white">
+            <ChevronRight size={14} />
+          </div>
+        </div>
+      </Link>
+    );
+  })
+)
                                                     </div>
                                                 </Link>
                                             );
@@ -408,6 +497,12 @@ const UserDashboard = () => {
                                                 <div>
                                                     <p className="text-[11px] font-black text-[#002147] leading-none uppercase tracking-tight">{item.label}</p>
                                                     <p className="text-[10px] text-slate-400 font-medium mt-1">{item.desc}</p>
+                                            { label: 'Report Incident', path: '/report-incident', icon: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z' },
+                                            { label: 'Browse Resources', path: '/book', icon: 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4' }
+                                        ].map((action, i) => (
+                                            <Link key={i} to={action.path} className="flex items-center gap-4 group">
+                                                <div className="w-10 h-10 bg-slate-50 border border-slate-100 rounded-xl flex items-center justify-center text-slate-400 group-hover:bg-[#FFD166] group-hover:text-slate-900 transition-all">
+                                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={action.icon} /></svg>
                                                 </div>
                                             </div>
                                         ))}

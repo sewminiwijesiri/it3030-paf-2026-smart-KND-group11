@@ -187,18 +187,29 @@ const BookingFormModal = ({ resource, onClose, onSuccess }) => {
 
   return (
     <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
-      <div className="bg-white rounded-[2rem] shadow-2xl w-full max-w-lg overflow-hidden relative animate-fade-in-up">
+      <div className="bg-white rounded-[1.5rem] shadow-2xl w-full max-w-md overflow-hidden relative animate-fade-in-up">
         {/* Header */}
-        <div className="px-8 py-8 border-b border-white/10 flex items-center justify-between bg-[#002147] text-white">
-          <div>
-            <h2 className="text-xl font-black">Book Resource</h2>
-            <p className="text-xs font-bold text-blue-200 mt-1 uppercase tracking-widest opacity-80">Submit a new request</p>
-          </div>
-          <button
-            onClick={onClose}
-            className="w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all"
+<div className="px-8 py-8 border-b border-white/10 flex items-center justify-between bg-[#002147] text-white">
+  <div>
+    <h2 className="text-xl font-black">Book {resource.name}</h2>
+
+    <div className="flex items-center gap-2 mt-1">
+      <span className="text-[9px] font-black text-blue-200 uppercase tracking-widest opacity-80">
+        📍 {resource.location}
+      </span>
+      <span className="text-blue-200 opacity-60">|</span>
+      <span className="text-[9px] font-black text-blue-200 uppercase tracking-widest opacity-80">
+        👥 Capacity: {resource.capacity || "N/A"}
+      </span>
+    </div>
+  </div>
+
+  <button
+    onClick={onClose}
+    className="w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all"
+  
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
         </div>
 
@@ -216,28 +227,18 @@ const BookingFormModal = ({ resource, onClose, onSuccess }) => {
             </div>
           </div>
 
+        <div className="p-6">
           {error && (
-            <div className="mb-6 p-4 bg-rose-50 border border-rose-200 text-rose-600 rounded-xl text-sm font-bold">
-              {error}
+            <div className="mb-4 p-3 bg-rose-50 border border-rose-200 text-rose-600 rounded-xl text-[11px] font-bold flex items-center gap-2">
+              <span className="shrink-0 text-lg">⚠️</span> {error}
             </div>
           )}
 
-          {conflictError && (
-            <div className="mb-6 p-4 bg-amber-50 border border-amber-200 text-amber-700 rounded-xl text-sm font-bold flex items-center gap-2">
-              ⚠️ {conflictError}
-            </div>
-          )}
-
-          {availabilityError && (
-            <div className="mb-6 p-4 bg-rose-50 border border-rose-200 text-rose-600 rounded-xl text-sm font-bold flex items-center gap-2">
-              ⚠️ {availabilityError}
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div className="space-y-1.5">
-              <label className="text-xs font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
-                <Calendar className="w-3.5 h-3.5" /> Date
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Date Section */}
+            <div className="space-y-1">
+              <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                <Calendar className="w-3 h-3" /> Booking Date
               </label>
               <input
                 type="date"
@@ -246,14 +247,15 @@ const BookingFormModal = ({ resource, onClose, onSuccess }) => {
                 min={todayLocal}
                 value={formData.bookingDate}
                 onChange={handleChange}
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-[#002147] focus:outline-none focus:ring-2 focus:ring-[#002147]/10 focus:border-[#002147] transition-all"
+className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-[#002147] focus:outline-none focus:ring-2 focus:ring-[#002147]/20 focus:border-[#002147] transition-all"
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-5">
-              <div className="space-y-1.5 relative">
-                <label className="text-xs font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
-                  <Clock className="w-3.5 h-3.5" /> Start Time
+            {/* Time Grid */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-1">
+                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                  <Clock className="w-3 h-3" /> Start
                 </label>
                 <input
                   type="time"
@@ -261,19 +263,17 @@ const BookingFormModal = ({ resource, onClose, onSuccess }) => {
                   required
                   value={formData.startTime}
                   onChange={handleChange}
-                  className={`w-full bg-slate-50 border rounded-xl px-4 py-3 text-sm font-bold focus:outline-none focus:ring-2 transition-all ${
-                    startTimeError ? 'border-rose-300 text-rose-600 focus:ring-rose-500' : 'border-slate-200 text-[#002147] focus:ring-[#002147]/10 focus:border-[#002147]'
+className={`w-full bg-slate-50 border rounded-xl px-4 py-3 text-sm font-bold focus:outline-none focus:ring-2 transition-all ${
+  startTimeError
+    ? 'border-rose-300 text-rose-600 focus:ring-rose-500'
+    : 'border-slate-200 text-[#002147] focus:ring-[#002147]/20 focus:border-[#002147]'
+}`}
                   }`}
                 />
-                {startTimeError && (
-                  <p className="text-[10px] font-bold text-rose-500 mt-1 flex items-center gap-1">
-                    ⚠️ {startTimeError}
-                  </p>
-                )}
               </div>
-              <div className="space-y-1.5 relative">
-                <label className="text-xs font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
-                  <Clock className="w-3.5 h-3.5" /> End Time
+              <div className="space-y-1">
+                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                  <Clock className="w-3 h-3" /> End
                 </label>
                 <input
                   type="time"
@@ -281,89 +281,122 @@ const BookingFormModal = ({ resource, onClose, onSuccess }) => {
                   required
                   value={formData.endTime}
                   onChange={handleChange}
-                  className={`w-full bg-slate-50 border rounded-xl px-4 py-3 text-sm font-bold focus:outline-none focus:ring-2 transition-all ${
-                    endTimeError ? 'border-rose-300 text-rose-600 focus:ring-rose-500' : 'border-slate-200 text-[#002147] focus:ring-[#002147]/10 focus:border-[#002147]'
+className={`w-full bg-slate-50 border rounded-xl px-4 py-3 text-sm font-bold focus:outline-none focus:ring-2 transition-all ${
+  endTimeError
+    ? 'border-rose-300 text-rose-600 focus:ring-rose-500'
+    : 'border-slate-200 text-[#002147] focus:ring-[#002147]/20 focus:border-[#002147]'
+}`}
                   }`}
                 />
-                {endTimeError && (
-                  <p className="text-[10px] font-bold text-rose-500 mt-1 flex items-center gap-1">
-                    ⚠️ {endTimeError}
-                  </p>
-                )}
               </div>
             </div>
 
-            {availabilityDetails && (availabilityDetails.availableDays?.length > 0 || availabilityDetails.availableStartTime) && (
-              <div className="text-[10px] font-black text-[#4DA8DA] mt-2 uppercase tracking-widest bg-blue-50/50 px-3 py-1 rounded-lg border border-blue-100/50 inline-block">
-                Available on: {(availabilityDetails.availableDays?.length > 0) ? availabilityDetails.availableDays.map(d => d.charAt(0).toUpperCase() + d.slice(1).toLowerCase()).join(', ') : 'All days'} 
-                {availabilityDetails.availableStartTime && ` (${availabilityDetails.availableStartTime.substring(0,5)} - ${availabilityDetails.availableEndTime.substring(0,5)})`}
+{/* Availability Info */}
+{availabilityDetails && (availabilityDetails.availableDays?.length > 0 || availabilityDetails.availableStartTime) && (
+  <div className="text-[10px] font-black text-[#4DA8DA] mt-2 uppercase tracking-widest bg-blue-50/50 px-3 py-1 rounded-lg border border-blue-100/50 inline-block">
+    Available on: {(availabilityDetails.availableDays?.length > 0)
+      ? availabilityDetails.availableDays
+          .map(d => d.charAt(0).toUpperCase() + d.slice(1).toLowerCase())
+          .join(', ')
+      : 'All days'}
+    {availabilityDetails.availableStartTime &&
+      ` (${availabilityDetails.availableStartTime.substring(0,5)} - ${availabilityDetails.availableEndTime.substring(0,5)})`}
+  </div>
+)}
+
+{/* Inline Errors for Time */}
+{(startTimeError || endTimeError || conflictError || availabilityError) && (
+  <div className="p-3 bg-amber-50/50 border border-amber-100 rounded-xl space-y-1 mt-2">
+    {startTimeError && (
+      <p className="text-[10px] font-bold text-rose-500 flex items-center gap-1">
+        ❌ {startTimeError}
+      </p>
+    )}
+    {endTimeError && (
+      <p className="text-[10px] font-bold text-rose-500 flex items-center gap-1">
+        ❌ {endTimeError}
+      </p>
+    )}
+    {conflictError && (
+      <p className="text-[10px] font-bold text-amber-600 flex items-center gap-1">
+        ⚠️ {conflictError}
+      </p>
+    )}
+    {availabilityError && (
+      <p className="text-[10px] font-bold text-rose-500 flex items-center gap-1">
+        ⏱️ {availabilityError}
+      </p>
+    )}
+  </div>
+)}
               </div>
             )}
 
-            <div className="space-y-1.5">
-              <label className="text-xs font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
-                <AlignLeft className="w-3.5 h-3.5" /> Purpose
+            {/* Purpose */}
+            <div className="space-y-1">
+              <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                <AlignLeft className="w-3 h-3" /> Purpose
               </label>
               <textarea
                 name="purpose"
                 required
-                placeholder="e.g., Group meeting, Project presentation"
+                placeholder="Briefly describe the booking purpose..."
                 value={formData.purpose}
                 onChange={handleChange}
-                rows="3"
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-medium text-[#002147] focus:outline-none focus:ring-2 focus:ring-[#002147]/10 focus:border-[#002147] transition-all resize-none shadow-inner"
+rows="3"
+className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-medium text-[#002147] focus:outline-none focus:ring-2 focus:ring-[#002147]/20 focus:border-[#002147] transition-all resize-none shadow-inner"
               ></textarea>
             </div>
 
-            <div className="space-y-1.5">
-              <label className="text-xs font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
-                <Users className="w-3.5 h-3.5" /> Expected Attendees
-              </label>
+            {/* Attendees */}
+            <div className="space-y-1">
+              <div className="flex justify-between items-center">
+                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                    <Users className="w-3 h-3" /> Attendees
+                </label>
+                {isCapacityExceeded && (
+                    <span className="text-[9px] font-black text-rose-500 uppercase tracking-widest">Capacity Exceeded!</span>
+                )}
+              </div>
               <input
                 type="number"
                 name="expectedAttendees"
                 min="1"
-                max={resource.capacity || ''}
                 required
                 value={formData.expectedAttendees}
                 onChange={handleChange}
-                className={`w-full bg-slate-50 border rounded-xl px-4 py-3 text-sm font-bold focus:outline-none focus:ring-2 transition-all ${
-                  isCapacityExceeded 
-                    ? 'border-rose-300 text-rose-600 focus:ring-rose-500' 
-                    : 'border-slate-200 text-[#002147] focus:ring-[#002147]/10 focus:border-[#002147]'
+className={`w-full bg-slate-50 border rounded-xl px-4 py-3 text-sm font-bold focus:outline-none focus:ring-2 transition-all ${
+  isCapacityExceeded
+    ? 'border-rose-400 text-rose-600 focus:ring-rose-500 bg-rose-50/30'
+    : 'border-slate-200 text-[#002147] focus:ring-[#002147]/20 focus:border-[#002147]'
+}`}
                 }`}
               />
-              {isCapacityExceeded && (
-                <p className="text-xs font-bold text-rose-500 mt-2 flex items-center gap-1">
-                  ⚠️ Attendees cannot exceed capacity ({resource.capacity})
-                </p>
-              )}
             </div>
 
-            <div className="pt-6 flex items-center gap-4">
+            {/* Submit Actions */}
+            <div className="pt-4 flex items-center gap-3">
               <button
                 type="button"
                 onClick={onClose}
-                className="flex-1 px-6 py-4 rounded-xl text-sm font-black text-slate-500 hover:bg-slate-100 transition-colors uppercase tracking-wider"
+                className="flex-1 px-4 py-3 rounded-xl text-[11px] font-black text-slate-400 hover:text-slate-600 hover:bg-slate-50 transition-all uppercase tracking-widest"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={isSubmitDisabled}
-                className={`flex-1 px-6 py-4 rounded-2xl text-sm font-black text-white uppercase tracking-widest shadow-xl transition-all flex items-center justify-center gap-2 ${
-                  isSubmitDisabled 
-                    ? 'bg-slate-200 shadow-none cursor-not-allowed text-slate-400' 
-                    : 'bg-[#FF9F1C] hover:bg-orange-500 hover:shadow-orange-500/20 hover:-translate-y-0.5 active:scale-95'
+className={`flex-[2] px-6 py-4 rounded-2xl text-sm font-black text-white uppercase tracking-widest shadow-xl transition-all flex items-center justify-center gap-2 ${
+  isSubmitDisabled
+    ? 'bg-slate-200 shadow-none cursor-not-allowed text-slate-400'
+    : 'bg-[#FF9F1C] hover:bg-orange-500 hover:shadow-orange-500/20 hover:-translate-y-0.5 active:scale-95'
+}`}
                 }`}
               >
                 {loading ? (
-                  <>
-                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                    Submitting...
-                  </>
+                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                 ) : (
-                  'Submit Booking'
+                  'Confirm Booking'
                 )}
               </button>
             </div>

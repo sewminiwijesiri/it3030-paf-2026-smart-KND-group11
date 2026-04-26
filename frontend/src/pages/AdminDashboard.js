@@ -39,9 +39,14 @@ const AdminDashboard = () => {
                         </span>
                         <h1 className="text-4xl font-black text-slate-900 tracking-tight leading-none">Admin Core</h1>
                     </div>
-                    <div className="flex items-center gap-2 bg-white border border-slate-200 px-5 py-3 rounded-xl shadow-sm">
-                        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                        <span className="text-[9px] font-black text-slate-600 uppercase tracking-[0.2em]">All Engines Active</span>
+                    <div className="flex items-center gap-4">
+                        <Link to="/admin/logs" className="hidden md:flex items-center gap-2 bg-slate-900 text-[#FFD166] px-5 py-3 rounded-xl shadow-xl hover:scale-105 transition-all text-[9px] font-black uppercase tracking-[0.2em]">
+                            System Logs
+                        </Link>
+                        <div className="flex items-center gap-2 bg-white border border-slate-200 px-5 py-3 rounded-xl shadow-sm">
+                            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                            <span className="text-[9px] font-black text-slate-600 uppercase tracking-[0.2em]">All Engines Active</span>
+                        </div>
                     </div>
                 </div>
 

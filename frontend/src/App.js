@@ -16,6 +16,7 @@ import TicketSubmission from './pages/TicketSubmission';
 import MyTickets from './pages/MyTickets';
 import TicketDetails from './pages/TicketDetails';
 import AdminMaintenance from './pages/AdminMaintenance';
+import AdminLogs from './pages/AdminLogs';
 import AdminTest from './pages/AdminTest';
 import OAuth2RedirectHandler from './pages/OAuth2RedirectHandler';
 import AccessDenied from './pages/AccessDenied';
@@ -23,6 +24,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import MyBookings from './pages/MyBookings';
 import AdminBookings from './pages/AdminBookings';
 import VerifyBooking from './pages/VerifyBooking';
+import Notifications from './pages/Notifications';
 import { Toaster } from 'react-hot-toast';
 import NotificationListener from './components/NotificationListener';
 import { NotificationProvider } from './context/NotificationContext';
@@ -55,6 +57,10 @@ function App() {
           <Route
             path="/admin/maintenance"
             element={<ProtectedRoute allowedRoles={['ADMIN']}><AdminMaintenance /></ProtectedRoute>}
+          />
+          <Route
+            path="/admin/logs"
+            element={<ProtectedRoute allowedRoles={['ADMIN']}><AdminLogs /></ProtectedRoute>}
           />
           <Route
             path="/user-dashboard"
@@ -106,6 +112,10 @@ function App() {
             element={<ProtectedRoute allowedRoles={['ADMIN']}><AdminTest /></ProtectedRoute>}
           />
 
+          <Route
+            path="/notifications"
+            element={<ProtectedRoute allowedRoles={['USER', 'ADMIN', 'TECHNICIAN']}><Notifications /></ProtectedRoute>}
+          />
           <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
           <Route path="/access-denied" element={<AccessDenied />} />
           

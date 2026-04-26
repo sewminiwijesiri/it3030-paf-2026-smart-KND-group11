@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import logoIcon from '../assets/uniflow-icon.svg';
@@ -17,6 +17,7 @@ const Register = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
 
     const handleChange = (e) => {
         setUser({ ...user, [e.target.name]: e.target.value });
@@ -37,7 +38,8 @@ const Register = () => {
             const { confirmPassword, ...registrationData } = user;
             await axios.post('http://localhost:8081/auth/register', registrationData);
             alert('Registration Successful! Please login.');
-            navigate('/login');
+            const redirectPath = searchParams.get('redirect');
+            navigate(redirectPath ? `/login?redirect=${redirectPath}` : '/login');
         } catch (err) {
             console.error('Registration error:', err);
             setError(err.response?.data?.message || 'Registration failed. Please try again.');
@@ -50,13 +52,13 @@ const Register = () => {
         <div className="min-h-screen flex flex-col bg-slate-900">
             <Navbar />
             <main 
-                className="flex-1 flex items-center justify-center p-5 relative overflow-hidden bg-cover bg-center min-h-[100vh]"
+                className="flex-1 flex items-center justify-center p-5 pt-[72px] relative overflow-hidden bg-cover bg-center min-h-[100vh]"
                 style={{ backgroundImage: `url(${heroBg})` }}
             >
                 {/* Premium Dark Overlay */}
                 <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-[2px]"></div>
                 
-                <div className="bg-white rounded-[32px] w-full max-w-[380px] p-6 z-[1] shadow-2xl relative border border-white/20">
+                <div className="bg-white rounded-[24px] w-full max-w-[340px] p-6 z-[1] shadow-2xl relative border border-white/20">
                     <div className="text-center mb-4">
                         <img src={logoIcon} alt="UniFlow Logo" className="w-[40px] h-auto mx-auto mb-2" />
                         <h2 className="text-lg font-black mb-0.5 tracking-tight text-slate-900">Join UniFlow</h2>
@@ -165,7 +167,7 @@ const Register = () => {
 
                     <div className="text-center mt-4 pt-3 border-t border-slate-50">
                         <span className="text-slate-500 text-[9px] font-bold">MEMBER ALREADY?</span> 
-                        <Link to="/login" className="text-[#5B5FEF] font-black uppercase tracking-widest text-[9px] ml-2 hover:text-slate-900 transition-colors">Log In</Link>
+                        <Link to={searchParams.get('redirect') ? `/login?redirect=${searchParams.get('redirect')}` : "/login"} className="text-[#5B5FEF] font-black uppercase tracking-widest text-[10px] ml-2 hover:text-slate-900 transition-colors">Portal Login</Link>
                     </div>
                 </div>
             </main>

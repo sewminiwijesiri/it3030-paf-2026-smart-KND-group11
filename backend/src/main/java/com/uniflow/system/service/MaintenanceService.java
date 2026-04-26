@@ -2,6 +2,7 @@ package com.uniflow.system.service;
 
 import com.uniflow.system.model.MaintenanceRequest;
 import com.uniflow.system.repository.MaintenanceRepository;
+import com.smartcampus.notification.service.NotificationService;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -10,9 +11,11 @@ import java.util.List;
 public class MaintenanceService {
 
     private final MaintenanceRepository maintenanceRepository;
+    private final NotificationService notificationService;
 
-    public MaintenanceService(MaintenanceRepository maintenanceRepository) {
+    public MaintenanceService(MaintenanceRepository maintenanceRepository, NotificationService notificationService) {
         this.maintenanceRepository = maintenanceRepository;
+        this.notificationService = notificationService;
     }
 
     public MaintenanceRequest getRequestById(String id) {
@@ -64,14 +67,36 @@ public class MaintenanceService {
                 .orElseThrow(() -> new RuntimeException("Request not found"));
         request.setTechnicianEmail(technicianEmail);
         request.setUpdatedAt(LocalDateTime.now());
-        return maintenanceRepository.save(request);
+        MaintenanceRequest savedRequest = maintenanceRepository.save(request);
+
+        // Notify Technician in real-time
+        notificationService.sendUserNotification(
+            technicianEmail,
+            "New Task Assigned",
+            "You have been assigned to a maintenance task for " + request.getResourceName() + ": " + request.getDescription(),
+            "MAINTENANCE_ASSIGNMENT",
+            "/technician/tasks"
+        );
+
+        return savedRequest;
     }
 
     public MaintenanceRequest createRequest(MaintenanceRequest request) {
         request.setCreatedAt(LocalDateTime.now());
         request.setUpdatedAt(LocalDateTime.now());
         if (request.getStatus() == null) request.setStatus(MaintenanceRequest.MaintenanceStatus.OPEN);
-        return maintenanceRepository.save(request);
+        
+        MaintenanceRequest savedRequest = maintenanceRepository.save(request);
+        
+        // Notify Admins in real-time
+        notificationService.sendAdminNotification(
+            "New Maintenance Ticket",
+            "A new ticket has been raised for " + request.getResourceName() + ": " + request.getDescription(),
+            "MAINTENANCE",
+            "/admin/maintenance"
+        );
+        
+        return savedRequest;
     }
 
     public void deleteRequest(String id) {

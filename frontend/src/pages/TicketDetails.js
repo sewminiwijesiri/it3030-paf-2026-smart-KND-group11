@@ -125,12 +125,12 @@ const TicketDetails = () => {
             )}
 
             <Navbar />
-            <div className="flex flex-1 relative z-10 w-full overflow-hidden">
+            <div className="flex flex-1 pt-[72px] relative z-10 w-full overflow-hidden">
                 {renderSidebar()}
-                <main className={`flex-1 ${userRole === 'USER' ? 'lg:ml-72' : 'lg:ml-72'} h-[calc(100vh-64px)] overflow-y-auto scroll-smooth`}>
+<main className="flex-1 lg:ml-72 h-[calc(100vh-72px)] overflow-y-auto scroll-smooth">
 
-                    {/* Header Area styled like UserDashboard */}
-                    <div className="bg-[#002147] border-b border-white/10 py-10 shadow-lg">
+  {/* Header Area styled like UserDashboard */}
+  <div className="bg-[#002147] border-b border-white/10 py-8 shadow-lg">
                         <div className="max-w-[1000px] mx-auto px-6">
                             <div className="flex flex-col md:flex-row justify-between items-start gap-8">
                                 <div>
@@ -144,7 +144,7 @@ const TicketDetails = () => {
                                             {ticket.status.replace('_', ' ')}
                                         </span>
                                     </div>
-                                    <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight mb-2 uppercase">
+<h1 className="text-4xl md:text-5xl font-black text-white tracking-tight mb-2 uppercase">
                                         {ticket.resourceName}
                                     </h1>
                                     <p className="text-blue-100/60 font-bold uppercase tracking-[0.2em] text-[10px]">
@@ -173,16 +173,16 @@ const TicketDetails = () => {
                         </div>
                     </div>
 
-                    <div className="max-w-[1000px] mx-auto px-6 py-10">
+                    <div className="max-w-[1000px] mx-auto px-6 py-6">
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
                             {/* Left: Content */}
-                            <div className="lg:col-span-2 space-y-8">
+                            <div className="lg:col-span-2 space-y-6">
 
-                                <section className="bg-white p-8 rounded border border-slate-200 shadow-sm relative overflow-hidden">
-                                    <div className="absolute top-0 left-0 w-full h-2 bg-[#FF9F1C]"></div>
+<section className="bg-white p-6 rounded border border-slate-200 shadow-sm relative overflow-hidden">
+  <div className="absolute top-0 left-0 w-full h-2 bg-[#FF9F1C]"></div>
                                     <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4">Case Description</h3>
-                                    <p className="text-lg font-bold text-slate-800 leading-relaxed">"{ticket.description}"</p>
+                                    <p className="text-base font-bold text-slate-800 leading-relaxed">"{ticket.description}"</p>
 
                                     {/* Resolution Area */}
                                     {ticket.resolutionNotes && (
@@ -191,7 +191,7 @@ const TicketDetails = () => {
                                                 <span className="w-2 h-2 bg-[#FF9F1C] rounded-full"></span>
                                                 Official Resolution Notes
                                             </h3>
-                                            <div className="bg-slate-50 p-6 rounded border border-slate-200 font-bold text-slate-800 text-sm leading-relaxed">
+                                            <div className="bg-slate-50 p-4 rounded border border-slate-200 font-bold text-slate-800 text-xs leading-relaxed">
                                                 {ticket.resolutionNotes}
                                             </div>
                                         </div>
@@ -200,7 +200,7 @@ const TicketDetails = () => {
 
                                 {/* Gallery Section */}
                                 {ticket.attachments && ticket.attachments.length > 0 && (
-                                    <section className="bg-white p-8 rounded border border-slate-200 shadow-sm">
+                                    <section className="bg-white p-6 rounded border border-slate-200 shadow-sm">
                                         <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-6">Evidentiary Documentation</h3>
                                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                             {ticket.attachments.map((url, i) => (
@@ -224,7 +224,7 @@ const TicketDetails = () => {
                                 )}
 
                                 {/* Interaction Section */}
-                                <section className="bg-white p-8 rounded border border-slate-200 shadow-sm space-y-8">
+                                <section className="bg-white p-6 rounded border border-slate-200 shadow-sm space-y-6">
                                     <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Registry Conversation</h3>
                                     <div className="space-y-6">
                                         {comments.map(comment => (
@@ -232,7 +232,7 @@ const TicketDetails = () => {
                                                 <div className="w-10 h-10 rounded bg-slate-100 flex items-center justify-center font-black text-[10px] text-slate-500 border border-slate-200 uppercase tracking-tighter shrink-0">
                                                     {(comment.authorEmail || 'U').charAt(0)}
                                                 </div>
-                                                <div className="bg-slate-50 p-6 rounded border border-slate-200 flex-1 relative">
+                                                <div className="bg-slate-50 p-4 rounded border border-slate-200 flex-1 relative">
                                                     <div className="flex justify-between items-center mb-2">
                                                         <span className="text-[10px] font-black text-slate-800 uppercase tracking-widest">{comment.authorEmail}</span>
                                                         <span className="text-[9px] font-bold text-slate-400">{new Date(comment.createdAt).toLocaleString([], { hour: '2-digit', minute: '2-digit' })}</span>
@@ -248,7 +248,7 @@ const TicketDetails = () => {
                                     <form onSubmit={submitComment} className="relative pt-6 border-t border-slate-100">
                                         <textarea
                                             placeholder="Add a comment to the incident thread..." required
-                                            className="w-full px-6 py-5 bg-slate-50 border border-slate-200 rounded-2xl focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#002147] font-bold text-slate-800 shadow-sm resize-none min-h-[100px] placeholder:text-slate-400"
+className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#002147]/30 focus:border-[#002147] font-bold text-slate-800 shadow-sm resize-none min-h-[100px] placeholder:text-slate-400 text-sm"
                                             value={newComment} onChange={(e) => setNewComment(e.target.value)}
                                         ></textarea>
                                         <button type="submit" className="mt-4 px-8 py-3 bg-[#002147] text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-[#003166] transition shadow-md">Post Comment</button>
@@ -258,10 +258,14 @@ const TicketDetails = () => {
 
                             {/* Right: Meta Info */}
                             <div className="lg:col-span-1 space-y-8">
-                                <div className="bg-[#002147] p-8 rounded-[32px] border border-white/5 text-white shadow-xl relative overflow-hidden">
-                                    <div className="absolute top-0 right-0 w-32 h-32 bg-[#FF9F1C]/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2"></div>
-                                    <h4 className="text-[10px] font-black text-blue-200 uppercase tracking-[0.2em] mb-8 relative z-10">Metadata Summary</h4>
-                                    <div className="space-y-6 relative z-10">
+<div className="bg-[#002147] p-6 rounded-2xl border border-white/5 text-white shadow-xl relative overflow-hidden">
+  <div className="absolute top-0 right-0 w-32 h-32 bg-[#FF9F1C]/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2"></div>
+
+  <h4 className="text-[10px] font-black text-blue-200 uppercase tracking-[0.2em] mb-6 relative z-10">
+    Metadata Summary
+  </h4>
+
+  <div className="space-y-5 relative z-10">
                                         <div>
                                             <p className="text-[9px] font-black text-blue-300/50 uppercase tracking-widest mb-1">Incident Creator</p>
                                             <p className="font-bold text-xs truncate text-white">{ticket.requesterEmail}</p>

@@ -7,10 +7,11 @@ import { CheckCircle, XCircle } from 'lucide-react';
 import AdminLayout from '../components/AdminLayout';
 
 const AdminBookings = () => {
-  const { bookings, loading, error, fetchAllBookings, updateStatus } = useBookings();
+  const { bookings, loading, error, fetchAllBookings, updateStatus, bulkDeleteBookings } = useBookings();
   const [filters, setFilters] = useState({});
   const [rejectingBooking, setRejectingBooking] = useState(null);
   const [rejectReason, setRejectReason] = useState('');
+  const [selectedIds, setSelectedIds] = useState([]);
 
   useEffect(() => {
     fetchAllBookings(filters);
@@ -34,6 +35,27 @@ const AdminBookings = () => {
     }
   };
 
+  const toggleSelectAll = () => {
+    if (selectedIds.length === bookings.length) {
+      setSelectedIds([]);
+    } else {
+      setSelectedIds(bookings.map(b => b.id));
+    }
+  };
+
+  const toggleSelect = (id) => {
+    setSelectedIds(prev => 
+      prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
+    );
+  };
+
+  const handleBulkClear = async () => {
+    if (window.confirm(`Clear ${selectedIds.length} selected records permanently?`)) {
+      const success = await bulkDeleteBookings(selectedIds);
+      if (success) setSelectedIds([]);
+    }
+  };
+
   return (
     <AdminLayout>
       <div className="max-w-7xl mx-auto animate-up">
@@ -45,14 +67,35 @@ const AdminBookings = () => {
             </span>
             <h1 className="text-4xl font-black text-slate-900 tracking-tight leading-none">Manage Bookings</h1>
           </div>
-          <div className="flex items-center gap-2 bg-white border border-slate-200 px-5 py-3 rounded-xl shadow-sm">
-            <span className="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></span>
-            <span className="text-[9px] font-black text-slate-600 uppercase tracking-[0.2em]">Total Bookings: {bookings.length}</span>
+          <div className="flex items-center gap-3 bg-slate-900 border border-slate-800 px-6 py-3 rounded-2xl shadow-xl">
+            <div className="flex -space-x-2">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            </div>
+            <div className="flex flex-col">
+                <span className="text-[8px] font-black text-slate-500 uppercase tracking-[0.3em] leading-none mb-1">Live Registry</span>
+                <span className="text-xs font-black text-[#FFD166] uppercase tracking-widest leading-none">Total Bookings: {bookings.length}</span>
+            </div>
           </div>
         </div>
 
         <div className="bg-white rounded-[28px] border border-slate-100 shadow-sm p-6 md:p-8 relative">
-          <BookingFilters currentFilters={filters} onFilterChange={setFilters} />
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+            <BookingFilters currentFilters={filters} onFilterChange={setFilters} />
+            
+            {selectedIds.length > 0 && (
+              <div className="flex items-center gap-3 animate-fade-in">
+                <span className="text-[10px] font-black text-[#FFD166] bg-[#0F172A] px-4 py-2 rounded-xl shadow-lg uppercase tracking-widest">
+                  {selectedIds.length} Selected
+                </span>
+                <button 
+                  onClick={handleBulkClear}
+                  className="px-5 py-2 bg-rose-500 text-white rounded-xl text-[9px] font-black uppercase tracking-widest hover:bg-rose-600 transition-all shadow-md shadow-rose-500/20 flex items-center gap-2"
+                >
+                  Clear Selection
+                </button>
+              </div>
+            )}
+          </div>
 
       {loading && <p className="text-gray-500">Loading bookings...</p>}
       
@@ -69,64 +112,93 @@ const AdminBookings = () => {
       )}
 
       {!loading && !error && bookings.length > 0 && (
-        <div className="mt-6 border border-slate-200 rounded-2xl overflow-x-auto">
-          <table className="w-full whitespace-nowrap">
-            <thead>
-              <tr className="bg-slate-50 border-b border-slate-200 text-left text-[10px] font-black text-slate-500 uppercase tracking-widest">
-                <th className="px-6 py-4">ID / User</th>
-                <th className="px-6 py-4">Resource ID</th>
-                <th className="px-6 py-4">Date / Time</th>
-                <th className="px-6 py-4">Purpose</th>
-                <th className="px-6 py-4">Attendees</th>
-                <th className="px-6 py-4">Status</th>
-                <th className="px-6 py-4 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {bookings.map((booking) => (
-                <tr key={booking.id} className="hover:bg-slate-50 transition-colors group">
-                  <td className="px-6 py-4">
-                    <div className="font-bold text-slate-800 tracking-tight">#{booking.id}</div>
-                    <div className="text-xs font-medium text-slate-500">User: {booking.userId}</div>
-                  </td>
-                  <td className="px-6 py-4 font-bold text-slate-700">{booking.resourceId}</td>
-                  <td className="px-6 py-4">
-                    <div className="font-bold text-slate-700">{booking.bookingDate}</div>
-                    <div className="text-xs font-medium text-slate-500 flex items-center gap-1">
-                      {booking.startTime.substring(0,5)} - {booking.endTime.substring(0,5)}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className="truncate max-w-[200px] block text-sm font-medium text-slate-600" title={booking.purpose}>
-                      {booking.purpose}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 font-bold text-slate-700">{booking.expectedAttendees}</td>
-                  <td className="px-6 py-4">
-                    <BookingStatusBadge status={booking.status} />
-                  </td>
-                  <td className="px-6 py-4 text-right">
-                    {booking.status === BOOKING_STATUS.PENDING && (
-                      <div className="flex justify-end gap-2">
-                        <button
-                          onClick={() => handleApprove(booking.id)}
-                          className="flex items-center gap-1 text-emerald-600 hover:text-emerald-700 bg-emerald-50 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-colors"
-                        >
-                          <CheckCircle className="w-3 h-3" /> Approve
-                        </button>
-                        <button
-                          onClick={() => setRejectingBooking(booking)}
-                          className="flex items-center gap-1 text-rose-600 hover:text-rose-700 bg-rose-50 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-colors"
-                        >
-                          <XCircle className="w-3 h-3" /> Reject
-                        </button>
-                      </div>
-                    )}
-                  </td>
+        <div className="mt-8 bg-white border border-slate-200 rounded-[24px] overflow-hidden shadow-sm">
+          <div className="overflow-x-auto">
+            <table className="w-full whitespace-nowrap">
+              <thead>
+                <tr className="bg-slate-50 border-b border-slate-200 text-left">
+                  <th className="px-6 py-4 w-10">
+                    <input 
+                      type="checkbox" 
+                      className="w-4 h-4 rounded border-slate-300 text-[#0F172A] focus:ring-[#0F172A] cursor-pointer"
+                      checked={selectedIds.length === bookings.length && bookings.length > 0}
+                      onChange={toggleSelectAll}
+                    />
+                  </th>
+                  <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Asset / User</th>
+                  <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Schedule</th>
+                  <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Purpose</th>
+                  <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] text-center">Attendees</th>
+                  <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Status</th>
+                  <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] text-right">Registry Operations</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {bookings.map((booking) => (
+                  <tr key={booking.id} className={`hover:bg-slate-50/50 transition-colors group ${selectedIds.includes(booking.id) ? 'bg-indigo-50/30' : ''}`}>
+                    <td className="px-6 py-5">
+                      <input 
+                        type="checkbox" 
+                        className="w-4 h-4 rounded border-slate-300 text-[#0F172A] focus:ring-[#0F172A] cursor-pointer"
+                        checked={selectedIds.includes(booking.id)}
+                        onChange={() => toggleSelect(booking.id)}
+                      />
+                    </td>
+                    <td className="px-6 py-5">
+                      <div className="flex flex-col">
+                        <span className="text-[11px] font-black text-slate-900 tracking-tight flex items-center gap-2">
+                            <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.5)]"></span>
+                            {booking.resourceName || (booking.resourceId.length > 12 ? `${booking.resourceId.substring(0, 12)}...` : booking.resourceId)}
+                        </span>
+                        <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">Requester: {booking.userId}</span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-5">
+                      <div className="flex flex-col">
+                        <span className="text-[11px] font-black text-slate-700">{booking.bookingDate}</span>
+                        <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">
+                          {booking.startTime.substring(0,5)} - {booking.endTime.substring(0,5)}
+                        </span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-5">
+                      <span className="truncate max-w-[180px] block text-[11px] font-bold text-slate-600 italic" title={booking.purpose}>
+                        "{booking.purpose}"
+                      </span>
+                    </td>
+                    <td className="px-6 py-5 text-center">
+                      <span className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-slate-100 text-[11px] font-black text-slate-600 border border-slate-200/50">
+                        {booking.expectedAttendees}
+                      </span>
+                    </td>
+                    <td className="px-6 py-5">
+                      <BookingStatusBadge status={booking.status} />
+                    </td>
+                    <td className="px-6 py-5 text-right">
+                      {booking.status === BOOKING_STATUS.PENDING ? (
+                        <div className="flex justify-end gap-3 transition-opacity">
+                          <button
+                            onClick={() => handleApprove(booking.id)}
+                            className="flex items-center gap-1.5 text-emerald-600 hover:text-white hover:bg-emerald-500 border border-emerald-200 px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all"
+                          >
+                            <CheckCircle className="w-3 h-3" /> Approve
+                          </button>
+                          <button
+                            onClick={() => setRejectingBooking(booking)}
+                            className="flex items-center gap-1.5 text-rose-600 hover:text-white hover:bg-rose-500 border border-rose-200 px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all"
+                          >
+                            <XCircle className="w-3 h-3" /> Reject
+                          </button>
+                        </div>
+                      ) : (
+                        <span className="text-[9px] font-black text-slate-300 uppercase tracking-widest italic pr-4">Processed</span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 
