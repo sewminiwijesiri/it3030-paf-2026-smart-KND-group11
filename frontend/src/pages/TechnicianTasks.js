@@ -411,59 +411,60 @@ const TechnicianTasks = () => {
                                         </div>
                                     </div>
 
-                                    {/* Resolution Terminal Overlay */}
+                                    {/* Resolution Terminal Overlay - Ultra Compact */}
                                     {resolving === task.id && (
-                                        <div className="bg-[#0F172A] p-12 md:p-16 animate-in slide-in-from-bottom duration-500 relative">
-                                            <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2"></div>
+                                        <div className="bg-[#0F172A] p-4 md:p-5 animate-in slide-in-from-bottom duration-300 relative border-t border-white/5">
+                                            <div className="absolute top-0 right-0 w-48 h-48 bg-[#FFD166]/5 rounded-full blur-[60px] -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
+                                            
                                             <div className="relative z-10">
-                                                <div className="flex justify-between items-center mb-12">
-                                                    <div className="flex items-center gap-5">
-                                                        <div className="w-12 h-12 bg-[#FFD166] rounded-[20px] flex items-center justify-center shadow-lg shadow-[#FFD166]/20">
-                                                            <CheckCircle2 className="w-6 h-6 text-[#0F172A]" />
+                                                <div className="flex items-center justify-between mb-4">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="w-8 h-8 bg-[#FFD166] rounded-lg flex items-center justify-center shadow-lg shadow-[#FFD166]/10">
+                                                            <CheckCircle2 className="w-4 h-4 text-[#0F172A]" />
                                                         </div>
                                                         <div>
-                                                            <h4 className="text-2xl font-black text-white uppercase italic tracking-tight leading-none">Resolution Terminal</h4>
-                                                            <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.4em] mt-3">Finalizing Asset Integrity Record</p>
+                                                            <h4 className="text-sm font-black text-white uppercase italic tracking-tight leading-none">Resolution Terminal</h4>
+                                                            <p className="text-[7px] font-black text-white/20 uppercase tracking-[0.4em] mt-1">Finalizing Asset Integrity Record</p>
                                                         </div>
                                                     </div>
-                                                    <button onClick={() => setResolving(null)} className="p-4 bg-white/5 hover:bg-white/10 text-white rounded-2xl transition-all">
-                                                        <X className="w-6 h-6" />
+                                                    <button onClick={() => setResolving(null)} className="p-2 bg-white/5 hover:bg-white/10 text-white rounded-lg transition-all">
+                                                        <X className="w-4 h-4" />
                                                     </button>
                                                 </div>
 
-                                                <form onSubmit={handleResolve} className="space-y-12">
-                                                    <div className="space-y-4">
-                                                        <label className="text-[10px] font-black text-white/30 uppercase tracking-[0.4em] ml-6">Technical Resolution Protocol</label>
+                                                <form onSubmit={handleResolve} className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+                                                    <div className="lg:col-span-8 space-y-2">
+                                                        <label className="text-[7px] font-black text-white/20 uppercase tracking-[0.4em] ml-2">Protocol Log</label>
                                                         <textarea
-                                                            placeholder="Log resolution steps, hardware replacements, and final integrity status..."
+                                                            placeholder="Log resolution steps and integrity status..."
                                                             required
-                                                            className="w-full px-10 py-10 bg-white/5 border-2 border-white/5 rounded-[40px] focus:border-[#FFD166] focus:outline-none transition-all font-bold text-white text-base resize-none min-h-[220px] placeholder:text-slate-700 italic"
+                                                            className="w-full px-4 py-3 bg-white/5 border border-white/5 rounded-xl focus:border-[#FFD166] focus:outline-none transition-all font-bold text-white text-[12px] resize-none min-h-[100px] placeholder:text-slate-700 italic"
                                                             value={notes} onChange={(e) => setNotes(e.target.value)}
                                                         ></textarea>
                                                     </div>
 
-                                                    <div className="flex flex-col lg:flex-row gap-8 items-end">
-                                                        <div className="flex-1 w-full space-y-4">
-                                                            <label className="text-[10px] font-black text-white/30 uppercase tracking-[0.4em] ml-6">Recovery Telemetry (Evidence)</label>
-                                                            <div className="relative group h-28">
+                                                    <div className="lg:col-span-4 flex flex-col justify-between gap-3">
+                                                        <div className="space-y-2">
+                                                            <label className="text-[7px] font-black text-white/20 uppercase tracking-[0.4em] ml-2">Evidence Staging</label>
+                                                            <div className="relative group h-14">
                                                                 <input
                                                                     type="file" multiple accept="image/*"
                                                                     onChange={(e) => setFiles(Array.from(e.target.files))}
                                                                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20"
                                                                 />
-                                                                <div className="w-full h-full border-2 border-dashed border-white/10 rounded-[32px] flex items-center justify-center gap-5 group-hover:bg-white/5 transition-all">
-                                                                    <Camera className="w-6 h-6 text-slate-600" />
-                                                                    <span className="text-[11px] font-black text-slate-600 uppercase tracking-[0.2em]">
-                                                                        {files.length > 0 ? `${files.length} ASSETS READY` : 'Staging resolution evidence'}
+                                                                <div className="w-full h-full border border-dashed border-white/10 rounded-xl flex items-center justify-center gap-3 group-hover:bg-white/5 transition-all">
+                                                                    <Camera className="w-4 h-4 text-slate-600" />
+                                                                    <span className="text-[8px] font-black text-slate-600 uppercase tracking-[0.2em]">
+                                                                        {files.length > 0 ? `${files.length} ASSETS` : 'Attach Telemetry'}
                                                                     </span>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <button
                                                             type="submit" disabled={updating}
-                                                            className="w-full lg:w-96 py-7 bg-[#FFD166] text-[#0F172A] rounded-[32px] font-black text-[13px] uppercase tracking-[0.5em] hover:bg-white transition-all shadow-2xl active:scale-95 disabled:opacity-50 shrink-0"
+                                                            className="w-full py-3 bg-[#FFD166] text-[#0F172A] rounded-xl font-black text-[10px] uppercase tracking-[0.4em] hover:bg-white transition-all shadow-xl active:scale-95 disabled:opacity-50"
                                                         >
-                                                            {updating ? 'Transmitting...' : 'Finalize Log'}
+                                                            {updating ? 'Transmitting...' : 'Finalize Record'}
                                                         </button>
                                                     </div>
                                                 </form>
