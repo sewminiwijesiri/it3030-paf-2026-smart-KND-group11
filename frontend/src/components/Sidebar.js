@@ -21,29 +21,29 @@ const Sidebar = () => {
   };
 
   return (
-    <aside className="fixed left-0 top-[72px] bottom-0 w-72 bg-[#1E293B] hidden lg:flex flex-col z-[50]">
+    <aside className="fixed left-0 top-[72px] bottom-0 w-72 bg-white border-r border-slate-200 hidden lg:flex flex-col z-[50]">
       <div className="flex-1 py-10 px-6 space-y-2 overflow-y-auto">
-        <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.25em] mb-8 ml-2">Personal Terminal</p>
+        <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.25em] mb-8 ml-2">Personal Terminal</p>
         {menuItems.map((item, index) => (
           <NavLink
             key={index}
             to={item.path}
             className={({ isActive }) =>
-              `flex items-center gap-4 px-4 py-3.5 rounded-xl font-bold transition-all duration-300 group ${
+              `flex items-center gap-4 px-5 py-3 rounded-2xl font-bold transition-all duration-300 group ${
                 isActive
-                  ? 'bg-[#0F172A] text-[#FFD166] border border-white/5 shadow-xl'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-white/5'
+                  ? 'bg-[#4DA8DA] text-white shadow-lg shadow-blue-200/50'
+                  : 'text-slate-500 hover:text-[#002147] hover:bg-slate-50'
               }`
             }
           >
             {({ isActive }) => (
               <>
-                <svg className={`w-5 h-5 transition-colors ${isActive ? 'text-[#FFD166]' : 'text-slate-600 group-hover:text-slate-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className={`w-5 h-5 transition-colors ${isActive ? 'text-white' : 'text-slate-400 group-hover:text-[#002147]'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={item.icon} />
                 </svg>
-                <span className="text-sm tracking-tight font-bold">{item.label}</span>
+                <span className="text-base tracking-tight font-bold">{item.label}</span>
                 {isActive && (
-                  <span className="ml-auto w-1.5 h-1.5 rounded-full bg-[#FFD166] shadow-[0_0_10px_#FFD166] shrink-0"></span>
+                  <span className="ml-auto w-2 h-2 rounded-full bg-white shrink-0"></span>
                 )}
               </>
             )}
@@ -54,16 +54,16 @@ const Sidebar = () => {
       {/* Sidebar Footer */}
       <div className="p-8 space-y-6">
         <div className="space-y-1 ml-2">
-            <p className="text-[9px] font-black text-slate-500 uppercase tracking-[0.3em]">Build V2.4.0</p>
+            <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.3em]">Build V2.4.0</p>
             <div className="flex items-center gap-2">
-                <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full"></span>
-                <span className="text-[9px] font-black text-emerald-400 uppercase tracking-[0.2em]">Node-Secure OK</span>
+                <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
+                <span className="text-[9px] font-black text-emerald-500 uppercase tracking-[0.2em]">Node-Secure OK</span>
             </div>
         </div>
 
         <button
           onClick={handleLogout}
-          className="w-full flex items-center justify-center p-4 bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all border border-white/5"
+          className="w-full flex items-center justify-center p-4 bg-slate-50 hover:bg-red-50 text-slate-500 hover:text-red-500 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all border border-slate-100 hover:border-red-100"
         >
           Sign Out
         </button>

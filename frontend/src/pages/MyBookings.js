@@ -8,6 +8,7 @@ import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import AdminSidebar from '../components/AdminSidebar';
 import TechnicianSidebar from '../components/TechnicianSidebar';
+import Footer from '../components/Footer';
 
 const MyBookings = () => {
   const { bookings, loading, error, fetchMyBookings, cancelBooking, createBooking } = useBookings();
@@ -59,38 +60,43 @@ const MyBookings = () => {
       
       <div className="flex flex-1">
         {renderSidebar()}
-
-        <main className={`flex-1 ${role === 'USER' ? 'lg:ml-64' : 'lg:ml-72'} p-6 md:p-8 transition-all duration-300`}>
-          <div className="max-w-5xl mx-auto">
-            
-            {/* Header Section */}
-            <header className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-slate-100 pb-8 animate-fade-in-up">
-              <div>
-                <h1 className="text-3xl font-black text-slate-900 tracking-tight leading-none mb-2">
-                  My Bookings
-                </h1>
-                <p className="text-slate-400 font-medium italic">Manage your resource reservations and schedules.</p>
-              </div>
-              <div className="flex flex-col sm:flex-row items-center gap-4">
-                <div className="bg-white p-2 border border-slate-200/60 rounded-2xl shadow-sm flex items-center gap-2">
-                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-2">Total Bookings:</span>
-                  <span className="bg-indigo-600 text-white px-3 py-1 rounded-xl text-xs font-black">{filteredBookings.length}</span>
+        <main className={`flex-1 ${role === 'USER' ? 'lg:ml-72' : 'lg:ml-72'} h-[calc(100vh-64px)] overflow-y-auto scroll-smooth pb-10`}>
+          
+          {/* Header Section - Modern Hero Style */}
+          <div className="bg-[#002147] border-b border-white/10 py-10 mb-8 shadow-lg">
+            <div className="max-w-[1200px] mx-auto px-6 lg:px-10">
+              <p className="text-blue-200 font-black text-[10px] uppercase tracking-[0.4em] mb-3 flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#FF9F1C]"></span>
+                Reservation Registry
+              </p>
+              <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                <div>
+                  <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight leading-tight mb-2">
+                    My <span className="text-blue-100/50">Bookings</span>
+                  </h1>
+                  <p className="text-blue-100/60 font-bold uppercase tracking-wider text-[11px]">Manage your resource reservations and schedules.</p>
+                </div>
+                <div className="bg-white/5 p-2 border border-white/10 rounded-2xl shrink-0 shadow-inner flex items-center gap-4 px-4">
+                  <span className="text-[10px] font-black text-blue-200 uppercase tracking-widest pl-2">Active Slots:</span>
+                  <span className="bg-[#FF9F1C] text-white px-4 py-1.5 rounded-xl text-xs font-black shadow-lg shadow-orange-500/20">{filteredBookings.length}</span>
                 </div>
               </div>
-            </header>
+            </div>
+          </div>
 
+          <div className="max-w-[1200px] mx-auto px-6 lg:px-10">
             {/* Filters Panel */}
             <div className="mb-8 bg-white border border-slate-100 rounded-[2rem] p-6 shadow-sm flex flex-wrap items-center gap-4 animate-fade-in">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center">
+                <div className="w-10 h-10 bg-blue-50 text-[#002147] rounded-xl flex items-center justify-center border border-blue-100">
                   <Filter className="w-5 h-5" />
                 </div>
-                <label className="text-xs font-black text-slate-500 uppercase tracking-widest">Filter by Status:</label>
+                <label className="text-xs font-black text-slate-500 uppercase tracking-widest">Filter Status</label>
               </div>
               <select
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value)}
-                className="bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all flex-1 md:flex-none md:w-64 appearance-none"
+                className="bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#002147] transition-all flex-1 md:flex-none md:w-64 appearance-none shadow-inner"
               >
                 <option value="">All Statuses</option>
                 {Object.values(BOOKING_STATUS).map((status) => (
@@ -112,7 +118,7 @@ const MyBookings = () => {
             {/* Loading State */}
             {loading ? (
               <div className="flex flex-col items-center justify-center h-64 space-y-4 animate-fade-in">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-indigo-600"></div>
+                <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-[#002147]"></div>
                 <p className="text-slate-400 font-bold uppercase tracking-widest text-[10px]">Loading Bookings...</p>
               </div>
             ) : !error && filteredBookings.length === 0 ? (
@@ -135,12 +141,12 @@ const MyBookings = () => {
                   >
                     
                     {/* Date/Time Block */}
-                    <div className="bg-slate-50 rounded-2xl p-4 flex flex-col items-center justify-center min-w-[120px] text-center shrink-0 border border-slate-100 group-hover:bg-indigo-50 group-hover:border-indigo-100 transition-colors">
-                      <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 group-hover:text-indigo-400">{new Date(booking.bookingDate).toLocaleDateString('en-US', { weekday: 'short' })}</span>
-                      <span className="text-2xl font-black text-slate-800 group-hover:text-indigo-600">{new Date(booking.bookingDate).getDate()}</span>
-                      <span className="text-xs font-bold text-slate-500 group-hover:text-indigo-500 mb-2">{new Date(booking.bookingDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</span>
-                      <div className="w-full h-px bg-slate-200 my-2 group-hover:bg-indigo-200"></div>
-                      <span className="text-[11px] font-black text-slate-600 flex items-center gap-1 group-hover:text-indigo-600">
+                    <div className="bg-slate-50 rounded-2xl p-4 flex flex-col items-center justify-center min-w-[120px] text-center shrink-0 border border-slate-100 group-hover:bg-blue-50 group-hover:border-[#4DA8DA] transition-colors">
+                      <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 group-hover:text-[#4DA8DA]">{new Date(booking.bookingDate).toLocaleDateString('en-US', { weekday: 'short' })}</span>
+                      <span className="text-2xl font-black text-slate-800 group-hover:text-[#002147]">{new Date(booking.bookingDate).getDate()}</span>
+                      <span className="text-xs font-bold text-slate-500 group-hover:text-[#4DA8DA] mb-2">{new Date(booking.bookingDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</span>
+                      <div className="w-full h-px bg-slate-200 my-2 group-hover:bg-blue-200"></div>
+                      <span className="text-[11px] font-black text-slate-600 flex items-center gap-1 group-hover:text-[#002147]">
                         <Clock className="w-3 h-3" /> {booking.startTime ? booking.startTime.substring(0,5) : ''}
                       </span>
                     </div>
@@ -148,8 +154,8 @@ const MyBookings = () => {
                     {/* Booking Details */}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between mb-2">
-                        <h3 className="text-lg font-black text-slate-800 truncate pr-4">
-                          Resource ID: {booking.resourceId}
+                        <h3 className="text-lg font-black text-[#002147] truncate pr-4 uppercase tracking-tight">
+                          Ref: {booking.resourceId}
                         </h3>
                         <BookingStatusBadge status={booking.status} />
                       </div>
@@ -183,13 +189,13 @@ const MyBookings = () => {
                         <>
                           <button
                             onClick={() => handleGenerateQR(booking.id)}
-                            className="w-full md:w-auto px-4 py-3 bg-indigo-50 border border-indigo-100 text-indigo-600 hover:bg-indigo-100 hover:text-indigo-700 rounded-xl text-[11px] font-black uppercase tracking-wider transition-colors flex items-center justify-center gap-2"
+                            className="w-full md:w-auto px-4 py-3 bg-blue-50 border border-blue-100 text-[#4DA8DA] hover:bg-[#4DA8DA] hover:text-white rounded-xl text-[11px] font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-sm"
                           >
                             <QrCode className="w-4 h-4" /> QR Code
                           </button>
                           <button
                             onClick={() => handleCancelClick(booking.id)}
-                            className="w-full md:w-auto px-4 py-3 bg-white border border-rose-200 text-rose-600 hover:bg-rose-50 hover:text-rose-700 rounded-xl text-[11px] font-black uppercase tracking-wider transition-colors flex items-center justify-center gap-2"
+                            className="w-full md:w-auto px-4 py-3 bg-white border border-rose-200 text-rose-600 hover:bg-rose-50 hover:text-rose-700 rounded-xl text-[11px] font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2"
                           >
                             <Trash2 className="w-4 h-4" /> Cancel
                           </button>
@@ -206,8 +212,8 @@ const MyBookings = () => {
                 ))}
               </div>
             )}
-
           </div>
+          <Footer />
         </main>
       </div>
 
@@ -227,9 +233,9 @@ const MyBookings = () => {
               
               <div className="bg-slate-50 p-6 rounded-3xl border border-slate-100 flex items-center justify-center min-h-[250px]">
                 {qrLoading ? (
-                  <div className="animate-spin rounded-full h-10 w-10 border-b-4 border-indigo-600"></div>
+                  <div className="animate-spin rounded-full h-10 w-10 border-b-4 border-[#002147]"></div>
                 ) : currentQrCode ? (
-                  <img src={`data:image/png;base64,${currentQrCode}`} alt="Booking QR Code" className="w-48 h-48 rounded-xl shadow-sm" />
+                  <img src={`data:image/png;base64,${currentQrCode}`} alt="Booking QR Code" className="w-48 h-48 rounded-xl shadow-md border-4 border-white" />
                 ) : (
                   <div className="text-rose-500 text-sm font-bold flex items-center gap-2">
                     <AlertCircle className="w-5 h-5"/> Failed to load QR Code

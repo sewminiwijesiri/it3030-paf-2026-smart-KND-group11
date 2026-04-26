@@ -189,14 +189,14 @@ const BookingFormModal = ({ resource, onClose, onSuccess }) => {
     <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
       <div className="bg-white rounded-[2rem] shadow-2xl w-full max-w-lg overflow-hidden relative animate-fade-in-up">
         {/* Header */}
-        <div className="px-8 py-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+        <div className="px-8 py-8 border-b border-white/10 flex items-center justify-between bg-[#002147] text-white">
           <div>
-            <h2 className="text-xl font-black text-slate-800">Book Resource</h2>
-            <p className="text-xs font-bold text-slate-400 mt-1 uppercase tracking-widest">Submit a new request</p>
+            <h2 className="text-xl font-black">Book Resource</h2>
+            <p className="text-xs font-bold text-blue-200 mt-1 uppercase tracking-widest opacity-80">Submit a new request</p>
           </div>
           <button
             onClick={onClose}
-            className="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+            className="w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all"
           >
             <X className="w-5 h-5" />
           </button>
@@ -204,13 +204,13 @@ const BookingFormModal = ({ resource, onClose, onSuccess }) => {
 
         <div className="p-8">
           {/* Resource Info */}
-          <div className="bg-indigo-50/50 border border-indigo-100 rounded-2xl p-5 mb-8">
-            <h3 className="font-black text-indigo-900 text-lg">{resource.name}</h3>
-            <div className="flex items-center gap-4 mt-2">
-              <span className="text-xs font-bold text-indigo-600 bg-white px-3 py-1 rounded-full shadow-sm">
+          <div className="bg-slate-50 border border-slate-100 rounded-3xl p-6 mb-8">
+            <h3 className="font-black text-[#002147] text-lg">{resource.name}</h3>
+            <div className="flex flex-wrap items-center gap-4 mt-3">
+              <span className="text-[10px] font-black text-[#4DA8DA] bg-white px-3 py-1.5 rounded-xl shadow-sm border border-slate-100 uppercase tracking-wider">
                 📍 {resource.location}
               </span>
-              <span className="text-xs font-bold text-indigo-600 bg-white px-3 py-1 rounded-full shadow-sm">
+              <span className="text-[10px] font-black text-[#4DA8DA] bg-white px-3 py-1.5 rounded-xl shadow-sm border border-slate-100 uppercase tracking-wider">
                 👥 Capacity: {resource.capacity || 'N/A'}
               </span>
             </div>
@@ -246,7 +246,7 @@ const BookingFormModal = ({ resource, onClose, onSuccess }) => {
                 min={todayLocal}
                 value={formData.bookingDate}
                 onChange={handleChange}
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-[#002147] focus:outline-none focus:ring-2 focus:ring-[#002147]/10 focus:border-[#002147] transition-all"
               />
             </div>
 
@@ -262,7 +262,7 @@ const BookingFormModal = ({ resource, onClose, onSuccess }) => {
                   value={formData.startTime}
                   onChange={handleChange}
                   className={`w-full bg-slate-50 border rounded-xl px-4 py-3 text-sm font-bold focus:outline-none focus:ring-2 transition-all ${
-                    startTimeError ? 'border-rose-300 text-rose-600 focus:ring-rose-500' : 'border-slate-200 text-slate-700 focus:ring-indigo-500 focus:border-transparent'
+                    startTimeError ? 'border-rose-300 text-rose-600 focus:ring-rose-500' : 'border-slate-200 text-[#002147] focus:ring-[#002147]/10 focus:border-[#002147]'
                   }`}
                 />
                 {startTimeError && (
@@ -282,7 +282,7 @@ const BookingFormModal = ({ resource, onClose, onSuccess }) => {
                   value={formData.endTime}
                   onChange={handleChange}
                   className={`w-full bg-slate-50 border rounded-xl px-4 py-3 text-sm font-bold focus:outline-none focus:ring-2 transition-all ${
-                    endTimeError ? 'border-rose-300 text-rose-600 focus:ring-rose-500' : 'border-slate-200 text-slate-700 focus:ring-indigo-500 focus:border-transparent'
+                    endTimeError ? 'border-rose-300 text-rose-600 focus:ring-rose-500' : 'border-slate-200 text-[#002147] focus:ring-[#002147]/10 focus:border-[#002147]'
                   }`}
                 />
                 {endTimeError && (
@@ -294,7 +294,7 @@ const BookingFormModal = ({ resource, onClose, onSuccess }) => {
             </div>
 
             {availabilityDetails && (availabilityDetails.availableDays?.length > 0 || availabilityDetails.availableStartTime) && (
-              <div className="text-xs font-bold text-indigo-500 mt-2">
+              <div className="text-[10px] font-black text-[#4DA8DA] mt-2 uppercase tracking-widest bg-blue-50/50 px-3 py-1 rounded-lg border border-blue-100/50 inline-block">
                 Available on: {(availabilityDetails.availableDays?.length > 0) ? availabilityDetails.availableDays.map(d => d.charAt(0).toUpperCase() + d.slice(1).toLowerCase()).join(', ') : 'All days'} 
                 {availabilityDetails.availableStartTime && ` (${availabilityDetails.availableStartTime.substring(0,5)} - ${availabilityDetails.availableEndTime.substring(0,5)})`}
               </div>
@@ -311,7 +311,7 @@ const BookingFormModal = ({ resource, onClose, onSuccess }) => {
                 value={formData.purpose}
                 onChange={handleChange}
                 rows="3"
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all resize-none"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-medium text-[#002147] focus:outline-none focus:ring-2 focus:ring-[#002147]/10 focus:border-[#002147] transition-all resize-none shadow-inner"
               ></textarea>
             </div>
 
@@ -330,7 +330,7 @@ const BookingFormModal = ({ resource, onClose, onSuccess }) => {
                 className={`w-full bg-slate-50 border rounded-xl px-4 py-3 text-sm font-bold focus:outline-none focus:ring-2 transition-all ${
                   isCapacityExceeded 
                     ? 'border-rose-300 text-rose-600 focus:ring-rose-500' 
-                    : 'border-slate-200 text-slate-700 focus:ring-indigo-500'
+                    : 'border-slate-200 text-[#002147] focus:ring-[#002147]/10 focus:border-[#002147]'
                 }`}
               />
               {isCapacityExceeded && (
@@ -351,10 +351,10 @@ const BookingFormModal = ({ resource, onClose, onSuccess }) => {
               <button
                 type="submit"
                 disabled={isSubmitDisabled}
-                className={`flex-1 px-6 py-4 rounded-xl text-sm font-black text-white uppercase tracking-wider shadow-lg transition-all flex items-center justify-center gap-2 ${
+                className={`flex-1 px-6 py-4 rounded-2xl text-sm font-black text-white uppercase tracking-widest shadow-xl transition-all flex items-center justify-center gap-2 ${
                   isSubmitDisabled 
-                    ? 'bg-slate-300 shadow-none cursor-not-allowed' 
-                    : 'bg-indigo-600 hover:bg-indigo-700 hover:shadow-indigo-200 hover:-translate-y-0.5'
+                    ? 'bg-slate-200 shadow-none cursor-not-allowed text-slate-400' 
+                    : 'bg-[#FF9F1C] hover:bg-orange-500 hover:shadow-orange-500/20 hover:-translate-y-0.5 active:scale-95'
                 }`}
               >
                 {loading ? (

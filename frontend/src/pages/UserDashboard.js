@@ -1,233 +1,423 @@
 import React, { useState, useEffect } from 'react';
-import Navbar from '../components/Navbar';
+import { Link, useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import api from '../utils/api';
-import { Link } from 'react-router-dom';
+import {
+    Bell, LogOut, User, AlertTriangle, ClipboardList,
+    Activity, ChevronRight, Plus, CheckCircle2, Clock,
+    AlertCircle, FileText, Calendar, BookOpen, Settings
+} from 'lucide-react';
+import { useNotifications } from '../context/NotificationContext';
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
 
 const UserDashboard = () => {
+    const navigate = useNavigate();
     const [userData, setUserData] = useState({
         name: localStorage.getItem('name') || 'User',
         email: localStorage.getItem('email') || 'user@uniflow.com'
     });
-    const [stats, setStats] = useState({ active: 0, completed: 0, pending: 0 });
+    const [stats, setStats] = useState({ active: 0, completed: 0, pending: 0, total: 0 });
     const [recentTickets, setRecentTickets] = useState([]);
     const [loading, setLoading] = useState(true);
+    const { unreadCount } = useNotifications();
+
+    const hour = new Date().getHours();
+    const greeting = hour < 12 ? 'Good Morning' : hour < 18 ? 'Good Afternoon' : 'Good Evening';
+
+    // Palette Colors
+    const colors = {
+        navy: '#002147',
+        orange: '#FF9F1C',
+        lightBlue: '#4DA8DA',
+        white: '#FFFFFF',
+        slate: '#F1F5F9'
+    };
 
     useEffect(() => {
-        const fetchDashboardData = async () => {
+        const fetchData = async () => {
             try {
-                // Fetch User Data
-                const userResponse = await api.get('/auth/me');
-                setUserData({
-                    name: userResponse.data.name,
-                    email: userResponse.data.email
-                });
-                localStorage.setItem('name', userResponse.data.name);
-                localStorage.setItem('email', userResponse.data.email);
+                const userRes = await api.get('/auth/me');
+                setUserData({ name: userRes.data.name, email: userRes.data.email });
+                localStorage.setItem('name', userRes.data.name);
+                localStorage.setItem('email', userRes.data.email);
 
-                // Fetch User Tickets for stats and recent activity
-                const ticketsResponse = await api.get('/api/maintenance/my');
-                const tickets = ticketsResponse.data;
-
+                const ticketsRes = await api.get('/api/maintenance/my');
+                const tickets = ticketsRes.data;
                 setStats({
                     active: tickets.filter(t => t.status === 'OPEN' || t.status === 'IN_PROGRESS').length,
-                    completed: tickets.filter(t => t.status === 'RESOLVED').length,
-                    pending: tickets.filter(t => t.status === 'PENDING').length
+                    completed: tickets.filter(t => t.status === 'RESOLVED' || t.status === 'CLOSED').length,
+                    pending: tickets.filter(t => t.status === 'PENDING').length,
+                    total: tickets.length
                 });
-
-                setRecentTickets(tickets.slice(0, 5));
+                setRecentTickets(tickets.slice(0, 4));
             } catch (err) {
-                console.error('Failed to fetch user dashboard data', err);
+                console.error('Dashboard fetch error', err);
             } finally {
                 setLoading(false);
             }
         };
-
-        fetchDashboardData();
+        fetchData();
     }, []);
 
-    const statsConfig = [
-        { label: 'Active Bookings', value: stats.active, icon: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z', color: 'text-indigo-600', bg: 'bg-indigo-50', border: 'border-indigo-100' },
-        { label: 'Completed Actions', value: stats.completed, icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z', color: 'text-emerald-600', bg: 'bg-emerald-50', border: 'border-emerald-100' },
-        { label: 'Pending Requests', value: stats.pending, icon: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z', color: 'text-rose-600', bg: 'bg-rose-50', border: 'border-rose-100' },
-        { label: 'Platform Rating', value: '4.9', icon: 'M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.518 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.921-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.518-4.674z', color: 'text-amber-500', bg: 'bg-amber-50', border: 'border-amber-100' },
+    const handleLogout = () => {
+        localStorage.clear();
+        navigate('/login');
+    };
+
+    const getStatusConfig = (status) => {
+        switch (status) {
+            case 'OPEN': return { label: 'Open', color: 'text-rose-600', bg: 'bg-rose-50', border: 'border-rose-200', Icon: AlertCircle };
+            case 'IN_PROGRESS': return { label: 'In Progress', color: 'text-amber-600', bg: 'bg-amber-50', border: 'border-amber-200', Icon: Clock };
+            case 'RESOLVED': return { label: 'Resolved', color: 'text-emerald-600', bg: 'bg-emerald-50', border: 'border-emerald-200', Icon: CheckCircle2 };
+            case 'CLOSED': return { label: 'Closed', color: 'text-slate-500', bg: 'bg-slate-100', border: 'border-slate-200', Icon: CheckCircle2 };
+            default: return { label: status, color: 'text-slate-400', bg: 'bg-slate-50', border: 'border-slate-100', Icon: FileText };
+        }
+    };
+
+    const quickActions = [
+        {
+            id: 'report',
+            title: 'Report a Fault',
+            desc: 'Submit a new maintenance or technical issue',
+            path: '/report-incident',
+            icon: AlertTriangle,
+            accent: colors.orange,
+            accentText: '#FFFFFF',
+            bg: 'bg-[#002147]',
+            textMain: 'text-white',
+            textSub: 'text-blue-200',
+            cta: 'Submit Request'
+        },
+        {
+            id: 'requests',
+            title: 'My Requests',
+            desc: 'View and track all your submitted tickets',
+            path: '/my-tickets',
+            icon: ClipboardList,
+            accent: colors.orange,
+            accentText: '#FFFFFF',
+            bg: 'bg-[#FF9F1C]',
+            textMain: 'text-white',
+            textSub: 'text-orange-50',
+            cta: 'View Tickets'
+        },
+        {
+            id: 'bookings',
+            title: 'My Bookings',
+            desc: 'Manage your resource and facility bookings',
+            path: '/my-bookings',
+            icon: BookOpen,
+            accent: colors.lightBlue,
+            accentText: '#FFFFFF',
+            bg: 'bg-white',
+            textMain: 'text-slate-900',
+            textSub: 'text-slate-500',
+            cta: 'View Bookings'
+        },
+        {
+            id: 'resources',
+            title: 'Browse Resources',
+            desc: 'Explore and book available university resources',
+            path: '/book',
+            icon: Activity,
+            accent: colors.navy,
+            accentText: '#FFFFFF',
+            bg: 'bg-white',
+            textMain: 'text-slate-900',
+            textSub: 'text-slate-500',
+            cta: 'Explore'
+        },
     ];
 
-    const recentRequests = [
-        { id: '#REQ-829', title: 'Lab B2 Projector Setup', type: 'Facility', status: 'In Progress', date: '2 hours ago' },
-        { id: '#REQ-812', title: 'Asset Rental: DSLR Camera', type: 'Asset', status: 'Completed', date: 'Yesterday' },
-        { id: '#REQ-799', title: 'Maintenance: VR Station 01', type: 'Technical', status: 'Pending', date: 'Oct 14' },
-    ];
-
-    const role = localStorage.getItem('role') || 'USER';
+    const initials = userData.name ? userData.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() : 'U';
 
     return (
-        <div className="min-h-screen bg-slate-50 flex flex-col font-sans relative overflow-hidden transition-colors duration-300">
-            {/* Soft Background Accents - Matching Home Page Hero */}
-            <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#1E293B]/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
-            <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[#FFD166]/5 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/2 pointer-events-none"></div>
+        <div className="min-h-screen bg-[#F1F5F9] font-sans flex flex-col">
 
-            <Navbar />
+            {/* ── TOP NAV ── */}
+            <header className="sticky top-0 z-[60] bg-[#002147] border-b border-white/10 shadow-md h-16 flex items-center shrink-0">
+                <div className="w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+                    {/* Logo */}
+                    <Link to="/user-dashboard" className="flex items-center gap-2 no-underline">
+                        <div className="w-8 h-8 bg-[#FF9F1C] rounded-lg flex items-center justify-center shadow-lg">
+                            <span className="text-white font-black text-xs">UF</span>
+                        </div>
+                        <span className="text-white font-black text-lg tracking-tight">UniFlow</span>
+                    </Link>
 
-            <div className="flex flex-1 relative z-10 w-full overflow-hidden">
-                <Sidebar />
+                    {/* Right actions */}
+                    <div className="flex items-center gap-2">
+                        {/* Notification */}
+                        <Link to="/my-tickets" className="relative p-2.5 rounded-xl text-white/80 hover:text-white hover:bg-white/10 transition-all no-underline">
+                            <Bell size={18} />
+                            {unreadCount > 0 && (
+                                <span className="absolute top-1.5 right-1.5 w-4 h-4 bg-[#FF9F1C] text-white text-[9px] font-black rounded-full flex items-center justify-center border border-[#002147]">
+                                    {unreadCount}
+                                </span>
+                            )}
+                        </Link>
 
-                <main className={`flex-1 ${role === 'USER' ? 'lg:ml-64' : 'lg:ml-72'} h-[calc(100vh-72px)] overflow-y-auto scroll-smooth`}>
+                        {/* Profile */}
+                        <Link to="/profile" className="p-2.5 rounded-xl text-white/80 hover:text-white hover:bg-white/10 transition-all no-underline">
+                            <Settings size={18} />
+                        </Link>
 
-                    {/* Header */}
-                    <div className="bg-white border-b border-slate-200 py-6">
-                        <div className="max-w-[1200px] mx-auto px-6 lg:px-10">
+                        <div className="h-6 w-[1px] bg-white/20 mx-2 hidden sm:block"></div>
 
-                            <p className="text-[#1E293B] font-black text-[10px] uppercase tracking-[0.4em] mb-2 flex items-center gap-2">
-                                <span className="w-1.5 h-1.5 rounded-full bg-[#FFD166]"></span>
-                                Dashboard Portal
-                            </p>
-
-                            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-
-                                <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight leading-tight">
-                                    Welcome, <br />
-                                    <span className="text-slate-500">
-                                        {userData.name?.split(' ')[0]}
-                                    </span>
-                                </h1>
-
-                                <div className="flex gap-3 mt-2 md:mt-0">
-                                    <button className="bg-[#0F172A] text-white px-6 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-800 transition-all shadow-md">
-                                        View Map
-                                    </button>
-
-                                    <button className="bg-[#FFD166] text-slate-900 px-6 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-[#FFCC29] transition-all shadow-md shadow-[#FFD166]/20">
-                                        Book Resource
-                                    </button>
-                                </div>
-
+                        {/* Avatar */}
+                        <div className="flex items-center gap-3 pl-1">
+                            <div className="hidden md:flex flex-col items-end">
+                                <span className="text-[10px] font-bold text-white/70 leading-none mb-1 uppercase tracking-wider">User Portal</span>
+                                <span className="text-xs font-black text-white leading-none">{userData.name?.split(' ')[0]}</span>
+                            </div>
+                            <div className="w-9 h-9 rounded-xl bg-[#4DA8DA] text-white font-black text-sm flex items-center justify-center shadow-lg">
+                                {initials}
                             </div>
                         </div>
+
+                        {/* Logout */}
+                        <button
+                            onClick={handleLogout}
+                            className="flex items-center gap-2 px-4 py-2 rounded-xl text-[11px] font-bold text-white/80 hover:text-white hover:bg-red-500/20 transition-all ml-1"
+                        >
+                            <LogOut size={14} />
+                            <span className="hidden sm:inline">Logout</span>
+                        </button>
                     </div>
+                </div>
+            </header>
 
+            <div className="flex flex-1">
+                {/* ── SIDEBAR ── */}
+                <Sidebar />
 
-                    <div className="max-w-[1200px] mx-auto px-6 lg:px-10 py-10 space-y-12">
+                {/* ── MAIN CONTENT ── */}
+                <main className="flex-1 lg:ml-72 flex flex-col min-h-[calc(100vh-64px)] overflow-x-hidden">
+                    
+                    {/* ── HERO WELCOME BANNER ── */}
+                    <div className="bg-[#002147] relative overflow-hidden shrink-0">
+                        {/* Decorative blobs */}
+                        <div className="absolute top-0 right-0 w-96 h-96 bg-[#FF9F1C]/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+                        <div className="absolute bottom-0 left-1/4 w-64 h-64 bg-[#4DA8DA]/10 rounded-full blur-3xl translate-y-1/2 pointer-events-none" />
 
-                        {/* 1. STATISTICS BAR (Matched to Home.js Stats Bar) */}
-                        <section className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden relative">
-                            {/* Decorative Accent */}
-                            <div className="absolute top-0 right-0 w-64 h-64 bg-[#FFCC29]/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
+                            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                                <div>
+                                    <p className="text-[#4DA8DA] font-black text-[10px] uppercase tracking-[0.4em] mb-2">{greeting}</p>
+                                    <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight leading-tight">
+                                        Welcome, {userData.name?.split(' ')[0]}<br />
+                                        <span className="text-blue-200 text-2xl font-bold">How can we assist you today?</span>
+                                    </h1>
+                                    <div className="flex items-center gap-2 mt-4">
+                                        <span className="px-3 py-1 bg-white/10 text-white text-[10px] font-black uppercase tracking-widest rounded-full border border-white/10">
+                                            Authenticated User
+                                        </span>
+                                        <span className="text-blue-300 text-[11px] font-medium opacity-80">{userData.email}</span>
+                                    </div>
+                                </div>
 
-                            <div className="p-8">
-                                <div className="grid grid-cols-2 md:grid-cols-4 gap-8 divide-x divide-slate-100">
-                                    {statsConfig.map((stat, i) => (
-                                        <div key={i} className="text-center px-4">
-                                            <div className={`w-10 h-10 mx-auto ${stat.bg} ${stat.border} border rounded-full flex items-center justify-center mb-3`}>
-                                                <svg className={`w-5 h-5 ${stat.color}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={stat.icon} /></svg>
-                                            </div>
-                                            <h3 className={`text-3xl md:text-4xl font-black ${stat.color} mb-1 tracking-tighter italic`}>{stat.value}</h3>
-                                            <p className="text-slate-500 font-black text-[9px] uppercase tracking-widest opacity-80">{stat.label}</p>
+                                {/* Stats row */}
+                                <div className="flex gap-4 flex-wrap">
+                                    {[
+                                        { label: 'Active', value: stats.active, color: 'text-orange-400' },
+                                        { label: 'Resolved', value: stats.completed, color: 'text-emerald-400' },
+                                    ].map((s, i) => (
+                                        <div key={i} className="bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-center min-w-[110px] backdrop-blur-sm">
+                                            <p className={`text-3xl font-black ${s.color} leading-none`}>{loading ? '—' : s.value}</p>
+                                            <p className="text-[9px] font-black text-blue-200 uppercase tracking-widest mt-2">{s.label}</p>
                                         </div>
                                     ))}
                                 </div>
                             </div>
+                        </div>
+                    </div>
+
+                    <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10 space-y-10">
+
+                        {/* ── QUICK ACTION CARDS ── */}
+                        <section>
+                            <div className="flex items-center justify-between mb-6">
+                                <h2 className="text-lg font-black text-[#002147] tracking-tight">System Navigation</h2>
+                                <Link to="/report-incident" className="flex items-center gap-2 bg-[#FF9F1C] text-white px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-orange-500 transition-all no-underline shadow-lg shadow-orange-500/20">
+                                    <Plus size={14} />
+                                    New Incident
+                                </Link>
+                            </div>
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                                {quickActions.map((action) => {
+                                    const Icon = action.icon;
+                                    return (
+                                        <Link
+                                            key={action.id}
+                                            to={action.path}
+                                            className={`group relative ${action.bg} rounded-3xl p-7 flex flex-col gap-4 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 no-underline overflow-hidden border border-slate-100`}
+                                        >
+                                            {/* BG Decoration */}
+                                            <div className="absolute top-0 right-0 w-32 h-32 rounded-full opacity-10 blur-2xl"
+                                                style={{ backgroundColor: action.accent }} />
+
+                                            <div className="relative z-10">
+                                                <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4 shadow-md"
+                                                    style={{ backgroundColor: action.accent }}>
+                                                    <Icon size={22} style={{ color: action.accentText }} />
+                                                </div>
+                                                <h3 className={`font-black text-base tracking-tight leading-tight ${action.textMain}`}>
+                                                    {action.title}
+                                                </h3>
+                                                <p className={`text-xs font-medium mt-1.5 leading-relaxed ${action.textSub}`}>
+                                                    {action.desc}
+                                                </p>
+                                            </div>
+
+                                            <div className={`relative z-10 flex items-center gap-1 text-[10px] font-black uppercase tracking-widest mt-auto ${action.textMain} opacity-70 group-hover:opacity-100 transition-opacity`}>
+                                                {action.cta}
+                                                <ChevronRight size={12} className="group-hover:translate-x-1 transition-transform" />
+                                            </div>
+                                        </Link>
+                                    );
+                                })}
+                            </div>
                         </section>
 
-                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 items-start">
+                        {/* ── RECENT TICKETS + PROFILE CARD ── */}
+                        <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
 
-                            {/* Live Incident Tracker - Table style matched to modern lists */}
-                            <div className="lg:col-span-2 bg-white rounded-[40px] border border-slate-200 shadow-sm overflow-hidden p-10">
-                                <div className="flex justify-between items-center mb-12 px-2">
+                            {/* Recent Tickets */}
+                            <div className="xl:col-span-2 bg-white rounded-[32px] border border-slate-200 shadow-sm overflow-hidden">
+                                <div className="flex items-center justify-between px-8 py-6 border-b border-slate-100 bg-slate-50/50">
                                     <div>
-                                        <h3 className="text-xl font-bold text-slate-900 tracking-tight">Recent Incidents</h3>
-                                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Live maintenance updates</p>
+                                        <h2 className="text-base font-black text-[#002147] tracking-tight">Recent Activity</h2>
+                                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Your submission registry</p>
                                     </div>
-                                    <Link to="/my-tickets" className="px-6 py-2.5 bg-[#FFD166] text-slate-900 rounded-full text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-all shadow-lg shadow-[#FFD166]/20">
-                                        View All
+                                    <Link to="/my-tickets" className="text-[10px] font-black text-[#002147] uppercase tracking-widest hover:text-[#FF9F1C] transition-colors no-underline flex items-center gap-1">
+                                        View All Reports <ChevronRight size={12} />
                                     </Link>
                                 </div>
 
-                                <div className="space-y-4">
+                                <div className="divide-y divide-slate-50">
                                     {loading ? (
-                                        <div className="h-64 flex items-center justify-center text-slate-400 font-black text-xs uppercase tracking-widest">
-                                            Synchronizing...
+                                        <div className="flex items-center justify-center py-20">
+                                            <div className="w-10 h-10 border-4 border-slate-100 border-t-[#002147] rounded-full animate-spin" />
                                         </div>
-                                    ) : recentTickets.length > 0 ? (
-                                        recentTickets.map((ticket) => (
-                                            <Link to={`/tickets/${ticket.id}`} key={ticket.id} className="flex items-center justify-between p-6 hover:bg-slate-50 border border-transparent hover:border-slate-100 rounded-[24px] transition-all group">
-                                                <div className="flex items-center gap-6">
-                                                    <div className="w-12 h-12 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center group-hover:bg-white group-hover:border-[#1E293B] transition-all">
-                                                        <span className="text-[#1E293B] font-black italic text-xs">ID</span>
-                                                    </div>
-                                                    <div>
-                                                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">#{ticket.id.slice(-6).toUpperCase()}</p>
-                                                        <h4 className="font-bold text-slate-800 tracking-tight group-hover:text-[#1E293B] transition-colors">{ticket.resourceName}</h4>
-                                                    </div>
-                                                </div>
-                                                <div className="flex items-center gap-8">
-                                                    <span className={`px-5 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest border transition-all ${ticket.status === 'OPEN' ? 'bg-rose-50 text-rose-600 border-rose-100' :
-                                                            ticket.status === 'IN_PROGRESS' ? 'bg-amber-50 text-amber-600 border-amber-100' :
-                                                                'bg-emerald-50 text-emerald-600 border-emerald-100'
-                                                        }`}>
-                                                        {ticket.status.replace('_', ' ')}
-                                                    </span>
-                                                    <div className="w-8 h-8 rounded-full flex items-center justify-center text-slate-300 group-hover:text-slate-900 transition-colors">
-                                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M9 5l7 7-7 7" /></svg>
-                                                    </div>
-                                                </div>
+                                    ) : recentTickets.length === 0 ? (
+                                        <div className="flex flex-col items-center justify-center py-20 text-center px-8">
+                                            <div className="w-20 h-20 bg-slate-50 rounded-3xl flex items-center justify-center mb-4 border border-slate-100">
+                                                <FileText size={32} className="text-slate-300" />
+                                            </div>
+                                            <h3 className="font-black text-[#002147] text-sm mb-1 uppercase tracking-tight">Registry Empty</h3>
+                                            <p className="text-slate-400 text-[11px] font-medium">You have no active maintenance records at this time.</p>
+                                            <Link to="/report-incident" className="mt-6 px-6 py-3 bg-[#002147] text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-[#003166] transition-all no-underline shadow-md">
+                                                Start New Report
                                             </Link>
-                                        ))
-                                    ) : (
-                                        <div className="text-center py-20 border-2 border-dashed border-slate-100 rounded-[32px]">
-                                            <p className="text-slate-400 font-bold text-xs uppercase tracking-widest">No active requests found</p>
                                         </div>
+                                    ) : (
+                                        recentTickets.map((ticket) => {
+                                            const s = getStatusConfig(ticket.status);
+                                            const SIcon = s.Icon;
+                                            return (
+                                                <Link
+                                                    key={ticket.id}
+                                                    to={`/tickets/${ticket.id}`}
+                                                    className="flex items-center gap-4 px-8 py-6 hover:bg-slate-50 transition-all group no-underline"
+                                                >
+                                                    <div className={`w-12 h-12 rounded-2xl ${s.bg} ${s.border} border flex items-center justify-center shrink-0 shadow-sm transition-transform group-hover:scale-105`}>
+                                                        <SIcon size={20} className={s.color} />
+                                                    </div>
+                                                    <div className="flex-1 min-w-0">
+                                                        <div className="flex items-center gap-2 mb-1">
+                                                            <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Ref: #{ticket.id?.slice(-6).toUpperCase()}</span>
+                                                            <span className="w-1 h-1 bg-slate-200 rounded-full"></span>
+                                                            <span className="flex items-center gap-1 text-[9px] font-bold text-slate-400 uppercase">
+                                                                <Calendar size={9} />
+                                                                {new Date(ticket.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                                                            </span>
+                                                        </div>
+                                                        <p className="font-black text-[#002147] text-sm truncate group-hover:text-[#FF9F1C] transition-colors uppercase tracking-tight">
+                                                            {ticket.resourceName || 'Unnamed Request'}
+                                                        </p>
+                                                    </div>
+                                                    <div className="flex flex-col items-end gap-2">
+                                                        <span className={`px-4 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest border shadow-sm ${s.bg} ${s.color} ${s.border} shrink-0`}>
+                                                            {s.label}
+                                                        </span>
+                                                        <div className="flex items-center gap-1 text-[9px] font-black text-slate-300 group-hover:text-[#002147] transition-colors">
+                                                            VIEW <ChevronRight size={10} />
+                                                        </div>
+                                                    </div>
+                                                </Link>
+                                            );
+                                        })
                                     )}
                                 </div>
                             </div>
 
-                            {/* Sidebar Actions & Identity - Matching Home Page Footer/Nav */}
-                            <div className="space-y-10">
+                            {/* Right column */}
+                            <div className="flex flex-col gap-6">
 
-                                {/* Identity Card */}
-                                <div className="bg-[#1E293B] rounded-[40px] p-10 text-white relative overflow-hidden shadow-2xl">
-                                    <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2"></div>
+                                {/* Profile card */}
+                                <div className="bg-[#4DA8DA] rounded-[32px] p-8 text-white relative overflow-hidden shadow-xl border border-blue-300/30">
+                                    <div className="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
                                     <div className="relative z-10">
-                                        <div className="flex items-center gap-4 mb-10">
-                                            <div className="w-12 h-12 bg-white/10 rounded-2xl border border-white/20 flex items-center justify-center text-xl font-black italic">
-                                                {userData.name.charAt(0)}
+                                        <div className="flex items-center gap-5 mb-8">
+                                            <div className="w-16 h-16 bg-[#002147] rounded-2xl flex items-center justify-center text-white font-black text-2xl shadow-xl border border-white/10">
+                                                {initials}
                                             </div>
                                             <div>
-                                                <p className="text-[10px] font-black text-white/50 uppercase tracking-widest mb-1">Clearance: {role}</p>
-                                                <p className="font-bold tracking-tight text-lg leading-none">{userData.name}</p>
+                                                <p className="text-[10px] font-black text-blue-100 uppercase tracking-widest mb-1">Active Session</p>
+                                                <h3 className="font-black text-lg leading-tight uppercase tracking-tight">{userData.name}</h3>
                                             </div>
                                         </div>
-                                        <div className="space-y-2 mb-10">
-                                            <p className="text-[10px] font-black text-white/40 uppercase tracking-widest">System Email</p>
-                                            <p className="text-xs font-bold text-white/80">{userData.email}</p>
+                                        
+                                        <div className="space-y-4 mb-8">
+                                            <div className="p-4 bg-white/10 rounded-2xl border border-white/10 backdrop-blur-sm">
+                                                <p className="text-[9px] font-black text-blue-50 uppercase tracking-widest mb-1 opacity-70">User Handle</p>
+                                                <p className="text-xs font-bold truncate">{userData.email}</p>
+                                            </div>
                                         </div>
-                                        <Link to="/profile" className="w-full py-4 bg-white/10 border border-white/20 hover:bg-white text-white hover:text-slate-900 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all flex items-center justify-center gap-2">
-                                            Manage Profile
-                                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
-                                        </Link>
+
+                                        <div className="space-y-3">
+                                            <Link to="/profile" className="w-full flex items-center justify-center gap-2 py-3.5 bg-[#002147] text-white hover:bg-[#003166] rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all no-underline shadow-lg border border-[#002147]">
+                                                <User size={14} />
+                                                Edit Profile
+                                            </Link>
+                                            <button
+                                                onClick={handleLogout}
+                                                className="w-full flex items-center justify-center gap-2 py-3.5 bg-transparent hover:bg-white/10 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all border border-white/20"
+                                            >
+                                                <LogOut size={14} />
+                                                Terminate Session
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
 
-                                {/* Quick Tools - Matching Home Feature Style */}
-                                <div className="bg-white border border-slate-200 rounded-[40px] p-10 shadow-sm">
-                                    <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest mb-8 px-2">Quick Actions</h3>
-                                    <div className="space-y-6">
+                                {/* Status legend */}
+                                <div className="bg-white rounded-[32px] border border-slate-200 p-8 shadow-sm">
+                                    <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-6">Status Definitions</h3>
+                                    <div className="space-y-5">
                                         {[
-                                            { label: 'Report Incident', path: '/report-incident', icon: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z' },
-                                            { label: 'Browse Resources', path: '/resources', icon: 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4' }
-                                        ].map((action, i) => (
-                                            <Link key={i} to={action.path} className="flex items-center gap-4 group">
-                                                <div className="w-10 h-10 bg-slate-50 border border-slate-100 rounded-xl flex items-center justify-center text-slate-400 group-hover:bg-[#FFD166] group-hover:text-slate-900 transition-all">
-                                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={action.icon} /></svg>
+                                            { label: 'Open', desc: 'Request submitted to system', color: 'bg-rose-500' },
+                                            { label: 'In Progress', desc: 'Technician assigned & working', color: 'bg-amber-400' },
+                                            { label: 'Resolved', desc: 'Solution verified by team', color: 'bg-emerald-500' },
+                                            { label: 'Closed', desc: 'Request archived', color: 'bg-slate-400' },
+                                        ].map((item, i) => (
+                                            <div key={i} className="flex items-center gap-4">
+                                                <div className={`w-3 h-3 rounded-full ${item.color} shrink-0 shadow-sm`} />
+                                                <div>
+                                                    <p className="text-[11px] font-black text-[#002147] leading-none uppercase tracking-tight">{item.label}</p>
+                                                    <p className="text-[10px] text-slate-400 font-medium mt-1">{item.desc}</p>
                                                 </div>
-                                                <span className="text-[11px] font-black text-slate-500 uppercase tracking-widest group-hover:text-slate-900 transition-colors">{action.label}</span>
-                                            </Link>
+                                            </div>
                                         ))}
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+                    <Footer />
                 </main>
             </div>
         </div>

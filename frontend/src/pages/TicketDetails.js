@@ -127,27 +127,27 @@ const TicketDetails = () => {
             <Navbar />
             <div className="flex flex-1 relative z-10 w-full overflow-hidden">
                 {renderSidebar()}
-                <main className={`flex-1 ${userRole === 'USER' ? 'lg:ml-72' : 'lg:ml-72'} h-[calc(100vh-72px)] overflow-y-auto scroll-smooth`}>
+                <main className={`flex-1 ${userRole === 'USER' ? 'lg:ml-72' : 'lg:ml-72'} h-[calc(100vh-64px)] overflow-y-auto scroll-smooth`}>
 
                     {/* Header Area styled like UserDashboard */}
-                    <div className="bg-white border-b border-slate-200 py-10">
+                    <div className="bg-[#002147] border-b border-white/10 py-10 shadow-lg">
                         <div className="max-w-[1000px] mx-auto px-6">
                             <div className="flex flex-col md:flex-row justify-between items-start gap-8">
                                 <div>
                                     <div className="flex gap-3 mb-4">
-                                        <span className="px-3 py-1 bg-slate-100 text-[#0F172A] text-[10px] font-black uppercase tracking-[0.2em] rounded shadow-sm border border-slate-200">
+                                        <span className="px-3 py-1 bg-white/5 text-blue-200 text-[10px] font-black uppercase tracking-[0.2em] rounded shadow-sm border border-white/10">
                                             #{ticket.id.slice(-8).toUpperCase()}
                                         </span>
-                                        <span className={`px-3 py-1 rounded text-[10px] font-black uppercase tracking-[0.2em] shadow-sm border ${ticket.status === 'OPEN' ? 'bg-[#FFD166] text-slate-900 border-[#FFCC29]' :
-                                                ticket.status === 'RESOLVED' ? 'bg-[#3f4175] text-white border-[#3f4175]' : 'bg-[#0F172A] text-white border-[#0F172A]'
+                                        <span className={`px-3 py-1 rounded text-[10px] font-black uppercase tracking-[0.2em] shadow-sm border ${ticket.status === 'OPEN' ? 'bg-[#FF9F1C] text-white border-[#FF9F1C]' :
+                                                ticket.status === 'RESOLVED' ? 'bg-[#4DA8DA] text-white border-[#4DA8DA]' : 'bg-slate-700 text-white border-slate-600'
                                             }`}>
                                             {ticket.status.replace('_', ' ')}
                                         </span>
                                     </div>
-                                    <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight mb-2 uppercase">
+                                    <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight mb-2 uppercase">
                                         {ticket.resourceName}
                                     </h1>
-                                    <p className="text-slate-500 font-bold uppercase tracking-[0.2em] text-[10px]">
+                                    <p className="text-blue-100/60 font-bold uppercase tracking-[0.2em] text-[10px]">
                                         Category: {ticket.category} • Created {new Date(ticket.createdAt).toLocaleDateString()}
                                     </p>
                                 </div>
@@ -157,13 +157,13 @@ const TicketDetails = () => {
                                     <div className="flex gap-4 shrink-0 mt-4 md:mt-0">
                                         {ticket.status !== 'CLOSED' && (
                                             <button onClick={() => handleAction('CLOSED')} disabled={actionLoading}
-                                                className="px-6 py-3 bg-[#3f4175] text-white rounded font-black text-[10px] uppercase tracking-[0.2em] hover:bg-[#2c2d54] transition shadow-md">
+                                                className="px-6 py-3 bg-[#4DA8DA] text-white rounded font-black text-[10px] uppercase tracking-[0.2em] hover:bg-[#3f98c8] transition shadow-md">
                                                 {actionLoading ? 'Finalizing...' : 'Close Incident'}
                                             </button>
                                         )}
                                         {ticket.status !== 'REJECTED' && (ticket.status === 'OPEN' || ticket.status === 'PENDING') && (
                                             <button onClick={() => handleAction('REJECTED')} disabled={actionLoading}
-                                                className="px-6 py-3 bg-white text-rose-600 border border-rose-200 rounded font-black text-[10px] uppercase tracking-[0.2em] hover:bg-rose-50 transition shadow-sm">
+                                                className="px-6 py-3 bg-rose-500 text-white rounded font-black text-[10px] uppercase tracking-[0.2em] hover:bg-rose-600 transition shadow-sm">
                                                 {actionLoading ? 'Rejecting...' : 'Reject Case'}
                                             </button>
                                         )}
@@ -180,15 +180,15 @@ const TicketDetails = () => {
                             <div className="lg:col-span-2 space-y-8">
 
                                 <section className="bg-white p-8 rounded border border-slate-200 shadow-sm relative overflow-hidden">
-                                    <div className="absolute top-0 left-0 w-full h-2 bg-[#FFD166]"></div>
+                                    <div className="absolute top-0 left-0 w-full h-2 bg-[#FF9F1C]"></div>
                                     <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4">Case Description</h3>
                                     <p className="text-lg font-bold text-slate-800 leading-relaxed">"{ticket.description}"</p>
 
                                     {/* Resolution Area */}
                                     {ticket.resolutionNotes && (
                                         <div className="mt-8 pt-8 border-t border-slate-100">
-                                            <h3 className="text-[10px] font-black text-[#3f4175] uppercase tracking-widest mb-4 flex items-center gap-2">
-                                                <span className="w-2 h-2 bg-[#ffD166] rounded-full"></span>
+                                            <h3 className="text-[10px] font-black text-[#002147] uppercase tracking-widest mb-4 flex items-center gap-2">
+                                                <span className="w-2 h-2 bg-[#FF9F1C] rounded-full"></span>
                                                 Official Resolution Notes
                                             </h3>
                                             <div className="bg-slate-50 p-6 rounded border border-slate-200 font-bold text-slate-800 text-sm leading-relaxed">
@@ -248,36 +248,36 @@ const TicketDetails = () => {
                                     <form onSubmit={submitComment} className="relative pt-6 border-t border-slate-100">
                                         <textarea
                                             placeholder="Add a comment to the incident thread..." required
-                                            className="w-full px-6 py-5 bg-slate-50 border border-slate-200 rounded focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#0F172A] font-bold text-slate-800 shadow-sm resize-none min-h-[100px] placeholder:text-slate-400"
+                                            className="w-full px-6 py-5 bg-slate-50 border border-slate-200 rounded-2xl focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#002147] font-bold text-slate-800 shadow-sm resize-none min-h-[100px] placeholder:text-slate-400"
                                             value={newComment} onChange={(e) => setNewComment(e.target.value)}
                                         ></textarea>
-                                        <button type="submit" className="mt-4 px-8 py-3 bg-[#0F172A] text-white rounded font-black text-[10px] uppercase tracking-widest hover:bg-slate-800 transition shadow-md">Post Comment</button>
+                                        <button type="submit" className="mt-4 px-8 py-3 bg-[#002147] text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-[#003166] transition shadow-md">Post Comment</button>
                                     </form>
                                 </section>
                             </div>
 
                             {/* Right: Meta Info */}
                             <div className="lg:col-span-1 space-y-8">
-                                <div className="bg-[#0F172A] p-8 rounded border border-slate-800 text-white shadow-lg relative overflow-hidden">
-                                    <div className="absolute top-0 right-0 w-32 h-32 bg-[#FFD166]/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2"></div>
-                                    <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-8 relative z-10">Metadata Summary</h4>
+                                <div className="bg-[#002147] p-8 rounded-[32px] border border-white/5 text-white shadow-xl relative overflow-hidden">
+                                    <div className="absolute top-0 right-0 w-32 h-32 bg-[#FF9F1C]/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2"></div>
+                                    <h4 className="text-[10px] font-black text-blue-200 uppercase tracking-[0.2em] mb-8 relative z-10">Metadata Summary</h4>
                                     <div className="space-y-6 relative z-10">
                                         <div>
-                                            <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">Incident Creator</p>
-                                            <p className="font-bold text-xs truncate text-slate-200">{ticket.requesterEmail}</p>
+                                            <p className="text-[9px] font-black text-blue-300/50 uppercase tracking-widest mb-1">Incident Creator</p>
+                                            <p className="font-bold text-xs truncate text-white">{ticket.requesterEmail}</p>
                                         </div>
                                         <div>
-                                            <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">Active Technician</p>
-                                            <p className="font-bold text-xs truncate text-[#FFD166]">{ticket.technicianEmail || 'PENDING ASSIGNMENT'}</p>
+                                            <p className="text-[9px] font-black text-blue-300/50 uppercase tracking-widest mb-1">Active Technician</p>
+                                            <p className="font-bold text-xs truncate text-[#FF9F1C]">{ticket.technicianEmail || 'PENDING ASSIGNMENT'}</p>
                                         </div>
                                         <div>
-                                            <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">Priority Classification</p>
-                                            <p className={`font-black text-xs uppercase tracking-widest ${ticket.priority === 'URGENT' ? 'text-rose-400' : 'text-slate-200'
+                                            <p className="text-[9px] font-black text-blue-300/50 uppercase tracking-widest mb-1">Priority Classification</p>
+                                            <p className={`font-black text-xs uppercase tracking-widest ${ticket.priority === 'URGENT' ? 'text-rose-400' : 'text-white'
                                                 }`}>{ticket.priority}</p>
                                         </div>
-                                        <div className="pt-6 border-t border-slate-800">
-                                            <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">Internal System</p>
-                                            <p className="font-bold text-xs text-slate-300">WASSUP-PROD</p>
+                                        <div className="pt-6 border-t border-white/10">
+                                            <p className="text-[9px] font-black text-blue-300/50 uppercase tracking-widest mb-1">Internal System</p>
+                                            <p className="font-bold text-xs text-blue-100/60">UNIFLOW-PROD</p>
                                         </div>
                                     </div>
                                 </div>
