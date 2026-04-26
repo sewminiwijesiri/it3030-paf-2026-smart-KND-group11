@@ -5,12 +5,9 @@ import { Link } from 'react-router-dom';
 import { 
   Search, 
   UserPlus, 
-  Clock, 
-  CheckCircle2, 
   ChevronDown,
   Activity,
   Zap,
-  Mail,
   X,
   AlertTriangle,
   ArrowRight

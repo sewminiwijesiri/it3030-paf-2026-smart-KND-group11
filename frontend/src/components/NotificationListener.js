@@ -72,7 +72,7 @@ const NotificationListener = () => {
                 stompClient.deactivate();
             }
         };
-    }, [token, role, email]);
+    }, [token, role, email, addNotification]);
 
     const showNotification = (data) => {
         toast.custom((t) => (

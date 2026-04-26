@@ -3,14 +3,14 @@ import { useBookings } from '../hooks/useBookings';
 import { bookingService } from '../services/bookingService';
 import BookingStatusBadge from '../components/Booking/BookingStatusBadge';
 import { BOOKING_STATUS } from '../utils/bookingConstants';
-import { Trash2, PlusCircle, AlertCircle, Calendar, Clock, MapPin, Users, Filter, QrCode, X } from 'lucide-react';
+import { Trash2, AlertCircle, Calendar, Clock, Users, Filter, QrCode, X } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import AdminSidebar from '../components/AdminSidebar';
 import TechnicianSidebar from '../components/TechnicianSidebar';
 
 const MyBookings = () => {
-  const { bookings, loading, error, fetchMyBookings, cancelBooking, createBooking } = useBookings();
+  const { bookings, loading, error, fetchMyBookings, cancelBooking } = useBookings();
   const [filterStatus, setFilterStatus] = useState('');
   const [qrModalOpen, setQrModalOpen] = useState(false);
   const [currentQrCode, setCurrentQrCode] = useState(null);

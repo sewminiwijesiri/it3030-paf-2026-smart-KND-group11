@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { Link } from 'react-router-dom';
-import { ArrowRight, CheckCircle, Zap } from 'lucide-react';
+
 import heroBg from '../assets/hero-bg.png';
 import showcaseImg from '../assets/campus-showcase.png';
 import api from '../utils/api';
@@ -27,11 +27,7 @@ const Home = () => {
 
     // Local assets for primary sections
     const aboutImg = showcaseImg;
-    const fallbackImgs = [
-        "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=600",
-        "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=600",
-        "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=600"
-    ];
+
 
     return (
         <div className="min-h-screen bg-white">

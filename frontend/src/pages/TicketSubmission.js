@@ -25,7 +25,6 @@ const TicketSubmission = () => {
     const [success, setSuccess] = useState(false);
 
     const categories = ['IT Support', 'Electrical', 'Plumbing', 'Furniture', 'Facility Structure', 'Other'];
-    const priorities = ['LOW', 'MEDIUM', 'HIGH', 'URGENT'];
 
     useEffect(() => {
         const fetchResources = async () => {

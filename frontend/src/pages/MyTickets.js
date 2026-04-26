@@ -5,7 +5,6 @@ import api from '../utils/api';
 import { Link } from 'react-router-dom';
 import {
     Search,
-    Filter,
     Trash2,
     ArrowRight,
     Clock,

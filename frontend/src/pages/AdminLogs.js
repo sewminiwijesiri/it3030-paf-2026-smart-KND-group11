@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import AdminLayout from '../components/AdminLayout';
 import api from '../utils/api';
 import { 
-    LineChart, Line, AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell,
+    AreaChart, Area, PieChart, Pie, Cell,
     XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend 
 } from 'recharts';
 import { 
@@ -11,7 +11,7 @@ import {
 } from 'lucide-react';
 
 const AdminLogs = () => {
-    const [loading, setLoading] = useState(true);
+    const [, setLoading] = useState(true);
     const [data, setData] = useState({
         bookings: [],
         incidents: [],
