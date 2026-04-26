@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 
 @Component
-public class JwtUtil {
+public class JwtUtil { // tocken validation
 
     private final String SECRET = "mysecretkey";
 
