@@ -61,7 +61,7 @@ const AdminLogs = () => {
         { name: 'Closed', value: data.incidents.filter(i => i.status === 'CLOSED').length || 30 },
     ];
 
-    const COLORS = ['#FFD166', '#3f4175', '#0F172A', '#94A3B8'];
+    const COLORS = ['#6366F1', '#10B981', '#FFD166', '#F43F5E'];
 
     const handleExport = () => {
         if (!data.incidents || data.incidents.length === 0) {
@@ -138,17 +138,17 @@ const AdminLogs = () => {
                 {/* Top Metrics Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
                     {[
-                        { label: 'Active Sessions', val: '124', icon: Activity, trend: '+12%', color: 'emerald' },
-                        { label: 'Total Users', val: data.users.length, icon: Users, trend: '+4%', color: 'indigo' },
-                        { label: 'Pending Bookings', val: '18', icon: Calendar, trend: 'Stable', color: 'amber' },
-                        { label: 'Unresolved Issues', val: data.incidents.filter(i => i.status === 'OPEN').length, icon: AlertTriangle, trend: '-2%', color: 'rose' }
+                        { label: 'Active Sessions', val: '124', icon: Activity, trend: '+12%', color: 'text-indigo-600', bg: 'bg-indigo-50', border: 'border-indigo-100', trendBg: 'bg-indigo-100/50' },
+                        { label: 'Total Users', val: data.users.length, icon: Users, trend: '+4%', color: 'text-emerald-600', bg: 'bg-emerald-50', border: 'border-emerald-100', trendBg: 'bg-emerald-100/50' },
+                        { label: 'Pending Bookings', val: '18', icon: Calendar, trend: 'Stable', color: 'text-amber-600', bg: 'bg-amber-50', border: 'border-amber-100', trendBg: 'bg-amber-100/50' },
+                        { label: 'Unresolved Issues', val: data.incidents.filter(i => i.status === 'OPEN').length, icon: AlertTriangle, trend: '-2%', color: 'text-rose-600', bg: 'bg-rose-50', border: 'border-rose-100', trendBg: 'bg-rose-100/50' }
                     ].map((stat, i) => (
-                        <div key={i} className="bg-white p-8 rounded-[32px] border border-slate-200 shadow-sm flex flex-col justify-between group hover:shadow-xl transition-all">
+                        <div key={i} className="bg-white p-8 rounded-[32px] border border-slate-200 shadow-sm flex flex-col justify-between group hover:shadow-xl hover:border-slate-300 transition-all">
                             <div className="flex justify-between items-start mb-6">
-                                <div className={`w-12 h-12 rounded-2xl bg-slate-50 text-slate-900 flex items-center justify-center border border-slate-100 group-hover:scale-110 transition-transform`}>
+                                <div className={`w-12 h-12 rounded-2xl ${stat.bg} ${stat.color} flex items-center justify-center border ${stat.border} group-hover:scale-110 transition-transform shadow-sm`}>
                                     <stat.icon size={24} />
                                 </div>
-                                <span className={`text-[10px] font-black px-2.5 py-1 rounded-lg bg-slate-50 text-slate-600`}>{stat.trend}</span>
+                                <span className={`text-[10px] font-black px-2.5 py-1 rounded-lg ${stat.trendBg} ${stat.color}`}>{stat.trend}</span>
                             </div>
                             <div>
                                 <h3 className="text-4xl font-black text-slate-900 tracking-tighter mb-1">{stat.val}</h3>
@@ -170,12 +170,12 @@ const AdminLogs = () => {
                             </div>
                             <div className="flex gap-2">
                                 <div className="flex items-center gap-2">
-                                    <span className="w-2 h-2 rounded-full bg-[#FFD166]"></span>
-                                    <span className="text-[9px] font-black uppercase text-slate-400">Bookings</span>
+                                    <span className="w-2 h-2 rounded-full bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.6)]"></span>
+                                    <span className="text-[9px] font-black uppercase text-indigo-500">Bookings</span>
                                 </div>
                                 <div className="flex items-center gap-2 ml-4">
-                                    <span className="w-2 h-2 rounded-full bg-[#3f4175]"></span>
-                                    <span className="text-[9px] font-black uppercase text-slate-400">Issues</span>
+                                    <span className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]"></span>
+                                    <span className="text-[9px] font-black uppercase text-emerald-500">Issues</span>
                                 </div>
                             </div>
                         </div>
@@ -185,12 +185,12 @@ const AdminLogs = () => {
                                 <AreaChart data={trendData}>
                                     <defs>
                                         <linearGradient id="colorBook" x1="0" y1="0" x2="0" y2="1">
-                                            <stop offset="5%" stopColor="#FFD166" stopOpacity={0.3}/>
-                                            <stop offset="95%" stopColor="#FFD166" stopOpacity={0}/>
+                                            <stop offset="5%" stopColor="#6366F1" stopOpacity={0.2}/>
+                                            <stop offset="95%" stopColor="#6366F1" stopOpacity={0}/>
                                         </linearGradient>
                                         <linearGradient id="colorIssue" x1="0" y1="0" x2="0" y2="1">
-                                            <stop offset="5%" stopColor="#3f4175" stopOpacity={0.3}/>
-                                            <stop offset="95%" stopColor="#3f4175" stopOpacity={0}/>
+                                            <stop offset="5%" stopColor="#10B981" stopOpacity={0.2}/>
+                                            <stop offset="95%" stopColor="#10B981" stopOpacity={0}/>
                                         </linearGradient>
                                     </defs>
                                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
@@ -210,8 +210,8 @@ const AdminLogs = () => {
                                         contentStyle={{borderRadius: '16px', border: 'none', boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1)', padding: '12px 16px'}}
                                         itemStyle={{fontSize: '10px', fontWeight: 900, textTransform: 'uppercase'}}
                                     />
-                                    <Area type="monotone" dataKey="bookings" stroke="#FFD166" strokeWidth={4} fillOpacity={1} fill="url(#colorBook)" />
-                                    <Area type="monotone" dataKey="issues" stroke="#3f4175" strokeWidth={4} fillOpacity={1} fill="url(#colorIssue)" />
+                                    <Area type="monotone" dataKey="bookings" stroke="#6366F1" strokeWidth={4} fillOpacity={1} fill="url(#colorBook)" />
+                                    <Area type="monotone" dataKey="issues" stroke="#10B981" strokeWidth={4} fillOpacity={1} fill="url(#colorIssue)" />
                                 </AreaChart>
                             </ResponsiveContainer>
                         </div>
