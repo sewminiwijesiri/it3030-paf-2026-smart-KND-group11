@@ -7,7 +7,7 @@ const BookingStatusBadge = ({ status }) => {
   const label = STATUS_LABELS[status] || status;
 
   return (
-    <span className={`px-3 py-1 rounded-full text-xs font-medium ${colorClass}`}>
+    <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border transition-all ${colorClass}`}>
       {label}
     </span>
   );

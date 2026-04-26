@@ -37,12 +37,12 @@ const UserDashboard = () => {
                     // Active Bookings = Approved Bookings
                     active: bookings.filter(b => b.status === 'APPROVED').length,
                     
-                    // Completed Actions = Resolved Maintenance Tickets
-                    completed: tickets.filter(t => t.status === 'RESOLVED').length,
+                    // Completed Actions = Resolved or Closed Maintenance Tickets
+                    completed: tickets.filter(t => t.status === 'RESOLVED' || t.status === 'CLOSED').length,
                     
-                    // Pending Requests = Pending Bookings + Pending Tickets
+                    // Pending Requests = Pending Bookings + Open Maintenance Tickets
                     pending: bookings.filter(b => b.status === 'PENDING').length + 
-                             tickets.filter(t => t.status === 'PENDING').length
+                             tickets.filter(t => t.status === 'OPEN' || t.status === 'IN_PROGRESS').length
                 });
 
                 setRecentTickets(tickets.slice(0, 5));
@@ -141,10 +141,13 @@ const UserDashboard = () => {
                             <div className="lg:col-span-2 bg-white rounded-[40px] border border-slate-200 shadow-sm overflow-hidden p-10">
                                 <div className="flex justify-between items-center mb-12 px-2">
                                     <div>
-                                        <h3 className="text-xl font-bold text-slate-900 tracking-tight">Recent Incidents</h3>
-                                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Live maintenance updates</p>
+                                        <h3 className="text-lg font-black text-slate-900 tracking-tight flex items-center gap-2">
+                                            <span className="w-1 h-4 bg-[#FFD166] rounded-full"></span>
+                                            Recent Incidents
+                                        </h3>
+                                        <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-0.5 ml-3">Live maintenance updates</p>
                                     </div>
-                                    <Link to="/my-tickets" className="px-6 py-2.5 bg-[#FFD166] text-slate-900 rounded-full text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-all shadow-lg shadow-[#FFD166]/20">
+                                    <Link to="/my-tickets" className="px-5 py-2 bg-slate-50 border border-slate-100 text-slate-600 rounded-xl text-[9px] font-black uppercase tracking-widest hover:bg-[#FFD166] hover:text-slate-900 hover:border-[#FFD166] transition-all shadow-sm">
                                         View All
                                     </Link>
                                 </div>
@@ -156,25 +159,46 @@ const UserDashboard = () => {
                                         </div>
                                     ) : recentTickets.length > 0 ? (
                                         recentTickets.map((ticket) => (
-                                            <Link to={`/tickets/${ticket.id}`} key={ticket.id} className="flex items-center justify-between p-6 hover:bg-slate-50 border border-transparent hover:border-slate-100 rounded-[24px] transition-all group">
-                                                <div className="flex items-center gap-6">
-                                                    <div className="w-12 h-12 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center group-hover:bg-white group-hover:border-[#1E293B] transition-all">
-                                                        <span className="text-[#1E293B] font-black italic text-xs">ID</span>
+                                            <Link 
+                                                to={`/tickets/${ticket.id}`} 
+                                                key={ticket.id} 
+                                                className={`flex items-center justify-between p-4 hover:bg-slate-50/80 border-l-4 border-transparent transition-all group relative ${
+                                                    ticket.status === 'OPEN' ? 'hover:border-rose-500' :
+                                                    ticket.status === 'IN_PROGRESS' ? 'hover:border-amber-500' :
+                                                    'hover:border-emerald-500'
+                                                }`}
+                                            >
+                                                <div className="flex items-center gap-4">
+                                                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all shadow-sm ${
+                                                        ticket.status === 'OPEN' ? 'bg-rose-50 text-rose-500 border border-rose-100' :
+                                                        ticket.status === 'IN_PROGRESS' ? 'bg-amber-50 text-amber-500 border border-amber-100' :
+                                                        'bg-emerald-50 text-emerald-500 border border-emerald-100'
+                                                    }`}>
+                                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                                     </div>
                                                     <div>
-                                                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">#{ticket.id.slice(-6).toUpperCase()}</p>
-                                                        <h4 className="font-bold text-slate-800 tracking-tight group-hover:text-[#1E293B] transition-colors">{ticket.resourceName}</h4>
+                                                        <p className={`text-[8px] font-black uppercase tracking-widest mb-0.5 ${
+                                                            ticket.status === 'OPEN' ? 'text-rose-400' :
+                                                            ticket.status === 'IN_PROGRESS' ? 'text-amber-400' :
+                                                            'text-emerald-400'
+                                                        }`}>#{ticket.id.slice(-6).toUpperCase()}</p>
+                                                        <h4 className="text-[13px] font-black text-slate-900 tracking-tight group-hover:text-[#0F172A] transition-colors">{ticket.resourceName}</h4>
                                                     </div>
                                                 </div>
-                                                <div className="flex items-center gap-8">
-                                                    <span className={`px-5 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest border transition-all ${ticket.status === 'OPEN' ? 'bg-rose-50 text-rose-600 border-rose-100' :
-                                                            ticket.status === 'IN_PROGRESS' ? 'bg-amber-50 text-amber-600 border-amber-100' :
-                                                                'bg-emerald-50 text-emerald-600 border-emerald-100'
-                                                        }`}>
+                                                <div className="flex items-center gap-6">
+                                                    <span className={`px-3 py-1 rounded-lg text-[8px] font-black uppercase tracking-widest border transition-all ${
+                                                        ticket.status === 'OPEN' ? 'bg-rose-500 text-white border-rose-500' :
+                                                        ticket.status === 'IN_PROGRESS' ? 'bg-amber-500 text-white border-amber-500' :
+                                                        'bg-emerald-500 text-white border-emerald-500'
+                                                    }`}>
                                                         {ticket.status.replace('_', ' ')}
                                                     </span>
-                                                    <div className="w-8 h-8 rounded-full flex items-center justify-center text-slate-300 group-hover:text-slate-900 transition-colors">
-                                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M9 5l7 7-7 7" /></svg>
+                                                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-md ${
+                                                        ticket.status === 'OPEN' ? 'bg-rose-600 text-white' :
+                                                        ticket.status === 'IN_PROGRESS' ? 'bg-amber-600 text-white' :
+                                                        'bg-emerald-600 text-white'
+                                                    }`}>
+                                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
                                                     </div>
                                                 </div>
                                             </Link>

@@ -138,7 +138,7 @@ const TicketSubmission = () => {
                 <main className={`flex-1 lg:ml-64 h-[calc(100vh-72px)] overflow-y-auto scroll-smooth pb-10`}>
 
                     {/* Header Section - Synced with Dashboard Style */}
-                    <div className="bg-white border-b border-slate-200 py-6 mb-8">
+                    <div className="bg-white border-b border-slate-200 py-4 mb-6">
                         <div className="max-w-[1200px] mx-auto px-6 lg:px-10">
                             <p className="text-[#0F172A] font-black text-[10px] uppercase tracking-[0.4em] mb-2 flex items-center gap-2">
                                 <span className="w-1.5 h-1.5 rounded-full bg-[#FFD166]"></span>
@@ -146,7 +146,7 @@ const TicketSubmission = () => {
                             </p>
 
                             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-                                <h1 className="text-3xl md:text-4xl font-black text-[#0F172A] tracking-tight leading-tight">
+                                <h1 className="text-2xl md:text-3xl font-black text-[#0F172A] tracking-tight leading-tight">
                                     Report <span className="text-slate-400">Fault</span>
                                 </h1>
 
@@ -160,7 +160,7 @@ const TicketSubmission = () => {
                     </div>
 
                     <div className="max-w-[1200px] mx-auto px-6 lg:px-10">
-                        <div className="bg-white/90 backdrop-blur-xl rounded-[48px] border border-white shadow-2xl shadow-[#3f4175]/5 p-10 md:p-16 animate-up" style={{ animationDelay: '0.1s' }}>
+                        <div className="bg-white/90 backdrop-blur-xl rounded-[32px] border border-white shadow-2xl shadow-[#3f4175]/5 p-6 md:p-10 animate-up" style={{ animationDelay: '0.1s' }}>
 
                             {success ? (
                                 <div className="py-24 flex flex-col items-center text-center animate-up">
@@ -171,7 +171,7 @@ const TicketSubmission = () => {
                                     <p className="text-slate-400 font-bold uppercase tracking-[0.4em] text-[10px]">Syncing with maintenance matrix...</p>
                                 </div>
                             ) : (
-                                <form onSubmit={handleSubmit} className="space-y-12">
+                                <form onSubmit={handleSubmit} className="space-y-8">
                                     {errors.submit && (
                                         <div className="p-6 bg-rose-50 border border-rose-100 text-rose-600 rounded-[32px] text-[10px] font-black uppercase tracking-widest flex items-center gap-5 animate-shake">
                                             <div className="w-10 h-10 rounded-2xl bg-rose-500 text-white flex items-center justify-center shrink-0 shadow-lg shadow-rose-500/20">
@@ -181,10 +181,10 @@ const TicketSubmission = () => {
                                         </div>
                                     )}
 
-                                    <div className={`grid grid-cols-1 lg:grid-cols-3 gap-0 border rounded-[40px] overflow-hidden shadow-2xl bg-white transition-all duration-300 ${Object.keys(errors).length > 0 ? 'border-[#0F172A]/20 ring-4 ring-[#0F172A]/5' : 'border-slate-200'}`}>
+                                    <div className={`grid grid-cols-1 lg:grid-cols-3 gap-0 border rounded-[24px] overflow-hidden shadow-2xl bg-white transition-all duration-300 ${Object.keys(errors).length > 0 ? 'border-[#0F172A]/20 ring-4 ring-[#0F172A]/5' : 'border-slate-200'}`}>
 
                                         {/* Column 1: Identity & Class - Navy Theme */}
-                                        <div className="space-y-10 p-10 border-r border-slate-100 bg-slate-50/50">
+                                        <div className="space-y-6 p-8 border-r border-slate-100 bg-slate-50/50">
                                             <div className={`space-y-3 transition-all ${errors.resourceId ? 'animate-shake' : ''}`}>
                                                 <div className="flex justify-between items-center ml-1">
                                                     <label className={`text-xs font-black uppercase tracking-[0.2em] ${errors.resourceId ? 'text-rose-500' : 'text-slate-500'}`}>Resource Vector</label>
@@ -197,7 +197,7 @@ const TicketSubmission = () => {
                                                 <div className="relative group">
                                                     <select
                                                         onChange={handleResourceSelect} required
-                                                        className={`w-full pl-12 pr-6 py-5 bg-white border-2 rounded-2xl focus:bg-white focus:outline-none transition-all font-bold text-[#0F172A] text-base appearance-none group-hover:border-[#0F172A]/20 cursor-pointer shadow-sm ${errors.resourceId ? 'border-rose-400' : touched.resourceId && formData.resourceId ? 'border-emerald-400' : 'border-slate-100 focus:border-[#0F172A]'
+                                                        className={`w-full pl-10 pr-6 py-3.5 bg-white border-2 rounded-xl focus:bg-white focus:outline-none transition-all font-bold text-[#0F172A] text-sm appearance-none group-hover:border-[#0F172A]/20 cursor-pointer shadow-sm ${errors.resourceId ? 'border-rose-400' : touched.resourceId && formData.resourceId ? 'border-emerald-400' : 'border-slate-100 focus:border-[#0F172A]'
                                                             }`}
                                                     >
                                                         <option value="">Scan for resource...</option>
@@ -214,7 +214,7 @@ const TicketSubmission = () => {
                                                 <div className="relative group">
                                                     <select
                                                         name="category" onChange={handleChange}
-                                                        className="w-full pl-12 pr-6 py-5 bg-white border-2 border-slate-100 rounded-2xl focus:bg-white focus:border-[#0F172A] focus:outline-none transition-all font-bold text-[#0F172A] text-base appearance-none group-hover:border-[#0F172A]/20 cursor-pointer shadow-sm"
+                                                        className="w-full pl-10 pr-6 py-3.5 bg-white border-2 border-slate-100 rounded-xl focus:bg-white focus:border-[#0F172A] focus:outline-none transition-all font-bold text-[#0F172A] text-sm appearance-none group-hover:border-[#0F172A]/20 cursor-pointer shadow-sm"
                                                     >
                                                         {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
                                                     </select>
@@ -239,7 +239,7 @@ const TicketSubmission = () => {
                                                                 setFormData({ ...formData, priority: p.id });
                                                                 setTouched({ ...touched, priority: true });
                                                             }}
-                                                            className={`py-4 px-3 rounded-2xl border-2 transition-all font-black text-[10px] uppercase tracking-[0.15em] ${formData.priority === p.id
+                                                            className={`py-3 px-3 rounded-xl border-2 transition-all font-black text-[9px] uppercase tracking-[0.15em] ${formData.priority === p.id
                                                                     ? p.id === 'HIGH' || p.id === 'URGENT'
                                                                         ? `border-${p.color}-500 bg-${p.color}-50 text-${p.color}-600 shadow-md`
                                                                         : 'border-[#0F172A] bg-[#0F172A] text-white shadow-md'
@@ -254,7 +254,7 @@ const TicketSubmission = () => {
                                         </div>
 
                                         {/* Column 2: Parameters - White Theme with Navy Accents */}
-                                        <div className="space-y-5 h-full flex flex-col p-10 bg-white">
+                                        <div className="space-y-4 h-full flex flex-col p-8 bg-white">
                                             <div className={`space-y-3 flex-1 flex flex-col ${errors.description ? 'animate-shake' : ''}`}>
                                                 <div className="flex justify-between items-center ml-1">
                                                     <label className={`text-xs font-black uppercase tracking-[0.2em] ${errors.description ? 'text-rose-500' : 'text-[#0F172A]'}`}>Incident Parameters</label>
@@ -267,7 +267,7 @@ const TicketSubmission = () => {
                                                 <textarea
                                                     name="description" required
                                                     onChange={handleChange}
-                                                    className={`flex-1 w-full px-8 py-8 bg-slate-50 border-2 rounded-[32px] focus:bg-white focus:outline-none transition-all font-bold text-[#0F172A] text-base resize-none placeholder:text-slate-300 min-h-[400px] shadow-inner ${errors.description ? 'border-rose-400' : touched.description && formData.description.length >= 10 ? 'border-emerald-400' : 'border-slate-100 focus:border-[#0F172A]'
+                                                    className={`flex-1 w-full px-6 py-6 bg-slate-50 border-2 rounded-2xl focus:bg-white focus:outline-none transition-all font-bold text-[#0F172A] text-sm resize-none placeholder:text-slate-300 min-h-[300px] shadow-inner ${errors.description ? 'border-rose-400' : touched.description && formData.description.length >= 10 ? 'border-emerald-400' : 'border-slate-100 focus:border-[#0F172A]'
                                                         }`}
                                                     placeholder="Provide a detailed breakdown of the malfunction..."
                                                 ></textarea>
@@ -275,7 +275,7 @@ const TicketSubmission = () => {
                                         </div>
 
                                         {/* Column 3: Contact & Evidence - Gray Theme with Yellow Button */}
-                                        <div className="space-y-10 p-10 border-l border-slate-100 bg-slate-50/50">
+                                        <div className="space-y-6 p-8 border-l border-slate-100 bg-slate-50/50">
                                             <div className={`space-y-3 ${errors.preferredContact ? 'animate-shake' : ''}`}>
                                                 <div className="flex justify-between items-center ml-1">
                                                     <label className={`text-xs font-black uppercase tracking-[0.2em] ${errors.preferredContact ? 'text-rose-500' : 'text-slate-500'}`}>Contact Vector</label>
@@ -288,7 +288,7 @@ const TicketSubmission = () => {
                                                 <div className="relative group">
                                                     <input
                                                         type="text" name="preferredContact" onChange={handleChange}
-                                                        className={`w-full pl-12 pr-6 py-5 bg-white border-2 rounded-2xl focus:bg-white focus:outline-none transition-all font-bold text-[#0F172A] text-base placeholder:text-slate-300 shadow-sm ${errors.preferredContact ? 'border-rose-400' : touched.preferredContact && formData.preferredContact.length >= 3 ? 'border-emerald-400' : 'border-slate-100 focus:border-[#0F172A]'
+                                                        className={`w-full pl-10 pr-6 py-3.5 bg-white border-2 rounded-xl focus:bg-white focus:outline-none transition-all font-bold text-[#0F172A] text-sm placeholder:text-slate-300 shadow-sm ${errors.preferredContact ? 'border-rose-400' : touched.preferredContact && formData.preferredContact.length >= 3 ? 'border-emerald-400' : 'border-slate-100 focus:border-[#0F172A]'
                                                             }`}
                                                         placeholder="Email or Ext"
                                                     />
@@ -307,7 +307,7 @@ const TicketSubmission = () => {
                                                         <svg className="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
                                                     ) : null}
                                                 </div>
-                                                <div className="relative group h-40">
+                                                <div className="relative group h-32">
                                                     <input
                                                         type="file" multiple accept="image/*"
                                                         onChange={(e) => {
@@ -316,22 +316,22 @@ const TicketSubmission = () => {
                                                         }}
                                                         className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20"
                                                     />
-                                                    <div className={`w-full h-full border-2 border-dashed rounded-[32px] group-hover:bg-[#FFD166]/10 transition-all flex flex-col items-center justify-center gap-3 shadow-sm ${errors.files ? 'border-rose-300 bg-rose-50' : selectedFiles.length > 0 ? 'border-emerald-400 bg-emerald-50/20' : 'border-slate-200 bg-white'
+                                                    <div className={`w-full h-full border-2 border-dashed rounded-2xl group-hover:bg-[#FFD166]/10 transition-all flex flex-col items-center justify-center gap-2 shadow-sm ${errors.files ? 'border-rose-300 bg-rose-50' : selectedFiles.length > 0 ? 'border-emerald-400 bg-emerald-50/20' : 'border-slate-200 bg-white'
                                                         }`}>
-                                                        <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${errors.files ? 'bg-rose-500 text-white' : selectedFiles.length > 0 ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : 'bg-slate-50 text-[#0F172A]/40'}`}>
-                                                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1M16 8l-4-4m0 0L8 8m4-4v12" /></svg>
+                                                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${errors.files ? 'bg-rose-500 text-white' : selectedFiles.length > 0 ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : 'bg-slate-50 text-[#0F172A]/40'}`}>
+                                                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1M16 8l-4-4m0 0L8 8m4-4v12" /></svg>
                                                         </div>
-                                                        <span className={`text-[10px] font-black uppercase tracking-[0.2em] ${errors.files ? 'text-rose-600' : selectedFiles.length > 0 ? 'text-emerald-600' : 'text-slate-400'}`}>
+                                                        <span className={`text-[9px] font-black uppercase tracking-[0.2em] ${errors.files ? 'text-rose-600' : selectedFiles.length > 0 ? 'text-emerald-600' : 'text-slate-400'}`}>
                                                             {selectedFiles.length > 0 ? `${selectedFiles.length} IMAGES READY` : 'Add evidence'}
                                                         </span>
                                                     </div>
                                                 </div>
                                             </div>
 
-                                            <div className="pt-6">
+                                            <div className="pt-2">
                                                 <button
                                                     type="submit" disabled={loading}
-                                                    className={`w-full py-4 rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] transition-all duration-300 flex items-center justify-center gap-3 disabled:opacity-50 group shadow-xl ${Object.keys(errors).length > 0
+                                                    className={`w-full py-3.5 rounded-xl font-black text-[10px] uppercase tracking-[0.3em] transition-all duration-300 flex items-center justify-center gap-3 disabled:opacity-50 group shadow-xl ${Object.keys(errors).length > 0
                                                             ? 'bg-[#0F172A] text-white shadow-[#0F172A]/20'
                                                             : 'bg-[#FFD166] hover:bg-[#FFCC29] text-[#0F172A] shadow-[#FFD166]/20'
                                                         }`}

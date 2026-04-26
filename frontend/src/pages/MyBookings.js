@@ -64,35 +64,39 @@ const MyBookings = () => {
           <div className="max-w-5xl mx-auto">
             
             {/* Header Section */}
-            <header className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-slate-100 pb-8 animate-fade-in-up">
-              <div>
-                <h1 className="text-3xl font-black text-slate-900 tracking-tight leading-none mb-2">
-                  My Bookings
-                </h1>
-                <p className="text-slate-400 font-medium italic">Manage your resource reservations and schedules.</p>
-              </div>
-              <div className="flex flex-col sm:flex-row items-center gap-4">
-                <div className="bg-white p-2 border border-slate-200/60 rounded-2xl shadow-sm flex items-center gap-2">
-                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-2">Total Bookings:</span>
-                  <span className="bg-indigo-600 text-white px-3 py-1 rounded-xl text-xs font-black">{filteredBookings.length}</span>
+            <header className="bg-white border-b border-slate-200 py-6 mb-8 -mx-6 md:-mx-8 px-6 md:px-8">
+              <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                <div>
+                  <p className="text-[#0F172A] font-black text-[10px] uppercase tracking-[0.4em] mb-2 flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#FFD166]"></span>
+                    Reservation Hub
+                  </p>
+                  <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight leading-tight">
+                    My <span className="text-slate-400">Bookings</span>
+                  </h1>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="px-4 py-1.5 bg-slate-50 border border-slate-100 rounded-xl text-[9px] font-black uppercase tracking-widest text-slate-500">
+                    Total Assets: {filteredBookings.length}
+                  </div>
                 </div>
               </div>
             </header>
 
             {/* Filters Panel */}
-            <div className="mb-8 bg-white border border-slate-100 rounded-[2rem] p-6 shadow-sm flex flex-wrap items-center gap-4 animate-fade-in">
+            <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center">
-                  <Filter className="w-5 h-5" />
+                <div className="w-8 h-8 bg-[#0F172A] text-[#FFD166] rounded-lg flex items-center justify-center shadow-lg shadow-slate-900/10">
+                  <Filter className="w-4 h-4" />
                 </div>
-                <label className="text-xs font-black text-slate-500 uppercase tracking-widest">Filter by Status:</label>
+                <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Filter Status</span>
               </div>
               <select
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value)}
-                className="bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all flex-1 md:flex-none md:w-64 appearance-none"
+                className="bg-white border border-slate-200 rounded-xl px-6 py-2.5 text-[11px] font-black uppercase tracking-widest text-[#0F172A] focus:outline-none focus:ring-4 focus:ring-slate-900/5 transition-all w-full md:w-64 appearance-none shadow-sm cursor-pointer"
               >
-                <option value="">All Statuses</option>
+                <option value="">All Registries</option>
                 {Object.values(BOOKING_STATUS).map((status) => (
                   <option key={status} value={status}>
                     {status}
@@ -130,41 +134,52 @@ const MyBookings = () => {
                 {filteredBookings.map((booking, index) => (
                   <div 
                     key={booking.id} 
-                    className="bg-white border border-slate-100 rounded-[2rem] p-6 flex flex-col md:flex-row gap-6 items-start md:items-center hover:shadow-xl hover:border-indigo-100 transition-all duration-300 group animate-fade-in-up"
+                    className="bg-white border border-slate-100 rounded-2xl p-3.5 flex flex-col md:flex-row gap-5 items-start md:items-center hover:border-slate-300 transition-all duration-300 group animate-fade-in-up shadow-sm hover:shadow-md"
                     style={{ animationDelay: `${index * 50}ms` }}
                   >
                     
                     {/* Date/Time Block */}
-                    <div className="bg-slate-50 rounded-2xl p-4 flex flex-col items-center justify-center min-w-[120px] text-center shrink-0 border border-slate-100 group-hover:bg-indigo-50 group-hover:border-indigo-100 transition-colors">
-                      <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 group-hover:text-indigo-400">{new Date(booking.bookingDate).toLocaleDateString('en-US', { weekday: 'short' })}</span>
-                      <span className="text-2xl font-black text-slate-800 group-hover:text-indigo-600">{new Date(booking.bookingDate).getDate()}</span>
-                      <span className="text-xs font-bold text-slate-500 group-hover:text-indigo-500 mb-2">{new Date(booking.bookingDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</span>
-                      <div className="w-full h-px bg-slate-200 my-2 group-hover:bg-indigo-200"></div>
-                      <span className="text-[11px] font-black text-slate-600 flex items-center gap-1 group-hover:text-indigo-600">
-                        <Clock className="w-3 h-3" /> {booking.startTime ? booking.startTime.substring(0,5) : ''}
+                    <div className={`rounded-xl p-3 flex flex-col items-center justify-center min-w-[85px] text-center shrink-0 border transition-all duration-300 ${
+                        booking.status === BOOKING_STATUS.APPROVED ? 'bg-emerald-50 text-emerald-600 border-emerald-100' :
+                        booking.status === BOOKING_STATUS.PENDING ? 'bg-amber-50 text-amber-600 border-amber-100' :
+                        booking.status === BOOKING_STATUS.REJECTED || booking.status === BOOKING_STATUS.CANCELLED ? 'bg-rose-50 text-rose-600 border-rose-100' :
+                        'bg-slate-50 text-slate-400 border-slate-100'
+                    }`}>
+                      <span className="text-[8px] font-black uppercase tracking-[0.2em] mb-1 opacity-60">{new Date(booking.bookingDate).toLocaleDateString('en-US', { weekday: 'short' })}</span>
+                      <span className="text-xl font-black tracking-tighter leading-none mb-1">{new Date(booking.bookingDate).getDate()}</span>
+                      <span className="text-[9px] font-black uppercase tracking-wider opacity-60">{new Date(booking.bookingDate).toLocaleDateString('en-US', { month: 'short' })}</span>
+                      <div className="w-8 h-0.5 bg-current opacity-10 my-2"></div>
+                      <span className="text-[10px] font-black flex items-center gap-1">
+                        <Clock size={10} /> {booking.startTime ? booking.startTime.substring(0,5) : '--:--'}
                       </span>
                     </div>
 
                     {/* Booking Details */}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between mb-2">
-                        <h3 className="text-lg font-black text-slate-800 truncate pr-4">
-                          Resource ID: {booking.resourceId}
-                        </h3>
-                        <BookingStatusBadge status={booking.status} />
+                    <div className="flex-1 min-w-0 py-2">
+                      <div className="flex flex-wrap items-center justify-between gap-4 mb-3">
+                        <div className="flex items-center gap-3">
+                           <h3 className="text-[15px] font-black text-[#0F172A] tracking-tight uppercase truncate">
+                            {booking.resourceName || `Asset #${booking.resourceId.slice(-6).toUpperCase()}`}
+                          </h3>
+                        </div>
+                        <div className="flex items-center gap-2">
+                           <BookingStatusBadge status={booking.status} />
+                        </div>
                       </div>
                       
-                      <p className="text-sm font-medium text-slate-600 mb-4 line-clamp-2">
+                      <p className="text-slate-600 font-bold text-[11px] mb-3 line-clamp-1">
                         {booking.purpose}
                       </p>
 
-                      <div className="flex flex-wrap items-center gap-4">
-                        <span className="flex items-center gap-1.5 text-xs font-bold text-slate-400 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100">
-                          <Users className="w-3.5 h-3.5" /> {booking.expectedAttendees} Attendees
-                        </span>
-                        <span className="flex items-center gap-1.5 text-xs font-bold text-slate-400 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100">
-                          <Clock className="w-3.5 h-3.5" /> Until {booking.endTime ? booking.endTime.substring(0,5) : ''}
-                        </span>
+                      <div className="flex flex-wrap items-center gap-3">
+                        <div className="flex items-center gap-2 px-2.5 py-1 bg-slate-100/50 rounded-lg border border-slate-200 text-[10px] font-black text-slate-700 uppercase tracking-widest">
+                          <Users size={12} className="text-[#0F172A]/40" />
+                          <span>{booking.expectedAttendees} Attendees</span>
+                        </div>
+                        <div className="flex items-center gap-2 px-2.5 py-1 bg-slate-100/50 rounded-lg border border-slate-200 text-[10px] font-black text-slate-700 uppercase tracking-widest">
+                          <Clock size={12} className="text-[#0F172A]/40" />
+                          <span>Until {booking.endTime ? booking.endTime.substring(0,5) : '--:--'}</span>
+                        </div>
                       </div>
 
                       {booking.status === BOOKING_STATUS.REJECTED && booking.reason && (
@@ -178,26 +193,26 @@ const MyBookings = () => {
                     </div>
 
                     {/* Actions */}
-                    <div className="w-full md:w-auto flex flex-col justify-end gap-3 shrink-0 pt-4 md:pt-0 border-t md:border-t-0 md:border-l border-slate-100 md:pl-6">
+                    <div className="w-full md:w-auto flex flex-col justify-center gap-2 shrink-0 md:pl-5 md:border-l border-slate-100">
                       {booking.status === BOOKING_STATUS.APPROVED && (
                         <>
                           <button
                             onClick={() => handleGenerateQR(booking.id)}
-                            className="w-full md:w-auto px-4 py-3 bg-indigo-50 border border-indigo-100 text-indigo-600 hover:bg-indigo-100 hover:text-indigo-700 rounded-xl text-[11px] font-black uppercase tracking-wider transition-colors flex items-center justify-center gap-2"
+                            className="w-full px-4 py-2 bg-[#0F172A] text-white rounded-lg text-[9px] font-black uppercase tracking-[0.2em] hover:bg-slate-800 transition-all flex items-center justify-center gap-2 shadow-lg shadow-slate-900/10"
                           >
-                            <QrCode className="w-4 h-4" /> QR Code
+                            <QrCode size={12} className="text-[#FFD166]" /> Get QR
                           </button>
                           <button
                             onClick={() => handleCancelClick(booking.id)}
-                            className="w-full md:w-auto px-4 py-3 bg-white border border-rose-200 text-rose-600 hover:bg-rose-50 hover:text-rose-700 rounded-xl text-[11px] font-black uppercase tracking-wider transition-colors flex items-center justify-center gap-2"
+                            className="w-full px-4 py-2 bg-white border border-rose-100 text-rose-500 hover:bg-rose-50 rounded-lg text-[9px] font-black uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-2"
                           >
-                            <Trash2 className="w-4 h-4" /> Cancel
+                            <Trash2 size={12} /> Cancel
                           </button>
                         </>
                       )}
                       {booking.status !== BOOKING_STATUS.APPROVED && (
-                         <div className="w-full md:w-auto px-4 py-3 text-slate-300 text-[10px] font-black uppercase tracking-widest text-center flex items-center justify-center">
-                           No Actions Available
+                         <div className="text-[9px] font-black text-slate-300 uppercase tracking-[0.2em] italic text-center">
+                           No actions active
                          </div>
                       )}
                     </div>
