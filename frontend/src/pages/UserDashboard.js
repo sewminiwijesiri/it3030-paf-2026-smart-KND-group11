@@ -5,7 +5,8 @@ import api from '../utils/api';
 import {
     Bell, LogOut, User, AlertTriangle, ClipboardList,
     Activity, ChevronRight, Plus, CheckCircle2, Clock,
-    AlertCircle, FileText, Calendar, BookOpen, Settings
+    AlertCircle, FileText, Calendar, BookOpen, Settings,
+    Edit
 } from 'lucide-react';
 import { useNotifications } from '../context/NotificationContext';
 import Navbar from '../components/Navbar';
@@ -172,16 +173,28 @@ const UserDashboard = () => {
                                             const s = getStatusConfig(ticket.status);
                                             const Icon = s.Icon;
                                             return (
-                                                <Link key={ticket.id} to={`/tickets/${ticket.id}`} className="flex items-center justify-between px-8 py-5 hover:bg-slate-50 transition-all no-underline group">
-                                                    <div className="flex items-center gap-4">
+                                                <div key={ticket.id} className="flex items-center justify-between px-8 py-5 hover:bg-slate-50 transition-all border-b border-slate-50 last:border-0 group">
+                                                    <Link to={`/tickets/${ticket.id}`} className="flex items-center gap-4 no-underline flex-1">
                                                         <div className={`w-10 h-10 rounded-xl ${s.bg} flex items-center justify-center`}><Icon size={18} className={s.color} /></div>
                                                         <div>
                                                             <p className="text-[9px] font-black text-slate-300 uppercase mb-1">#{ticket.id.slice(-6).toUpperCase()}</p>
                                                             <p className="font-black text-[#002147] text-sm group-hover:text-[#FF9F1C] transition-colors">{ticket.resourceName}</p>
                                                         </div>
+                                                    </Link>
+                                                    
+                                                    <div className="flex items-center gap-4">
+                                                        {ticket.status === 'OPEN' && (
+                                                            <Link 
+                                                                to={`/edit-ticket/${ticket.id}`}
+                                                                className="p-2 text-slate-400 hover:text-[#FF9F1C] hover:bg-orange-50 rounded-lg transition-all"
+                                                                title="Edit Request"
+                                                            >
+                                                                <Edit size={16} />
+                                                            </Link>
+                                                        )}
+                                                        <span className={`px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border ${s.bg} ${s.color} ${s.border}`}>{s.label}</span>
                                                     </div>
-                                                    <span className={`px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border ${s.bg} ${s.color} ${s.border}`}>{s.label}</span>
-                                                </Link>
+                                                </div>
                                             );
                                         })
                                     )}

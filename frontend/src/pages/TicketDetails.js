@@ -143,6 +143,15 @@ const TicketDetails = () => {
                                             }`}>
                                             {ticket.status.replace('_', ' ')}
                                         </span>
+                                        {ticket.status === 'OPEN' && (
+                                            <button 
+                                                onClick={() => navigate(`/edit-ticket/${ticket.id}`)}
+                                                className="px-4 py-1.5 bg-white/10 border border-white/20 text-white text-[9px] font-black uppercase tracking-[0.2em] rounded-xl hover:bg-white/20 transition-all flex items-center gap-2"
+                                            >
+                                                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                                                Modify Details
+                                            </button>
+                                        )}
                                     </div>
                                     <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight mb-2">
                                         {ticket.resourceName}
