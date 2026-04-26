@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import api from '../utils/api';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const UserDashboard = () => {
+    const navigate = useNavigate();
     const [userData, setUserData] = useState({
         name: localStorage.getItem('name') || 'User',
         email: localStorage.getItem('email') || 'user@uniflow.com'
@@ -78,36 +79,36 @@ const UserDashboard = () => {
             <div className="flex flex-1 pt-[72px] relative z-10 w-full overflow-hidden">
                 <Sidebar />
 
-                <main className={`flex-1 lg:ml-64 h-[calc(100vh-72px)] overflow-y-auto scroll-smooth`}>
+                <main className={`flex-1 lg:ml-72 h-[calc(100vh-64px)] overflow-y-auto scroll-smooth`}>
 
-                    {/* Header */}
-                    <div className="bg-white border-b border-slate-200 py-6">
+                    {/* Header Section - Modern Hero Style */}
+                    <div className="bg-[#002147] border-b border-white/10 py-10 shadow-lg">
                         <div className="max-w-[1200px] mx-auto px-6 lg:px-10">
-
-                            <p className="text-[#1E293B] font-black text-[10px] uppercase tracking-[0.4em] mb-2 flex items-center gap-2">
-                                <span className="w-1.5 h-1.5 rounded-full bg-[#FFD166]"></span>
+                            <p className="text-blue-200 font-black text-[10px] uppercase tracking-[0.4em] mb-3 flex items-center gap-2">
+                                <span className="w-1.5 h-1.5 rounded-full bg-[#FF9F1C]"></span>
                                 Dashboard Portal
                             </p>
 
-                            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-
-                                <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight leading-tight">
-                                    Welcome, <br />
-                                    <span className="text-slate-500">
-                                        {userData.name?.split(' ')[0]}
-                                    </span>
-                                </h1>
+                            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                                <div>
+                                    <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight leading-tight mb-2">
+                                        Welcome, <br />
+                                        <span className="text-blue-100/50">
+                                            {userData.name?.split(' ')[0]}
+                                        </span>
+                                    </h1>
+                                    <p className="text-blue-100/60 font-bold uppercase tracking-wider text-[11px]">Nexus Command Center Active</p>
+                                </div>
 
                                 <div className="flex gap-3 mt-2 md:mt-0">
-                                    <button className="bg-[#0F172A] text-white px-6 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-800 transition-all shadow-md">
+                                    <button className="bg-white/5 border border-white/10 text-white px-8 py-3 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-white/10 transition-all shadow-inner">
                                         View Map
                                     </button>
 
-                                    <button className="bg-[#FFD166] text-slate-900 px-6 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-[#FFCC29] transition-all shadow-md shadow-[#FFD166]/20">
+                                    <button onClick={() => navigate('/resource-catalogue')} className="bg-[#FF9F1C] text-white px-8 py-3 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-orange-500 transition-all shadow-xl shadow-orange-500/20 active:scale-95">
                                         Book Resource
                                     </button>
                                 </div>
-
                             </div>
                         </div>
                     </div>

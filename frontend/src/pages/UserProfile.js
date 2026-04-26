@@ -120,62 +120,58 @@ const UserProfile = () => {
             <div className="flex flex-1 pt-[72px] relative z-10 w-full overflow-hidden">
                 {renderSidebar()}
 
-<main className={`flex-1 lg:ml-64 h-[calc(100vh-72px)] overflow-y-auto scroll-smooth`}>
+                <main className={`flex-1 lg:ml-72 h-[calc(100vh-64px)] overflow-y-auto scroll-smooth pb-10`}>
 
-  {/* Header Area styled like Dashboard */}
-  <div className="bg-white border-b border-slate-200 py-4">
-                        <div className="max-w-[1000px] mx-auto px-6">
-                            <p className="text-[#3f4175] font-black text-[9px] uppercase tracking-[0.4em] mb-1.5 drop-shadow-sm flex items-center gap-2">
-                                <span className="w-1.5 h-1.5 rounded-full bg-[#FFD166]"></span>
+                    {/* Header Section - Modern Hero Style */}
+                    <div className="bg-[#002147] border-b border-white/10 py-10 shadow-lg mb-10">
+                        <div className="max-w-[1200px] mx-auto px-6 lg:px-10">
+                            <p className="text-blue-200 font-black text-[10px] uppercase tracking-[0.4em] mb-3 flex items-center gap-2">
+                                <span className="w-1.5 h-1.5 rounded-full bg-[#FF9F1C]"></span>
                                 Account Management
                             </p>
-                            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                                 <div>
-                                    <h1 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight leading-tight mb-0.5">
-                                        Account Settings
+                                    <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight leading-tight mb-2">
+                                        Account <span className="text-blue-100/50">Settings</span>
                                     </h1>
-                                    <p className="text-slate-500 font-bold uppercase tracking-wider text-[9px] max-w-sm">
-                                        Manage your personal info and security.
-                                    </p>
+                                    <p className="text-blue-100/60 font-bold uppercase tracking-wider text-[11px]">Manage your personal info and security.</p>
                                 </div>
-<div className="flex items-center gap-3">
-  {isEditing && (
-    <button 
-      onClick={() => { 
-        setIsEditing(false); 
-        setNameInput(userData.name); 
-      }}
-      className="px-4 py-2 rounded-full font-black text-[10px] uppercase tracking-widest text-slate-400 hover:text-slate-600 transition-colors"
-    >
-      Cancel
-    </button>
-  )}
-  <button
-    onClick={isEditing ? handleProfileUpdate : () => setIsEditing(true)}
-    disabled={updateLoading}
-    className={`shrink-0 px-6 py-2.5 rounded-full font-black text-[10px] uppercase tracking-widest transition-all shadow-lg ${
-      isEditing
-        ? 'bg-[#0F172A] text-white hover:bg-slate-800'
-        : 'bg-[#FFD166] text-slate-900 shadow-[#FFD166]/20 hover:scale-[1.02] hover:bg-[#FFCC29]'
-    } disabled:opacity-50`}
-  >
-    {updateLoading ? 'Saving...' : isEditing ? 'Save Changes' : 'Edit Profile'}
-  </button>
-</div>
+                                <div className="flex items-center gap-4">
+                                    {isEditing && (
+                                        <button 
+                                            onClick={() => { setIsEditing(false); setNameInput(userData.name); }}
+                                            className="px-6 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest text-blue-200 hover:text-white transition-all"
+                                        >
+                                            Cancel
+                                        </button>
+                                    )}
+                                    <button
+                                        onClick={isEditing ? handleProfileUpdate : () => setIsEditing(true)}
+                                        disabled={updateLoading}
+                                        className={`px-8 py-3 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all shadow-xl ${
+                                            isEditing
+                                                ? 'bg-white text-[#002147] hover:bg-blue-50'
+                                                : 'bg-[#FF9F1C] text-white shadow-orange-500/20 hover:bg-orange-500 active:scale-95'
+                                        } disabled:opacity-50`}
+                                    >
+                                        {updateLoading ? 'Saving...' : isEditing ? 'Save Changes' : 'Edit Profile'}
+                                    </button>
+                                </div>
                             </div>
                             
                             {updateMessage.text && (
-                                <div className={`mt-4 p-3 rounded-xl text-[10px] font-bold uppercase tracking-widest ${
-                                    updateMessage.type === 'success' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-rose-50 text-rose-600 border border-rose-100'
+                                <div className={`mt-6 p-4 rounded-[2rem] text-[10px] font-bold uppercase tracking-widest flex items-center gap-3 border ${
+                                    updateMessage.type === 'success' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border-rose-500/20'
                                 }`}>
+                                    <div className={`w-2 h-2 rounded-full ${updateMessage.type === 'success' ? 'bg-emerald-500' : 'bg-rose-500'}`}></div>
                                     {updateMessage.text}
                                 </div>
                             )}
                         </div>
                     </div>
 
-                    <div className="max-w-[1000px] mx-auto px-6 py-6">
-                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div className="max-w-[1200px] mx-auto px-6 lg:px-10">
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
 
                             {/* Left Column: Profile Card & Info */}
                             <div className="lg:col-span-2 space-y-8">

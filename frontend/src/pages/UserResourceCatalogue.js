@@ -79,25 +79,25 @@ const UserResourceCatalogue = () => {
             <div className="flex flex-1 pt-[72px] relative z-10 w-full overflow-hidden">
                 {renderSidebar()}
 
-                <main className="flex-1 lg:ml-64 h-[calc(100vh-72px)] overflow-y-auto scroll-smooth">
+                <main className="flex-1 lg:ml-72 h-[calc(100vh-64px)] overflow-y-auto scroll-smooth">
                     
                     {/* Header Area styled like UserDashboard */}
-                    <div className="bg-white border-b border-slate-200 py-6">
+                    <div className="bg-[#002147] border-b border-white/10 py-10 shadow-lg">
                         <div className="max-w-[1200px] mx-auto px-6 lg:px-10">
-                            <p className="text-[#3f4175] font-black text-[10px] uppercase tracking-[0.4em] mb-2 drop-shadow-sm flex items-center gap-2">
-                                <span className="w-1.5 h-1.5 rounded-full bg-[#FFD166]"></span>
+                            <p className="text-blue-200 font-black text-[10px] uppercase tracking-[0.4em] mb-3 flex items-center gap-2">
+                                <span className="w-1.5 h-1.5 rounded-full bg-[#FF9F1C]"></span>
                                 Campus Catalogue
                             </p>
                             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                                 <div>
-                                    <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight leading-tight mb-1">
-                                        Resource Catalogue
+                                    <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight leading-tight mb-2">
+                                        Resource <span className="text-blue-100/50">Catalogue</span>
                                     </h1>
-                                    <p className="text-slate-500 font-bold uppercase tracking-wider text-[11px]">Find and book campus facilities & technical assets.</p>
+                                    <p className="text-blue-100/60 font-bold uppercase tracking-wider text-[11px]">Find and book campus facilities & technical assets.</p>
                                 </div>
-                                <div className="bg-slate-50 p-2 border border-slate-200 rounded shrink-0 shadow-sm flex items-center gap-4 px-4">
-                                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest pl-2">Total Items Found:</span>
-                                    <span className="bg-[#0F172A] text-white px-3 py-1 text-xs font-black">{resources.length}</span>
+                                <div className="bg-white/5 p-2 border border-white/10 rounded-2xl shrink-0 shadow-inner flex items-center gap-4 px-4">
+                                    <span className="text-[10px] font-black text-blue-200 uppercase tracking-widest pl-2">Available Assets:</span>
+                                    <span className="bg-[#FF9F1C] text-white px-4 py-1.5 rounded-xl text-xs font-black shadow-lg shadow-orange-500/20">{resources.length}</span>
                                 </div>
                             </div>
                         </div>
