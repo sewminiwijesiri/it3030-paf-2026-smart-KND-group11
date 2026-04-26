@@ -29,7 +29,8 @@ const AdminMaintenance = () => {
                 api.get('/api/maintenance'),
                 api.get('/admin/users')
             ]);
-            setTickets(ticketsRes.data);
+            const sortedTickets = ticketsRes.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            setTickets(sortedTickets);
             setTechnicians(techsRes.data.filter(u => u.role === 'TECHNICIAN'));
         } catch (err) {
             console.error('Error fetching admin maintenance data', err);
